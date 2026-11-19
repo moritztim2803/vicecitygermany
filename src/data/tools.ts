@@ -11,7 +11,7 @@ export type Tool = {
 };
 
 export const TOOLS: Tool[] = [
-  { id: 'quiz', name: 'Welche Region bist du?', claim: '7 Fragen, 1 Minute. Finde heraus, wo in Leonida du hingehörst, und teil dein Ergebnis.',
+  { id: 'quiz', name: 'Welche Region bist du?', claim: '8 Fragen, 1 Minute. Finde heraus, wo in Leonida du hingehörst, und teil dein Ergebnis.',
     href: '/karte/gta-6-quiz-welche-region/', c: '#ff4fa3', tag: 'Test',
     icon: 'M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4v.5M12 18.5v.5' },
   { id: 'karte', name: 'Interaktive Karte', claim: '6 Regionen und 40 Orte. Tipp einen Ort an und sieh, was dich dort erwartet.',

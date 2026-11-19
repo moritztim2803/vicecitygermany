@@ -47,7 +47,7 @@ if (a.data.faq.length) {
   });
 }
 ---
-<Base title={a.data.title} description={a.data.description} type="article" jsonLd={jsonLd}>
+<Base title={a.data.title} description={a.data.description} type="article" jsonLd={jsonLd} ogImage={a.id === 'gta-6-quiz-welche-region' ? '/og/test.png' : undefined}>
   <nav class="breadcrumb" aria-label="Brotkrumen"><a href="/">Start</a> › <a href={`/kategorie/${cat.slug}/`}>{cat.name}</a></nav>
   <div class="article-layout">
     <article class="prose">
