@@ -2,7 +2,7 @@
 
 export const SITE = {
   name: 'Palmenpixel',
-  tagline: 'GTA 6 Guides, Tipps & News auf Deutsch',
+  tagline: 'GTA 6 Guides, Easter Eggs & News auf Deutsch',
   url: 'https://palmenpixel.de',
   lang: 'de',
   locale: 'de_DE',

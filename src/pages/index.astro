@@ -7,9 +7,11 @@ import { SITE, CATEGORIES } from '../site.config';
 import { allArtikel, artikelUrl } from '../lib/artikel';
 
 const artikel = await allArtikel();
+const usedCats = new Set(artikel.map((a) => a.data.category));
+const cats = CATEGORIES.filter((c) => usedCats.has(c.slug));
 const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'de-DE' }];
 ---
-<Base title={`${SITE.name}: ${SITE.tagline}`} description={`${SITE.tagline}: Release, Geld verdienen, Karte, Fahrzeuge und Technik, verständlich erklärt.`} jsonLd={jsonLd}>
+<Base title={`${SITE.name}: ${SITE.tagline}`} description={`${SITE.tagline}: Easter Eggs, Release, Technik und Hardware, verständlich erklärt.`} jsonLd={jsonLd}>
   <section class="hero">
     <Sunset />
     <div class="hero-text">
@@ -17,7 +19,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       <h1>Guides, Easter Eggs &amp; News aus dem Sonnenstaat</h1>
       <p>Kurze, ehrliche Antworten auf das, was du gerade in GTA 6 suchst. Ohne Spoiler, wenn nicht anders markiert.</p>
       <ul class="hero-cats">
-        {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+        {cats.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
       </ul>
     </div>
   </section>
@@ -42,6 +44,6 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   </div>
   <h2 class="section-title">Kategorien</h2>
   <ul class="cat-list">
-    {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}><strong>{c.name}</strong><span>{c.description}</span></a></li>)}
+    {cats.map((c) => <li><a href={`/kategorie/${c.slug}/`}><strong>{c.name}</strong><span>{c.description}</span></a></li>)}
   </ul>
 </Base>
