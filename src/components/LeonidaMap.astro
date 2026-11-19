@@ -3,7 +3,8 @@
 // Komplett selbst gezeichnet (SVG), schematisch und nicht maßstabsgetreu.
 // Keine Grafiken von Rockstar.
 
-import { COAST, R, keys, type Pt } from '../lib/leonida';
+import { COAST, ISLES, LAND, R, type Pt } from '../lib/leonida';
+import { ORTE, TYPEN, type OrtTyp } from '../data/orte';
 
 type Region = {
   id: 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
@@ -26,47 +27,47 @@ const I = {
 const regions: Region[] = [
   {
     id: 'vice', name: 'Vice City', vorbild: 'Miami', typ: 'Großstadt', color: '#ff4fa3',
-    text: 'Die Metropole im Südosten: Hochhäuser, Strände, Nachtleben. Zur Stadt gehört Vice Beach, ganz im Osten liegt Washington Island.',
-    facts: ['Vice Beach mit Strand und Nachtleben', 'Washington Island ganz im Osten', 'Easter Egg: Dexters Wohnung'],
+    text: 'Die Metropole im Südosten: Hochhäuser, Strände, Nachtleben. Dazu gehören Vice Beach, der Flughafen, der Kreuzfahrthafen und die Inseln der Reichen.',
+    facts: ['Downtown mit U-Bahn und Clubs', 'Vice Beach und Ocean Beach', 'Flughafen und Port Vice City', 'Easter Egg: Dexters Wohnung'],
     link: { href: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden', label: 'Dexters Wohnung finden' },
-    label: { x: 880, y: 395, anchor: 'middle', leader: [800, 560] },
-    icon: { x: 790, y: 735, d: I.palm },
+    label: { x: 885, y: 330, anchor: 'middle', leader: [790, 470] },
+    icon: { x: 700, y: 640, d: I.palm },
   },
   {
     id: 'keys', name: 'Leonida Keys', vorbild: 'Florida Keys', typ: 'Inselkette', color: '#3ee7f0',
-    text: 'Tropische Inseln südlich von Vice City. Hier liegt Key Lento, und hier schickt dich Kenton auf Schatztauchgänge.',
-    facts: ['Inseln, Boote, Tauchen', 'Key Lento', 'Schatztauchen mit Kenton: beste Geldquelle am Anfang'],
+    text: 'Tropische Inselkette im Süden, verbunden durch einen langen Highway. In Key Lento beginnt das Spiel.',
+    facts: ['Key Lento: Start des Spiels', 'Southwind am südlichen Ende', 'Mile Zero Air Station: Militärgebiet', 'Schatztauchen mit Kenton'],
     link: { href: '/guides/gta-6-schnell-geld-verdienen/', label: 'Schnell Geld verdienen' },
-    label: { x: 668, y: 980, anchor: 'middle' },
-    icon: { x: 846, y: 912, d: I.dive },
+    label: { x: 600, y: 985, anchor: 'middle' },
+    icon: { x: 350, y: 880, d: I.dive },
   },
   {
     id: 'grass', name: 'Grassrivers', vorbild: 'Everglades', typ: 'Sumpfgebiet', color: '#4dff9a',
     text: 'Marschland voller Alligatoren. Laut Rockstar warten hier „gefährlichere Raubtiere und seltsamere Entdeckungen“.',
-    facts: ['Sumpf und Marschland', 'Alligatoren', 'Gefährlichere Raubtiere, seltsamere Entdeckungen'],
-    label: { x: 650, y: 680, anchor: 'middle' },
-    icon: { x: 660, y: 760, d: I.gator },
+    facts: ['Pelican Valley mit Cottonmouth Lake', 'Watson Bay und Capri an der Küste', 'Easter Egg: Bigfoot'],
+    label: { x: 410, y: 640, anchor: 'middle' },
+    icon: { x: 395, y: 780, d: I.gator },
   },
   {
     id: 'gell', name: 'Port Gellhorn', vorbild: 'Floridas „vergessene Küste“', typ: 'Küstenort', color: '#ff9a4d',
     text: 'Früher ein Urlaubsort, heute voller Billigmotels, geschlossener Attraktionen und leerer Einkaufszentren.',
-    facts: ['Billigmotels und leere Malls', 'Geschlossene Attraktionen', 'Ab Kapitel 2: Moses kauft gestohlene Autos'],
-    label: { x: 205, y: 210, anchor: 'middle' },
-    icon: { x: 120, y: 190, d: I.car },
+    facts: ['Billigmotels und leere Malls', 'Gellhorn International Raceway', 'Ab Kapitel 2: Moses kauft gestohlene Autos'],
+    label: { x: 300, y: 500, anchor: 'middle' },
+    icon: { x: 230, y: 410, d: I.car },
   },
   {
     id: 'amb', name: 'Ambrosia', vorbild: 'Industriestadt', typ: 'Industrie', color: '#ffd166',
     text: 'Alles dreht sich um die Zuckerraffinerie Allied Crystal. Große Teile der Stadt kontrolliert die Biker-Gang Final Chapter.',
-    facts: ['Zuckerraffinerie Allied Crystal', 'Biker-Gang Final Chapter'],
-    label: { x: 628, y: 420, anchor: 'middle' },
-    icon: { x: 690, y: 360, d: I.factory },
+    facts: ['Zuckerraffinerie Allied Crystal', 'Lake Leonida, der große See', 'Biker-Gang Final Chapter'],
+    label: { x: 470, y: 528, anchor: 'middle' },
+    icon: { x: 610, y: 350, d: I.factory },
   },
   {
     id: 'kal', name: 'Mount Kalaga', vorbild: 'Nationalpark', typ: 'Wildnis', color: '#b07cff',
     text: 'Der Nationalpark im Norden von Leonida, mit Seen, Flüssen und Offroad-Strecken.',
-    facts: ['Seen, Flüsse und Wälder', 'Jagen und Angeln', 'Offroad-Touren'],
-    label: { x: 548, y: 228, anchor: 'middle' },
-    icon: { x: 460, y: 190, d: I.peak },
+    facts: ['Aussichtsplattform mit Blick bis Vice City', 'Millport und Lake Tallaloko', 'Jagen, Angeln und Offroad-Touren'],
+    label: { x: 470, y: 120, anchor: 'middle' },
+    icon: { x: 380, y: 215, d: I.peak },
   },
 ];
 ---
@@ -114,18 +115,21 @@ const regions: Region[] = [
         <pattern id="lm-p-amb" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
           <path d="M0 0v10" stroke="#ffd166" stroke-opacity=".45" stroke-width="1.4" />
         </pattern>
+ <pattern id="lm-p-keys" width="20" height="14" patternUnits="userSpaceOnUse">
+          <path d="M2 9q4-4 8 0t8 0" fill="none" stroke="#3ee7f0" stroke-opacity=".55" />
+        </pattern>
         <pattern id="lm-p-kal" width="22" height="18" patternUnits="userSpaceOnUse">
           <path d="M4 14l5-9 5 9z" fill="none" stroke="#b07cff" stroke-opacity=".55" />
         </pattern>
         <filter id="lm-glow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="5" result="b" />
+          <feGaussianBlur stdDeviation="3.5" result="b" />
           <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
         <filter id="lm-soft" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="2.5" result="b" />
           <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
-        <clipPath id="lm-clip-land"><path d={COAST} /></clipPath>
+        <clipPath id="lm-clip-land"><path d={LAND} clip-rule="evenodd" /></clipPath>
         {Object.entries(R).map(([k, d]) => <clipPath id={`lm-c-${k}`}><path d={d} /></clipPath>)}
       </defs>
 
@@ -135,43 +139,28 @@ const regions: Region[] = [
       <rect width="1000" height="1000" fill="url(#lm-waves)" />
       <circle cx="930" cy="960" r="360" fill="url(#lm-sun)" class="lm-sunglow" />
 
-      <!-- Schatten des Festlands -->
-      <path d={COAST} fill="#000" opacity=".45" transform="translate(10 14)" filter="url(#lm-soft)" />
-      <path d={COAST} fill="url(#lm-land)" />
+      <!-- Schatten des Landes -->
+      <path d={LAND} fill="#000" fill-rule="evenodd" opacity=".45" transform="translate(10 14)" filter="url(#lm-soft)" />
+      <path d={LAND} fill="url(#lm-land)" fill-rule="evenodd" />
 
       <!-- Regionen -->
-      {regions.filter((r) => r.id !== 'keys').map((r) => (
+      {regions.map((r) => (
         <g class="lm-rg" data-r={r.id} style={`--c:${r.color}`} tabindex="0" role="button" aria-label={`${r.name}, Vorbild ${r.vorbild}`}>
-          <path class="lm-fill" d={COAST} clip-path={`url(#lm-c-${r.id})`} />
-          <path class="lm-pat" d={COAST} clip-path={`url(#lm-c-${r.id})`} fill={`url(#lm-p-${r.id})`} />
-          <g clip-path={`url(#lm-c-${r.id})`}><path class="lm-coast-hi" d={COAST} /></g>
+          <path class="lm-fill" d={LAND} fill-rule="evenodd" clip-path={`url(#lm-c-${r.id})`} />
+          <path class="lm-pat" d={LAND} fill-rule="evenodd" clip-path={`url(#lm-c-${r.id})`} fill={`url(#lm-p-${r.id})`} />
+          <g clip-path={`url(#lm-c-${r.id})`}><path class="lm-coast-hi" d={LAND} /></g>
           <g clip-path="url(#lm-clip-land)"><path class="lm-edge" d={R[r.id as keyof typeof R]} /></g>
         </g>
       ))}
 
-      <!-- kleine Inseln an der Küste (Deko) -->
-      <g class="lm-deco-isles" aria-hidden="true">
-        <ellipse cx="250" cy="286" rx="22" ry="4" transform="rotate(-3 250 286)" />
-        <ellipse cx="140" cy="280" rx="16" ry="3.5" transform="rotate(4 140 280)" />
-        <ellipse cx="575" cy="694" rx="4" ry="12" transform="rotate(-14 575 694)" />
-        <ellipse cx="552" cy="620" rx="3.5" ry="9" transform="rotate(-20 552 620)" />
-        <ellipse cx="610" cy="806" rx="7" ry="4" />
-      </g>
+      <!-- Highway über die Keys -->
+      <path class="lm-bridge" d="M612 800 Q 540 880 470 945 Q 420 975 330 950" aria-hidden="true" />
 
-      <!-- Washington Island (gehört zu Vice City) -->
-      <g class="lm-rg lm-sub" data-r="vice" style="--c:#ff4fa3" aria-hidden="true">
-        <ellipse class="lm-fill lm-isle" cx="880" cy="690" rx="9" ry="26" transform="rotate(-8 880 690)" />
-      </g>
-
-      <!-- Leonida Keys -->
-      <g class="lm-rg" data-r="keys" style="--c:#3ee7f0" tabindex="0" role="button" aria-label="Leonida Keys, Vorbild Florida Keys">
-        <path class="lm-hit" d="M830 878 Q 700 935 545 945" />
-        <path class="lm-bridge" d="M826 880 Q 700 930 556 942" />
-        {keys.map((k) => <ellipse class="lm-fill lm-isle" cx={k.cx} cy={k.cy} rx={k.rx} ry={k.ry} transform={`rotate(${k.rot} ${k.cx} ${k.cy})`} />)}
-      </g>
+      <!-- See-Beschriftung -->
+      <text class="lm-water" x="572" y="298" text-anchor="middle" aria-hidden="true">LAKE LEONIDA</text>
 
       <!-- Küste mit Neon-Leuchten -->
-      <path class="lm-coast" d={COAST} pathLength="1" />
+      <path class="lm-coast" d={LAND} pathLength="1" />
 
       <!-- Abtast-Strahl -->
       <rect class="lm-sweep" x="0" y="-160" width="1000" height="160" fill="url(#lm-scan)" />
@@ -184,11 +173,17 @@ const regions: Region[] = [
         </g>
       ))}
 
-      <!-- Dexter-Pin -->
-      <g class="lm-pin" transform="translate(880 662)" aria-hidden="true">
-        <circle class="lm-pulse" r="7" />
-        <circle r="5" />
-        <text x="14" y="-6">Dexter</text>
+      <!-- Orte -->
+      <g class="lm-pins">
+        {ORTE.filter((o) => o.x !== undefined).map((o) => (
+          <g class={`lm-pin lm-pin-${o.typ}`} data-o={o.id} data-region={o.region} data-typ={o.typ} transform={`translate(${o.x} ${o.y})`}
+            tabindex="0" role="button" aria-label={o.name}>
+            <circle class="lm-pin-hit" r="16" />
+            {(o.id === 'dexter' || o.id === 'bigfoot') && <circle class="lm-pulse" r="7" />}
+            <circle class="lm-pin-dot" r="6" />
+            {o.typ === 'stadt' && <text class="lm-pin-t" x="11" y="4">{o.name}</text>}
+          </g>
+        ))}
       </g>
 
       <!-- Beschriftungen -->
@@ -233,6 +228,12 @@ const regions: Region[] = [
         <h3>Wohin geht's?</h3>
         <p>Fahr mit der Maus über eine Region oder tipp sie an. Hier siehst du dann, was dich dort erwartet.</p>
       </section>
+      <section class="lm-card lm-card-ort" data-card="ort" hidden>
+        <p class="lm-kicker" data-ort-k></p>
+        <h3 data-ort-n></h3>
+        <p data-ort-t></p>
+        <a class="lm-cta" data-ort-l hidden>Zur Anleitung →</a>
+      </section>
       {regions.map((r) => (
         <section class="lm-card" data-card={r.id} style={`--c:${r.color}`} hidden>
           <p class="lm-kicker">{r.typ} · Vorbild: {r.vorbild}</p>
@@ -244,7 +245,35 @@ const regions: Region[] = [
       ))}
     </div>
   </div>
-  <figcaption>Eigene schematische Darstellung, nicht maßstabsgetreu.</figcaption>
+  <section class="lm-orte" aria-label="Alle Orte in Leonida">
+    <div class="lm-orte-head">
+      <h3>Alle Orte <span data-orte-count>{ORTE.length}</span></h3>
+      <div class="lm-typen" role="group" aria-label="Nach Art filtern">
+        <button type="button" data-t="all" aria-pressed="true">Alle</button>
+        {(Object.keys(TYPEN) as OrtTyp[]).map((t) => (
+          <button type="button" data-t={t} aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d={TYPEN[t].icon} /></svg>{TYPEN[t].name}
+          </button>
+        ))}
+      </div>
+    </div>
+    <ul class="lm-orte-list">
+      {ORTE.map((o) => {
+        const r = regions.find((x) => x.id === o.region)!;
+        return (
+          <li data-o={o.id} data-region={o.region} data-typ={o.typ} style={`--c:${r.color}`}>
+            <button type="button" class="lm-ort" data-has-pin={o.x !== undefined ? '1' : '0'}>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d={TYPEN[o.typ].icon} /></svg>
+              <span><b>{o.name}</b><small>{r.name} · {TYPEN[o.typ].name}</small></span>
+            </button>
+            <p>{o.text} {o.link && <a href={o.link}>Anleitung →</a>}</p>
+          </li>
+        );
+      })}
+    </ul>
+    <script type="application/json" data-orte-json set:html={JSON.stringify(ORTE.map((o) => ({ id: o.id, name: o.name, region: o.region, typ: TYPEN[o.typ].name, text: o.text, link: o.link ?? '' })))} />
+  </section>
+  <figcaption>Eigene schematische Darstellung, nicht maßstabsgetreu. Pins zeigen die ungefähre Lage.</figcaption>
 </figure>
 
 <style>
@@ -268,7 +297,15 @@ const regions: Region[] = [
   .lm-rg .lm-pat { opacity: .6; transition: opacity .3s; pointer-events: none; }
   .lm-rg .lm-edge { fill: none; stroke: #f6efff; stroke-opacity: .28; stroke-width: 1.5; stroke-dasharray: 6 6; pointer-events: none; }
   .lm-rg .lm-coast-hi { fill: none; stroke: var(--c); stroke-width: 3; opacity: 0; transition: opacity .3s; pointer-events: none; }
-  .lm-deco-isles ellipse { fill: #2b1a4d; stroke: #3ee7f0; stroke-opacity: .45; stroke-width: 1.2; }
+  .lm-water { fill: #3ee7f0; fill-opacity: .55; font: 700 11px var(--font-body); letter-spacing: .2em; pointer-events: none; }
+  .lm-pin { cursor: pointer; outline: none; }
+  .lm-pin-hit { fill: transparent; }
+  .lm-pin-t { fill: #f6efff; font: 600 13px var(--font-body); paint-order: stroke; stroke: #140a24; stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+  .lm-pin-dot { fill: #fff; stroke: #140a24; stroke-width: 2.5; transition: r .2s, fill .2s; }
+  .lm-pin .lm-pulse { fill: none; stroke: #ff4fa3; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: lm-pulse 1.8s ease-out infinite; }
+  .lm-pin:hover .lm-pin-dot, .lm-pin:focus-visible .lm-pin-dot, .lm-pin.is-sel .lm-pin-dot { r: 9; fill: #ffd166; filter: url(#lm-soft); }
+  .lm.has-active .lm-pin:not(.in-region) { opacity: .25; }
+  .lm-pins.is-typed .lm-pin:not(.is-typ) { display: none; }
   .lm-isle { stroke: var(--c); stroke-width: 1.5; stroke-opacity: .7; }
   .lm-hit { fill: none; stroke: transparent; stroke-width: 46; pointer-events: stroke; }
   .lm-bridge { fill: none; stroke: #3ee7f0; stroke-opacity: .35; stroke-width: 1.5; stroke-dasharray: 2 5; pointer-events: none; }
@@ -282,7 +319,7 @@ const regions: Region[] = [
   .lm-rg:focus-visible .lm-coast-hi { opacity: 1; }
 
   /* Küste */
-  .lm-coast { fill: none; stroke: #3ee7f0; stroke-width: 2.2; filter: url(#lm-glow); pointer-events: none;
+  .lm-coast { fill: none; stroke: #3ee7f0; stroke-width: 1.5; filter: url(#lm-glow); pointer-events: none;
     stroke-dasharray: 1; stroke-dashoffset: 0; }
   .lm.lm-anim:not(.lm-in) .lm-coast { stroke-dashoffset: 1; }
   .lm.lm-in .lm-coast { animation: lm-draw 2.4s cubic-bezier(.6,.1,.2,1) both; }
@@ -296,12 +333,7 @@ const regions: Region[] = [
   .lm-icon circle { fill: #140a24; stroke: var(--c); stroke-width: 1.5; }
   .lm-icon path { fill: none; stroke: var(--c); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   .lm-icon.is-on circle { filter: url(#lm-glow); }
-  .lm-pin { pointer-events: none; }
-  .lm-pin circle { fill: #ff4fa3; }
-  .lm-pin .lm-pulse { fill: none; stroke: #ff4fa3; stroke-width: 2; transform-box: fill-box; transform-origin: center;
-    animation: lm-pulse 1.8s ease-out infinite; }
   @keyframes lm-pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(3.2); opacity: 0; } }
-  .lm-pin text { fill: #fff; font: 700 15px var(--font-body); paint-order: stroke; stroke: #140a24; stroke-width: 4px; }
 
   /* Beschriftungen */
   .lm-label { pointer-events: none; }
@@ -352,12 +384,38 @@ const regions: Region[] = [
   .lm-cta:hover { color: #fff; }
   .lm figcaption { font-size: .8rem; color: var(--muted); text-align: right; }
 
+  /* Orte-Liste */
+  .lm-orte { border-radius: 18px; padding: 16px; background: var(--night-2); border: 1px solid var(--night-3); }
+  .lm-orte-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .lm-orte h3 { margin: 0; font-size: 1.4rem; }
+  .lm-orte h3 span { font: 700 .85rem var(--font-body); color: var(--cyan); vertical-align: middle; margin-left: 6px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--cyan); }
+  .lm-typen { display: flex; flex-wrap: wrap; gap: 6px; }
+  .lm-typen button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 99px; border: 1px solid var(--night-3);
+    background: var(--night); color: var(--text); font: 600 .8rem var(--font-body); cursor: pointer; transition: .2s; }
+  .lm-typen button[aria-pressed='true'] { border-color: var(--cyan); color: #fff; background: rgb(62 231 240 / .12); box-shadow: 0 0 12px -3px var(--cyan); }
+  .lm-typen svg, .lm-ort svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .lm-orte-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px 14px; }
+  .lm-orte-list li { border-left: 2px solid var(--c); padding: 2px 0 2px 10px; animation: lm-card-in .3s both; }
+  .lm-orte-list li[hidden] { display: none; }
+  .lm-ort { display: flex; gap: 9px; align-items: flex-start; width: 100%; padding: 4px 0; background: none; border: 0; color: var(--text); text-align: left; cursor: pointer; font: inherit; }
+  .lm-ort svg { margin-top: 3px; color: var(--c); }
+  .lm-ort b { display: block; font-size: .95rem; }
+  .lm-ort small { color: var(--muted); font-size: .76rem; }
+  .lm-ort[data-has-pin='1'] b::after { content: ' ⌖'; color: var(--c); font-weight: 400; }
+  .lm-ort:hover b { color: var(--c); }
+  .lm-orte-list p { display: none; margin: 2px 0 8px 25px; font-size: .86rem; color: var(--muted); }
+  .lm-orte-list li.is-open p { display: block; }
+  .lm-orte-list li.is-open .lm-ort b { color: var(--c); }
+
   @container (max-width: 560px) {
     .lm-label text { font-size: 34px; stroke-width: 7px; }
     .lm-label .lm-sublabel { display: none; }
     .lm-pin text { font-size: 26px; stroke-width: 6px; }
     .lm-cart-s { display: none; }
     .lm-icon { display: none; }
+    .lm-water { font-size: 18px; }
+    .lm-pin-dot { r: 9; }
+    .lm-pin-t { display: none; }
   }
   @container (min-width: 1000px) {
     .lm { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
@@ -398,7 +456,65 @@ const regions: Region[] = [
       });
       root.querySelectorAll<HTMLButtonElement>('.lm-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.r === id)));
       root.querySelectorAll<HTMLElement>('.lm-card').forEach((c) => { c.hidden = c.dataset.card !== (id ?? 'none'); });
+      root.querySelectorAll<SVGGElement>('.lm-pin').forEach((p) => p.classList.toggle('in-region', p.dataset.region === id));
+      if (region !== pinned) { region = pinned; filterList(); }
     };
+
+    // Orte
+    const orte: { id: string; name: string; region: string; typ: string; text: string; link: string }[] =
+      JSON.parse(root.querySelector('[data-orte-json]')?.textContent || '[]');
+    const byId = Object.fromEntries(orte.map((o) => [o.id, o]));
+    const items = [...root.querySelectorAll<HTMLLIElement>('.lm-orte-list li')];
+    const pinsG = root.querySelector<SVGGElement>('.lm-pins')!;
+    let region: string | null = null, typ = 'all';
+    function filterList() {
+      let n = 0;
+      items.forEach((li) => {
+        const ok = (typ === 'all' || li.dataset.typ === typ) && (!region || li.dataset.region === region);
+        li.hidden = !ok; if (ok) n++;
+      });
+      const c = root.querySelector('[data-orte-count]'); if (c) c.textContent = String(n);
+    }
+    const selectOrt = (oid: string) => {
+      const o = byId[oid]; if (!o) return;
+      root.querySelectorAll('.lm-pin').forEach((p) => p.classList.toggle('is-sel', (p as SVGGElement).dataset.o === oid));
+      root.querySelectorAll<HTMLElement>('.lm-card').forEach((c) => { c.hidden = c.dataset.card !== 'ort'; });
+      const card = root.querySelector<HTMLElement>('[data-card="ort"]')!;
+      card.style.setProperty('--c', META[o.region][2]);
+      card.querySelector('[data-ort-k]')!.textContent = `${o.typ} · ${META[o.region][0]}`;
+      card.querySelector('[data-ort-n]')!.textContent = o.name;
+      card.querySelector('[data-ort-t]')!.textContent = o.text;
+      const l = card.querySelector<HTMLAnchorElement>('[data-ort-l]')!;
+      l.hidden = !o.link; if (o.link) l.href = o.link;
+      card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+    };
+    root.querySelectorAll<SVGGElement>('.lm-pin').forEach((p) => {
+      const o = byId[p.dataset.o!];
+      p.addEventListener('pointerenter', (e) => {
+        tip.querySelector('b')!.textContent = o.name;
+        tip.querySelector('span')!.textContent = o.typ;
+        tip.style.setProperty('--c', META[o.region][2]);
+        if (e.pointerType === 'mouse') tip.classList.add('show');
+      });
+      p.addEventListener('pointerleave', () => tip.classList.remove('show'));
+      p.addEventListener('click', (e) => { e.stopPropagation(); selectOrt(o.id); });
+      p.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOrt(o.id); } });
+    });
+    items.forEach((li) => li.querySelector('button')!.addEventListener('click', () => {
+      const open = !li.classList.contains('is-open');
+      items.forEach((x) => x.classList.remove('is-open'));
+      li.classList.toggle('is-open', open);
+      if (open) selectOrt(li.dataset.o!);
+    }));
+    const tbtns = [...root.querySelectorAll<HTMLButtonElement>('.lm-typen button')];
+    tbtns.forEach((b) => b.addEventListener('click', () => {
+      typ = b.dataset.t!;
+      tbtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      pinsG.classList.toggle('is-typed', typ !== 'all');
+      const name = b.textContent!.trim();
+      root.querySelectorAll<SVGGElement>('.lm-pin').forEach((p) => p.classList.toggle('is-typ', byId[p.dataset.o!].typ === name));
+      filterList();
+    }));
 
     const regions = root.querySelectorAll<SVGGElement>('.lm-rg');
     regions.forEach((g) => {

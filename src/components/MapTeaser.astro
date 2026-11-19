@@ -1,6 +1,6 @@
 ---
 // Startseiten-Teaser für die interaktive Leonida-Karte (eigene Grafik).
-import { COAST, R, keys } from '../lib/leonida';
+import { LAND, R } from '../lib/leonida';
 
 const href = '/karte/gta-6-karte-regionen/';
 const regions = [
@@ -16,7 +16,7 @@ const regions = [
   <div class="mt-text">
     <p class="eyebrow">Neu: Interaktive Karte</p>
     <h2>Entdecke die Karte von Leonida</h2>
-    <p>Sechs Regionen, von den Stränden in Vice City bis zu den Wäldern am Mount Kalaga. Fahr mit der Maus drüber und sieh, was dich wo erwartet.</p>
+    <p>Sechs Regionen und 40 Orte, von den Stränden in Vice City bis zu den Wäldern am Mount Kalaga. Tipp einen Ort an und sieh, was dich dort erwartet.</p>
     <ul class="mt-chips">
       {regions.map((r) => <li style={`--c:${r.c}`}><i></i>{r.name}</li>)}
     </ul>
@@ -31,13 +31,12 @@ const regions = [
         </filter>
         {Object.entries(R).map(([k, d]) => <clipPath id={`mt-c-${k}`}><path d={d} /></clipPath>)}
       </defs>
-      <path d={COAST} fill="#2b1a4d" />
-      {regions.filter((r) => r.id !== 'keys').map((r, i) => (
-        <path class="mt-rg" d={COAST} clip-path={`url(#mt-c-${r.id})`} style={`--c:${r.c};--i:${i}`} />
+      <path d={LAND} fill="#2b1a4d" fill-rule="evenodd" />
+      {regions.map((r, i) => (
+        <path class="mt-rg" d={LAND} fill-rule="evenodd" clip-path={`url(#mt-c-${r.id})`} style={`--c:${r.c};--i:${i}`} />
       ))}
-      {keys.map((k) => <ellipse class="mt-isle" cx={k.cx} cy={k.cy} rx={k.rx} ry={k.ry} transform={`rotate(${k.rot} ${k.cx} ${k.cy})`} />)}
-      <path class="mt-coast" d={COAST} />
-      <g transform="translate(880 662)"><circle class="mt-pulse" r="9" /><circle r="7" fill="#ff4fa3" /></g>
+      <path class="mt-coast" d={LAND} />
+      <g transform="translate(636 488)"><circle class="mt-pulse" r="9" /><circle r="7" fill="#ff4fa3" /></g>
     </svg>
   </div>
 </a>
@@ -62,7 +61,6 @@ const regions = [
   .mt:hover .mt-map svg { transform: rotate(-2deg) scale(1.04); }
   .mt-rg { fill: var(--c); fill-opacity: .2; animation: mt-blink 6s ease-in-out infinite; animation-delay: calc(var(--i) * 1s); }
   @keyframes mt-blink { 8% { fill-opacity: .6; } 18% { fill-opacity: .2; } }
-  .mt-isle { fill: #3ee7f0; fill-opacity: .4; stroke: #3ee7f0; stroke-width: 2; }
   .mt-coast { fill: none; stroke: #3ee7f0; stroke-width: 4; filter: url(#mt-glow); }
   .mt-pulse { fill: none; stroke: #ff4fa3; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: mt-pulse 1.8s ease-out infinite; }
   @keyframes mt-pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(3.4); opacity: 0; } }
