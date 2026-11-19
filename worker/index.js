@@ -1,10 +1,12 @@
 // Worker vor der statischen Seite: nimmt nur das Einsende-Formular (/api/einsenden) an
-// und schickt den Inhalt per Cloudflare Email Routing an die Redaktion.
+// und schickt den Inhalt per Mail an die Redaktion.
 // Alles andere liefert Cloudflare direkt aus ./dist aus.
 //
-// Einrichtung (Cloudflare-Dashboard):
-// 1. palmenpixel.de > Email > Email Routing aktivieren, Zieladresse bestätigen.
-// 2. Worker palmenpixel > Settings > Variables: EINSENDUNG_AN = bestätigte Zieladresse.
+// Versand (Worker palmenpixel > Settings > Variables and Secrets):
+// - EINSENDUNG_AN = Empfängeradresse (Pflicht)
+// - BREVO_API_KEY = API-Schlüssel von Brevo. Ist er gesetzt, geht die Mail über Brevo raus.
+// - BREVO_ABSENDER = in Brevo bestätigte Absenderadresse (Standard: kontakt@palmenpixel.de)
+// Ohne BREVO_API_KEY wird Cloudflare Email Routing (Binding EMAIL) verwendet.
 import { EmailMessage } from 'cloudflare:email';
 
 const FROM = 'formular@palmenpixel.de';
@@ -23,7 +25,7 @@ function json(body, status = 200) {
 
 async function einsenden(request, env) {
   if (request.method !== 'POST') return json({ ok: false, error: 'method' }, 405);
-  if (!env.EINSENDUNG_AN || !env.EMAIL) return json({ ok: false, error: 'not_configured' }, 503);
+  if (!env.EINSENDUNG_AN || (!env.BREVO_API_KEY && !env.EMAIL)) return json({ ok: false, error: 'not_configured' }, 503);
 
   let form;
   try { form = await request.formData(); } catch { return json({ ok: false, error: 'bad_request' }, 400); }
@@ -56,6 +58,8 @@ async function einsenden(request, env) {
     `Eingegangen: ${new Date().toISOString()}`,
   ].join('\n');
 
+  if (env.BREVO_API_KEY) return sendBrevo(env, { subject: `[${art}] ${titel}`, text, replyTo: email });
+
   const headers = [
     `From: Palmenpixel Formular <${FROM}>`,
     `To: ${env.EINSENDUNG_AN}`,
@@ -77,6 +81,33 @@ async function einsenden(request, env) {
     return json({ ok: false, error: 'send' }, 502);
   }
   return json({ ok: true });
+}
+
+async function sendBrevo(env, { subject, text, replyTo }) {
+  const body = {
+    sender: { name: 'Palmenpixel Formular', email: env.BREVO_ABSENDER || 'kontakt@palmenpixel.de' },
+    to: [{ email: env.EINSENDUNG_AN }],
+    subject,
+    textContent: text,
+  };
+  if (replyTo) body.replyTo = { email: replyTo };
+  try {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'api-key': env.BREVO_API_KEY, 'content-type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const out = await res.text();
+    if (!res.ok) {
+      console.error('brevo failed', res.status, out.slice(0, 300));
+      return json({ ok: false, error: 'send' }, 502);
+    }
+    console.log('brevo ok', out.slice(0, 200));
+    return json({ ok: true });
+  } catch (e) {
+    console.error('brevo error', e?.message ?? String(e));
+    return json({ ok: false, error: 'send' }, 502);
+  }
 }
 
 export default {
