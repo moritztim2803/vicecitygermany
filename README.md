@@ -1,7 +1,7 @@
-# Leonida Guide – deutsche GTA-6-Guide-Seite (Astro)
+# Palmenpixel – deutsche GTA-6-Guide-Seite (Astro)
 
 Statische, schnelle, SEO-freundliche Seite. Artikel sind einfache Markdown-Dateien.
-Der Name „Leonida Guide“ ist nur ein Platzhalter: in `src/site.config.ts` änderbar.
+Name und Domain stehen in `src/site.config.ts`.
 
 ## Lokal starten
 

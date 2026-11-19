@@ -2,27 +2,35 @@
 import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import AdSlot from '../components/AdSlot.astro';
+import Sunset from '../components/Sunset.astro';
 import { SITE, CATEGORIES } from '../site.config';
 import { allArtikel, artikelUrl } from '../lib/artikel';
 
 const artikel = await allArtikel();
 const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'de-DE' }];
 ---
-<Base title={SITE.name} description={`${SITE.tagline}: Release, Geld verdienen, Karte, Fahrzeuge und Technik, verständlich erklärt.`} jsonLd={jsonLd}>
+<Base title={`${SITE.name}: ${SITE.tagline}`} description={`${SITE.tagline}: Release, Geld verdienen, Karte, Fahrzeuge und Technik, verständlich erklärt.`} jsonLd={jsonLd}>
   <section class="hero">
-    <h1>{SITE.tagline}</h1>
-    <p>Kurze, ehrliche Antworten auf das, was du gerade in GTA 6 suchst. Ohne Spoiler, wenn nicht anders markiert.</p>
+    <Sunset />
+    <div class="hero-text">
+      <p class="eyebrow">GTA 6 auf Deutsch</p>
+      <h1>Guides, Tipps &amp; News aus dem Sonnenstaat</h1>
+      <p>Kurze, ehrliche Antworten auf das, was du gerade in GTA 6 suchst. Ohne Spoiler, wenn nicht anders markiert.</p>
+      <ul class="hero-cats">
+        {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+      </ul>
+    </div>
   </section>
   <AdSlot name="header" />
-  <h2>Neueste Artikel</h2>
+  <h2 class="section-title">Neueste Artikel</h2>
   <div class="grid">
     {artikel.map((a) => (
       <ArticleCard href={artikelUrl(a)} title={a.data.title} description={a.data.description}
         category={a.data.category} date={a.data.updatedDate ?? a.data.publishDate} />
     ))}
   </div>
-  <h2>Kategorien</h2>
+  <h2 class="section-title">Kategorien</h2>
   <ul class="cat-list">
-    {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}><strong>{c.name}</strong></a><span>{c.description}</span></li>)}
+    {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}><strong>{c.name}</strong><span>{c.description}</span></a></li>)}
   </ul>
 </Base>

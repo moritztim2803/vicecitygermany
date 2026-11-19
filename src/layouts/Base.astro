@@ -1,4 +1,6 @@
 ---
+import '@fontsource/righteous/400.css';
+import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { SITE, ADS, CATEGORIES } from '../site.config';
 import CookieBanner from '../components/CookieBanner.astro';
@@ -12,12 +14,13 @@ interface Props {
 }
 const { title, description, type = 'website', jsonLd = [], noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
-const fullTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 ---
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
     <meta charset="utf-8" />
+    <meta name="theme-color" content="#140a24" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
@@ -40,7 +43,7 @@ const fullTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
     <a class="skip" href="#inhalt">Zum Inhalt springen</a>
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="logo" href="/">{SITE.name}</a>
+        <a class="logo" href="/"><span class="logo-sun" aria-hidden="true"></span>{SITE.name}</a>
         <nav aria-label="Hauptnavigation">
           <ul>
             {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}

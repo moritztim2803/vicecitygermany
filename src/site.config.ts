@@ -1,8 +1,8 @@
 // Zentrale Einstellungen der Seite. Hier änderst du Name, Domain, Werbung und Affiliate.
 
 export const SITE = {
-  name: 'Leonida Guide',
-  tagline: 'Deutsche Guides, Tipps & News zu GTA 6',
+  name: 'Palmenpixel',
+  tagline: 'GTA 6 Guides, Tipps & News auf Deutsch',
   url: 'https://example.com', // TODO: echte Domain eintragen
   lang: 'de',
   locale: 'de_DE',
