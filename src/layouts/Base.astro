@@ -2,11 +2,10 @@
 import '@fontsource/righteous/400.css';
 import '@fontsource-variable/inter';
 import '../styles/global.css';
-import { SITE, ADS, CATEGORIES } from '../site.config';
+import { SITE, ADS, NAV } from '../site.config';
+import SiteFun from '../components/SiteFun.astro';
 import CookieBanner from '../components/CookieBanner.astro';
-import { allArtikel } from '../lib/artikel';
-const usedCats = new Set((await allArtikel()).map((a) => a.data.category));
-const navCats = CATEGORIES.filter((c) => usedCats.has(c.slug));
+const path = Astro.url.pathname;
 
 interface Props {
   title: string;
@@ -50,9 +49,10 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
         <a class="logo" href="/"><span class="logo-sun" aria-hidden="true"></span>{SITE.name}</a>
         <nav aria-label="Hauptnavigation">
           <ul>
-            {navCats.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+            {NAV.map((n) => <li><a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.name}</a></li>)}
           </ul>
         </nav>
+        <a class="nav-quiz" href="/karte/gta-6-quiz-welche-region/"><span aria-hidden="true">★</span> Region-Test</a>
       </div>
     </header>
     <main id="inhalt" class="wrap">
@@ -72,8 +72,10 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
           <li><a href="/ueber-uns/">Über uns</a></li>
           <li><button type="button" class="linklike" data-open-consent>Cookie-Einstellungen</button></li>
         </ul>
+        <p class="cheat-hint">Psst, Cheat-Code: Tipp irgendwo auf der Seite <kbd>SUNSET</kbd> ein{' '}<button type="button" class="linklike" data-sunset-toggle>oder klick hier</button>.</p>
       </div>
     </footer>
     <CookieBanner />
+    <SiteFun />
   </body>
 </html>

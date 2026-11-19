@@ -1,0 +1,105 @@
+---
+// Seiten-Gags: Palmen-Mauszeiger (nur Desktop) und Cheat-Code „SUNSET“ für den Sunset-Modus.
+---
+<div class="cheat-hud" aria-live="polite" hidden><span data-cheat-keys></span></div>
+<div class="sunset-rain" aria-hidden="true"></div>
+
+<style is:global>
+  @media (hover: hover) and (pointer: fine) {
+    html { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke='%23140a24' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M3 3l8 20 2.5-8.5L22 12z'/%3E%3C/g%3E%3Cpath d='M3 3l8 20 2.5-8.5L22 12z' fill='%23ff4fa3' stroke='%23fff' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cg stroke='%233ee7f0' stroke-width='1.6' fill='none' stroke-linecap='round'%3E%3Cpath d='M20 26v-7'/%3E%3Cpath d='M20 19c-2-2-5-2-6.5-.5M20 19c2-2 5-2 6.5-.5M20 19c-.5-2.5-2.5-4-4.5-4M20 19c.5-2.5 2.5-4 4.5-4'/%3E%3C/g%3E%3C/svg%3E") 2 2, auto; }
+    a, button, summary, label, [role='button'], select { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='%23140a24' stroke-width='4' fill='none' stroke-linecap='round'%3E%3Cpath d='M16 30V14'/%3E%3C/g%3E%3Cg stroke-linecap='round' fill='none'%3E%3Cpath d='M16 30V14' stroke='%23ffd166' stroke-width='2.4'/%3E%3Cpath d='M16 14c-4-4-10-4-13-1M16 14c4-4 10-4 13-1M16 14c-1-5-5-8-9-8M16 14c1-5 5-8 9-8M16 14c0-4 0-8-1-11' stroke='%234dff9a' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E") 16 4, pointer; }
+  }
+  .click-spark { position: fixed; z-index: 90; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; pointer-events: none;
+    background: var(--sc); box-shadow: 0 0 8px var(--sc); animation: click-spark .55s ease-out forwards; }
+  @keyframes click-spark { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+
+  .cheat-hud { position: fixed; z-index: 95; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 10px 18px; border-radius: 12px;
+    font: 1.5rem var(--font-display); letter-spacing: .3em; color: var(--sun-1); background: rgb(20 10 36 / .9); border: 1px solid var(--sun-1);
+    box-shadow: 0 0 24px -4px var(--sun-1); text-shadow: 0 0 12px var(--sun-1); pointer-events: none; }
+  .cheat-hud.ok { color: #4dff9a; border-color: #4dff9a; box-shadow: 0 0 30px #4dff9a; text-shadow: 0 0 12px #4dff9a; letter-spacing: .08em; }
+
+  .sunset-rain { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; display: none; }
+  html.sunset-mode .sunset-rain { display: block; }
+  .sunset-rain i { position: absolute; top: -20vh; width: 2px; height: 14vh; border-radius: 2px; opacity: .5;
+    background: linear-gradient(transparent, var(--rc)); animation: sunset-rain linear infinite; }
+  @keyframes sunset-rain { to { transform: translateY(130vh); } }
+  html.sunset-mode body { background:
+    radial-gradient(900px 500px at 50% 110%, rgb(255 122 89 / .45), transparent 70%),
+    radial-gradient(700px 400px at 90% -10%, rgb(255 79 163 / .35), transparent 70%),
+    linear-gradient(180deg, #2a0f45, #3b1050 50%, #5a1650) fixed; }
+  html.sunset-mode main, html.sunset-mode .site-header, html.sunset-mode .site-footer { position: relative; z-index: 2; }
+  html.sunset-mode h1, html.sunset-mode h2 { color: #ffd166 !important; text-shadow: 0 0 18px #ff7a59, 0 0 40px #ff4fa3 !important; }
+  html.sunset-mode .logo { animation: sunset-hue 6s linear infinite; }
+  @keyframes sunset-hue { to { filter: hue-rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .sunset-rain { display: none !important; } .click-spark { display: none; } }
+</style>
+
+<script>
+  const KEY = 'palmenpixel-sunset';
+  const CODE = 'SUNSET';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hud = document.querySelector<HTMLElement>('.cheat-hud')!;
+  const keysEl = hud.querySelector<HTMLElement>('[data-cheat-keys]')!;
+  const rain = document.querySelector<HTMLElement>('.sunset-rain')!;
+  let hudTimer = 0;
+
+  const fillRain = () => {
+    if (rain.childElementCount || reduce) return;
+    const cols = ['#ff4fa3', '#3ee7f0', '#ffd166', '#b07cff'];
+    for (let i = 0; i < 46; i++) {
+      const d = document.createElement('i');
+      d.style.left = `${Math.random() * 100}%`;
+      d.style.setProperty('--rc', cols[i % cols.length]);
+      d.style.animationDuration = `${1.2 + Math.random() * 2}s`;
+      d.style.animationDelay = `${-Math.random() * 3}s`;
+      rain.appendChild(d);
+    }
+  };
+  const setMode = (on: boolean, announce = false) => {
+    document.documentElement.classList.toggle('sunset-mode', on);
+    if (on) fillRain();
+    try { on ? localStorage.setItem(KEY, '1') : localStorage.removeItem(KEY); } catch { /* egal */ }
+    if (announce) {
+      hud.hidden = false; hud.classList.add('ok');
+      keysEl.textContent = on ? 'Cheat aktiviert: Sunset-Modus' : 'Cheat deaktiviert';
+      clearTimeout(hudTimer); hudTimer = window.setTimeout(() => { hud.hidden = true; hud.classList.remove('ok'); }, 2200);
+    }
+  };
+  try { if (localStorage.getItem(KEY)) setMode(true); } catch { /* egal */ }
+
+  let typed = '';
+  document.addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toUpperCase();
+    typed = (typed + k).slice(-CODE.length);
+    // Treffer zählen: wie viele Buchstaben vom Code-Anfang stimmen gerade?
+    let match = 0;
+    for (let n = CODE.length; n > 0; n--) if (typed.endsWith(CODE.slice(0, n))) { match = n; break; }
+    if (!match) return;
+    if (match === CODE.length) { typed = ''; setMode(!document.documentElement.classList.contains('sunset-mode'), true); return; }
+    hud.classList.remove('ok'); hud.hidden = false;
+    keysEl.textContent = CODE.slice(0, match).split('').join(' ') + ' ' + '_ '.repeat(CODE.length - match).trim();
+    clearTimeout(hudTimer); hudTimer = window.setTimeout(() => { hud.hidden = true; }, 1600);
+  });
+  document.querySelectorAll('[data-sunset-toggle]').forEach((b) => b.addEventListener('click', () => setMode(!document.documentElement.classList.contains('sunset-mode'), true)));
+
+  // Neon-Funken beim Klicken (nur mit Maus)
+  if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const cols = ['#ff4fa3', '#3ee7f0', '#ffd166'];
+    document.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      for (let i = 0; i < 7; i++) {
+        const s = document.createElement('span');
+        s.className = 'click-spark';
+        const a = (Math.PI * 2 * i) / 7, r = 18 + Math.random() * 14;
+        s.style.left = `${e.clientX}px`; s.style.top = `${e.clientY}px`;
+        s.style.setProperty('--sc', cols[i % 3]);
+        s.style.setProperty('--dx', `${Math.cos(a) * r}px`); s.style.setProperty('--dy', `${Math.sin(a) * r}px`);
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 600);
+      }
+    });
+  }
+</script>
