@@ -13,7 +13,7 @@ faq:
     a: "Ja, Bargeld, das du bei dir trägst, ist weg. Zahl größere Summen deshalb am Geldautomaten ein."
 ---
 
-> **Stand: 19. November 2026.** Alles spielt sich im Story-Modus ab, ohne Glitches.
+> **Stand: 19. November 2026.** Alles spielt sich im Story-Modus ab, ohne Glitches. Nutz oben den **Polizei-Check**: Tipp an, was die Polizei über dich weiß, und arbeite die Schritte ab.
 
 **Kurz gesagt:** Raus aus der **Suchzone** auf der Karte, außer Sicht bleiben, **verstecken**. Danach **umziehen und das Auto wechseln**, denn die Polizei merkt sich, wie du aussiehst.
 
