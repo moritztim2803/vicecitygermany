@@ -1,53 +1,62 @@
 ---
-title: "Jason und Lucia wechseln: So funktioniert der Charakterwechsel"
-description: "Wann du in GTA 6 zwischen Jason und Lucia wechseln kannst, wann nicht und warum. Mit den drei Missionstypen, die Rockstar erklärt hat."
+title: "GTA 6 Charakter wechseln: So spielst du Jason und Lucia"
+description: "So wechselst du in GTA 6 zwischen Jason und Lucia: Taste auf PS5 und Xbox, ab wann es geht und was hilft, wenn der Wechsel ausgegraut ist."
 category: guides
 publishDate: 2026-11-19
 keywords: ["gta 6 charakter wechseln", "gta 6 jason lucia wechseln", "gta 6 charakterwechsel", "gta 6 lucia spielen"]
 faq:
-  - q: "Kann ich in GTA 6 jederzeit zwischen Jason und Lucia wechseln?"
-    a: "Nein. In manchen Missionen ist die Figur fest vorgegeben, in manchen wechselt das Spiel automatisch, und in manchen darfst du frei wechseln."
-  - q: "Kann ich mit Jason und Lucia getrennt die Welt erkunden?"
-    a: "Laut einer Vorschau ja: Du kannst als Paar unterwegs sein oder beide getrennt ihr eigenes Ding machen."
+  - q: "Wie wechsle ich in GTA 6 zwischen Jason und Lucia?"
+    a: "Halte das Steuerkreuz rechts gedrückt und drück dann R1 (PS5) bzw. RB (Xbox)."
+  - q: "Ab wann kann ich in GTA 6 den Charakter wechseln?"
+    a: "Ab Kapitel 2, direkt nach der Mission Breakfast Run. In Kapitel 1 geht es noch nicht."
+  - q: "Warum ist der Charakterwechsel in GTA 6 ausgegraut?"
+    a: "Die andere Figur ist gerade beschäftigt, zum Beispiel weil sie mit einem RydeMe wegfährt, oder du bist in einer Mission, die nur mit einer Figur spielbar ist."
 ---
 
-> **Stand: 19. November 2026.** Grundlage sind Rockstars eigene Aussagen vor dem Release. Details aus dem fertigen Spiel ergänzen wir laufend.
+> **Stand: 19. November 2026.**
 
-**Kurz gesagt:** Du kannst in GTA 6 zwischen **Jason und Lucia** wechseln, aber **nicht immer**. Rockstar unterscheidet drei Arten von Missionen: feste Figur, automatischer Wechsel und freier Wechsel. In der offenen Welt kannst du als Paar oder getrennt unterwegs sein.
+**Kurz gesagt:** **Steuerkreuz rechts gedrückt halten** und dann **R1 (PS5)** bzw. **RB (Xbox)** drücken. Das funktioniert erst ab **Kapitel 2**, nach der Mission **Breakfast Run**.
 
-## Die drei Missionstypen
+## Die Tasten
 
-Rob Nelson, Co-Chef von Rockstar North, hat das System in einem Interview mit dem japanischen Magazin Famitsu erklärt:
-
-| Missionstyp | Was passiert | Beispiel laut Rockstar |
+| Aktion | PS5 | Xbox |
 |---|---|---|
-| **Feste Figur** | Du spielst nur eine Person | Eine frühe Mission in einem Hochhaus, in der Jason die Führung hat |
-| **Automatischer Wechsel** | Das Spiel wechselt an festen Stellen | Flucht nach einem Banküberfall: erst schießt Jason aus dem Auto, dann fährt Lucia |
-| **Freier Wechsel** | Du entscheidest selbst | Eine Szene, in der beide unter Beschuss stehen |
+| Charakter wechseln | Steuerkreuz rechts halten + **R1** | Steuerkreuz rechts halten + **RB** |
+| Partner zu dir holen | Steuerkreuz rechts halten + **Dreieck** | Steuerkreuz rechts halten + **Y** |
 
-Der Grund: Manche Momente sollen bewusst aus der Sicht einer Figur erzählt werden. Ein freier Wechsel wäre dort laut Nelson „unnatürlich“ für die Geschichte. Ähnlich war es schon bei GTA 5 mit seinen drei Hauptfiguren.
+Wichtig: Steuerkreuz rechts **halten**, nicht nur antippen. Antippen löst eine andere Aktion aus.
 
-## Wechseln in der offenen Welt
+## So wechselst du Schritt für Schritt
 
-Außerhalb von Missionen bist du freier. Laut einer Vorschau des Magazins Dazed kannst du:
+1. **Spiel Kapitel 1 durch.** Bis dahin legt die Story fest, wen du spielst.
+2. **Schließ in Kapitel 2 die Mission „Breakfast Run“ ab.** Kurz danach erscheint der Hinweis zum Wechseln, wenn du zurück zum Auto gehst.
+3. **Halte das Steuerkreuz rechts gedrückt.** Das Partner-Menü öffnet sich.
+4. **Drück R1 (PS5) oder RB (Xbox).** Du wechselst zur anderen Figur.
+5. **Du spielst jetzt die andere Figur** dort weiter, wo sie gerade ist.
 
-- **als Paar unterwegs sein**, zum Beispiel als Jason fahren, während Lucia mitfährt
-- **getrennt spielen** und mit jeder Figur eigene Wege gehen
-- über das **Handy** Kontakt halten
+## Was du im Partner-Menü noch machen kannst
 
-## Was sich an Jason und Lucia verändert
+Wenn Jason und Lucia zusammen unterwegs sind, öffnest du mit **Steuerkreuz rechts halten** auch diese Befehle:
 
-Beide Figuren reagieren auf deinen Lebensstil. Laut den Vorschauberichten:
+- **Partner fahren lassen**
+- **Getrennte Wege gehen**, damit jeder für sich unterwegs ist
+- **Bei Überfällen:** den Partner im Auto warten lassen oder als Verstärkung mitnehmen
 
-- **Essen** beeinflusst das Gewicht.
-- **Training** baut sichtbar Muskeln auf.
-- **Zu wenig Schlaf** sieht man ihnen an.
-- **Kleidung, Frisuren, Tattoos und Make-up** kannst du anpassen.
+## Wechsel ausgegraut? Das hilft
 
-Wenn du also lange nur mit einer Figur spielst, lohnt sich ab und zu ein Blick auf die andere.
+1. **Partner fährt gerade weg:** Nach einem Wechsel ruft die andere Figur manchmal ein **RydeMe** und verlässt die Gegend. Warte kurz und versuch es dann noch einmal.
+2. **Du bist in einer Mission für nur eine Figur:** Auf der Karte siehst du dann ein **J** oder **L** an der Mission. Beende sie und versuch es danach in der offenen Welt.
 
-## Tipp: Fahrzeugkampf im Duo
+## In Missionen entscheidet oft die Story
 
-Laut Vorschau kannst du im Auto fließend zwischen **Fahren und Schießen aus dem Beifahrerfenster** wechseln. In Verfolgungsjagden zu zweit ist das oft der schnellste Weg, Verfolger loszuwerden.
+Rockstar hat vor dem Release erklärt, dass es drei Arten von Missionen gibt:
 
-*Quellen: Famitsu-Interview mit Rob Nelson (über GamesRadar, 31.08.2026, und TweakTown, 01.09.2026), Dazed-Vorschau (über PC Gamer, 26.08.2026, und TechRadar, 27.08.2026).*
+| Missionstyp | Was passiert |
+|---|---|
+| **Feste Figur** | Du spielst nur Jason oder nur Lucia |
+| **Automatischer Wechsel** | Das Spiel wechselt an festen Stellen, z. B. bei einer Flucht |
+| **Freier Wechsel** | Du entscheidest selbst |
+
+Wenn der Wechsel in einer Mission also nicht geht, ist das kein Fehler.
+
+*Quellen: GamesRadar, KeenGamer, LibertyCity, Outputlag, VGC (18./19.11.2026), Famitsu-Interview mit Rob Nelson (über GamesRadar, 31.08.2026).*
