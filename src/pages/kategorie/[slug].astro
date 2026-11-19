@@ -1,9 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import ToolTiles from '../../components/ToolTiles.astro';
+import EggStrip from '../../components/EggStrip.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import SubmitCta from '../../components/SubmitCta.astro';
-import { CATEGORIES } from '../../site.config';
+import { CATEGORIES, SITE } from '../../site.config';
 import { allArtikel, artikelUrl } from '../../lib/artikel';
 
 export function getStaticPaths() {
@@ -11,18 +13,51 @@ export function getStaticPaths() {
 }
 const { cat } = Astro.props;
 const artikel = (await allArtikel()).filter((a) => a.data.category === cat.slug);
+
+// Passende Tools je Rubrik, damit man direkt etwas ausprobieren kann
+const TOOLS_FOR: Record<string, string[]> = {
+  guides: ['album', 'heat', 'fahrzeuge'],
+  karte: ['karte', 'quiz', 'checklisten'],
+  news: ['quiz', 'album', 'karte'],
+  technik: ['checklisten', 'quiz', 'karte'],
+  'easter-eggs': ['checklisten', 'karte'],
+};
+const C: Record<string, string> = { news: '#3ee7f0', guides: '#ff4fa3', 'easter-eggs': '#ffd166', karte: '#4dff9a', technik: '#b07cff' };
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: `${SITE.url}/` },
+    { '@type': 'ListItem', position: 2, name: cat.name, item: `${SITE.url}/kategorie/${cat.slug}/` },
+  ],
+}, {
+  '@context': 'https://schema.org', '@type': 'ItemList', name: `GTA 6 ${cat.name}`, numberOfItems: artikel.length,
+  itemListElement: artikel.map((a, i) => ({ '@type': 'ListItem', position: i + 1, name: a.data.title, url: `${SITE.url}${artikelUrl(a)}` })),
+}];
 ---
-<Base title={`GTA 6 ${cat.name}`} description={cat.description} noindex={artikel.length === 0}>
-  <h1>GTA 6 {cat.name}</h1>
-  <p class="lead">{cat.description}</p>
+<Base title={`GTA 6 ${cat.name}`} description={cat.description} noindex={artikel.length === 0} jsonLd={jsonLd}>
+  <header class="kat-head" style={`--c:${C[cat.slug] ?? '#ff4fa3'}`}>
+    <p class="eyebrow">Rubrik · {artikel.length} Artikel</p>
+    <h1>GTA 6 {cat.name}</h1>
+    <p class="lead">{cat.description}</p>
+  </header>
+
+  {cat.slug === 'easter-eggs' && <EggStrip />}
+
+  <div class="kat-tools">
+    <h2 class="kat-h">Direkt ausprobieren</h2>
+    <ToolTiles only={TOOLS_FOR[cat.slug] ?? []} compact />
+  </div>
+
   <AdSlot name="header" />
-  {artikel.length === 0 ? <p>Hier erscheinen bald die ersten Artikel.</p> : (
-    <div class="grid">
-      {artikel.map((a) => (
-        <ArticleCard href={artikelUrl(a)} title={a.data.title} description={a.data.description}
-          category={a.data.category} date={a.data.updatedDate ?? a.data.publishDate} />
-      ))}
-    </div>
-  )}
+
+  <h2 class="kat-h">Alle Artikel</h2>
+  {artikel.length === 0 ? <p>Hier erscheinen bald die ersten Artikel.</p> : <ArticleList items={artikel} showCat={false} />}
   {cat.slug === 'easter-eggs' && <SubmitCta />}
 </Base>
+
+<style>
+  .kat-head { padding: 14px 0 10px; }
+  .kat-head h1 { margin: .1em 0 .3em; color: #fff; text-shadow: 0 0 22px color-mix(in srgb, var(--c) 60%, transparent); }
+  .kat-head .eyebrow { color: var(--c); }
+  .kat-h { font-size: 1.2rem; margin: 26px 0 12px; }
+  .kat-tools { margin-bottom: 8px; }
+</style>

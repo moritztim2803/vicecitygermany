@@ -31,7 +31,12 @@
   html.sunset-mode h1, html.sunset-mode h2 { color: #ffd166 !important; text-shadow: 0 0 18px #ff7a59, 0 0 40px #ff4fa3 !important; }
   html.sunset-mode .logo { animation: sunset-hue 6s linear infinite; }
   @keyframes sunset-hue { to { filter: hue-rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .sunset-rain { display: none !important; } .click-spark { display: none; } }
+  /* Sanftes Einblenden beim Scrollen (nur wenn JS läuft) */
+  .rv { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .rv.rv-in { opacity: 1; transform: none; }
+  .prose h2.rv-in { animation: rv-glow 1.2s ease-out; }
+  @keyframes rv-glow { 0% { text-shadow: 0 0 0 transparent; } 40% { text-shadow: 0 0 22px var(--pink); } }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } .sunset-rain { display: none !important; } .click-spark { display: none; } }
 </style>
 
 <script>
@@ -84,6 +89,13 @@
     clearTimeout(hudTimer); hudTimer = window.setTimeout(() => { hud.hidden = true; }, 1600);
   });
   document.querySelectorAll('[data-sunset-toggle]').forEach((b) => b.addEventListener('click', () => setMode(!document.documentElement.classList.contains('sunset-mode'), true)));
+
+  // Inhalte beim Scrollen einblenden
+  if (!reduce && 'IntersectionObserver' in window) {
+    const els = document.querySelectorAll<HTMLElement>('.prose > h2, .prose > h3, .prose > p, .prose > ol, .prose > ul, .prose > table, .prose > blockquote, .faq details, [data-rv]');
+    const io = new IntersectionObserver((ents) => ents.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('rv-in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    els.forEach((el) => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('rv'); io.observe(el); } });
+  }
 
   // Neon-Funken beim Klicken (nur mit Maus)
   if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
