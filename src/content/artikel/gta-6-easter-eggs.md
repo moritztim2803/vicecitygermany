@@ -75,4 +75,4 @@ Ein echtes „Easter Egg“: ganz oben auf dem höchsten Turm liegt ein Vogelnes
 
 ## Mehr Easter Eggs folgen
 
-Spieler finden gerade jeden Tag neue Geheimnisse. Wir nehmen ein Easter Egg auf, sobald der Weg dorthin klar ist, und erklären es Schritt für Schritt.
+Spieler finden gerade jeden Tag neue Geheimnisse. Du hast selbst eins entdeckt? [Schick es uns](/easter-egg-melden/). Wir nehmen ein Easter Egg auf, sobald der Weg dorthin klar ist, und erklären es Schritt für Schritt.

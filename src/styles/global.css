@@ -189,3 +189,25 @@ main { padding-block: 24px 56px; }
 .prose .newsletter h2 { background: none; box-shadow: none; border: 0; padding: 0; }
 .nl-status { margin: 12px 0 0; padding: 12px 16px; border-radius: 12px; background: rgb(62 231 240 / .12); border: 1px solid rgb(62 231 240 / .5); }
 .nl-status.nl-error { background: rgb(255 79 163 / .12); border-color: rgb(255 79 163 / .6); }
+
+/* Einsende-Formular (Easter Egg melden) */
+.submit-box { margin: 24px 0 32px; padding: 22px; border-radius: 18px; border: 1px solid rgb(255 79 163 / .5);
+  background: linear-gradient(160deg, rgb(255 79 163 / .10), rgb(30 16 53 / .6)); }
+.submit-form { display: flex; flex-direction: column; gap: 8px; }
+.submit-form > label:not(.nl-consent), .sf-row label { font-weight: 600; font-size: .95rem; margin-top: 8px; }
+.submit-form input[type=text], .submit-form input[type=email], .submit-form textarea {
+  width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--night-3);
+  background: var(--night); color: inherit; font: inherit; }
+.submit-form textarea { resize: vertical; }
+.submit-form input:focus, .submit-form textarea:focus { outline: 2px solid var(--cyan); outline-offset: 1px; }
+.sf-art { border: 0; padding: 0; margin: 0 0 4px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.sf-art legend { font-weight: 600; margin-bottom: 6px; padding: 0; }
+.sf-art label { display: flex; gap: 8px; align-items: center; }
+.sf-art input { accent-color: var(--pink); }
+.sf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sf-row > div { display: flex; flex-direction: column; gap: 8px; }
+@media (max-width: 600px) { .sf-row { grid-template-columns: 1fr; } }
+.submit-form .nl-consent { margin-top: 10px; }
+.submit-form .btn { align-self: flex-start; margin-top: 6px; }
+.submit-cta { margin: 28px 0; padding: 18px 22px; border-radius: 18px; border: 1px dashed rgb(255 79 163 / .6); }
+.submit-cta p { margin: 0 0 10px; }
