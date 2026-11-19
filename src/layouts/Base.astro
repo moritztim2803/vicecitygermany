@@ -41,6 +41,7 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
     {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <!-- AdSense wird NICHT hier geladen, sondern erst nach Einwilligung (siehe CookieBanner). -->
     <meta name="x-adsense-client" content={ADS.adsenseClient} />
+    {ADS.account && <meta name="google-adsense-account" content={ADS.account} />}
   </head>
   <body>
     <a class="skip" href="#inhalt">Zum Inhalt springen</a>

@@ -9,6 +9,8 @@ export const SITE = {
 };
 
 export const ADS = {
+  // AdSense-Konto für die Website-Prüfung (Meta-Tag + ads.txt). Lädt noch keine Werbung.
+  account: 'ca-pub-8394934654859724',
   // AdSense Publisher-ID, z. B. 'ca-pub-1234567890123456'. Leer = es werden nur Platzhalter angezeigt.
   adsenseClient: '',
   // Slot-IDs aus dem AdSense-Konto (Anzeigenblöcke). Leer = automatische Anzeigen / Platzhalter.
