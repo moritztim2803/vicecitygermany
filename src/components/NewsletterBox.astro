@@ -9,16 +9,56 @@ const show = Boolean(NEWSLETTER.action) || import.meta.env.DEV;
     <p class="eyebrow">Easter-Egg-Alarm</p>
     <h2 id="nl-title">Neue Easter Eggs zuerst erfahren</h2>
     <p>Trag deine E-Mail ein und wir schicken dir neue Easter Eggs und Ereignisse in GTA 6, sobald wir sie Schritt für Schritt erklärt haben. Kostenlos, kein Spam, jederzeit abbestellbar.</p>
-    <form action={NEWSLETTER.action || '#'} method="post" target="_blank" class="nl-form">
+    <form action={NEWSLETTER.action || '#'} method="post" target="_blank" class="nl-form" data-newsletter>
       <label class="sr-only" for="nl-email">E-Mail-Adresse</label>
       <input id="nl-email" type="email" name={NEWSLETTER.emailField} required autocomplete="email" placeholder="deine@email.de" />
       <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="nl-hp" aria-hidden="true" />
+      <input type="hidden" name="locale" value="de" />
       <button type="submit" class="btn">Eintragen</button>
       <label class="nl-consent">
         <input type="checkbox" required />
         <span>Ja, ich möchte den Palmenpixel-Newsletter per E-Mail erhalten. Ich bestätige die Anmeldung über den Link in der Bestätigungsmail und kann mich jederzeit abmelden. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.</span>
       </label>
     </form>
+    <p class="nl-status" role="status" aria-live="polite" hidden></p>
     {!NEWSLETTER.action && <p class="nl-note">Vorschau: Das Formular erscheint live erst, wenn in site.config.ts eine Formular-Adresse eingetragen ist.</p>}
   </section>
 )}
+
+<script>
+  // Sendet die Anmeldung im Hintergrund an Brevo, damit Besucher auf der Seite bleiben.
+  // Brevo verschickt danach die Bestätigungsmail (Double-Opt-in).
+  document.querySelectorAll<HTMLFormElement>('form[data-newsletter]').forEach((form) => {
+    const box = form.closest('.newsletter')!;
+    const status = box.querySelector<HTMLElement>('.nl-status')!;
+    const show = (msg: string, ok: boolean) => {
+      status.textContent = msg;
+      status.hidden = false;
+      status.classList.toggle('nl-error', !ok);
+    };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.action.endsWith('#')) return;
+      const btn = form.querySelector('button')!;
+      btn.disabled = true;
+      let ok = true;
+      try {
+        const res = await fetch(form.action + (form.action.includes('?') ? '&' : '?') + 'isAjax=1', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => null);
+        if (data && data.success === false) ok = false;
+      } catch {
+        // Antwort nicht lesbar (z. B. CORS): Die Anmeldung wurde trotzdem abgeschickt.
+      }
+      if (ok) {
+        form.hidden = true;
+        show('Fast geschafft! Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, um deine Anmeldung zu bestätigen.', true);
+      } else {
+        btn.disabled = false;
+        show('Das hat nicht geklappt. Bitte prüfe deine E-Mail-Adresse und versuch es noch einmal.', false);
+      }
+    });
+  });
+</script>
