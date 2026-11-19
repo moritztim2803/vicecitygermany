@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+// Einsende-Formular. Die Daten gehen an /api/einsenden (worker/index.js) und von dort per Mail an die Redaktion.
+---
+<Base title="Easter Egg melden" description="Du hast in GTA 6 ein Easter Egg oder ein Geheimnis gefunden? Schick es uns. Wir prüfen es und erklären es Schritt für Schritt, mit deinem Namen.">
+  <div class="prose">
+    <h1>Easter Egg gefunden? Schick es uns!</h1>
+    <p>Du hast in GTA 6 ein Easter Egg, ein Geheimnis oder einen versteckten Ort entdeckt? Oder hast du eine Idee, worüber wir schreiben sollen? Schreib uns. Wir spielen es nach, prüfen es und bauen es als Schritt-für-Schritt-Anleitung auf die Seite. Wenn du magst, nennen wir dich als Finder.</p>
+
+    <section class="submit-box">
+      <form class="submit-form" data-submit action="/api/einsenden" method="post">
+        <fieldset class="sf-art">
+          <legend>Was möchtest du schicken?</legend>
+          <label><input type="radio" name="art" value="easter-egg" checked /> Easter Egg oder Geheimnis</label>
+          <label><input type="radio" name="art" value="anregung" /> Anregung oder Themenwunsch</label>
+        </fieldset>
+
+        <label for="sf-titel">Worum geht es? *</label>
+        <input id="sf-titel" name="titel" type="text" required maxlength="120" placeholder="Kurzer Titel, z. B. was oder wo es ist" />
+
+        <label for="sf-ort">Wo genau und wie kommt man hin?</label>
+        <textarea id="sf-ort" name="ort" rows="3" maxlength="1500" placeholder="Ort auf der Karte, ab welcher Mission, Uhrzeit oder Wetter, falls wichtig"></textarea>
+
+        <label for="sf-beschreibung">Was passiert dort? *</label>
+        <textarea id="sf-beschreibung" name="beschreibung" rows="5" required maxlength="4000" placeholder="Beschreib Schritt für Schritt, was du gemacht hast und was passiert."></textarea>
+
+        <div class="sf-row">
+          <div>
+            <label for="sf-name">Dein Name oder Gamertag (optional)</label>
+            <input id="sf-name" name="name" type="text" maxlength="60" autocomplete="nickname" placeholder="So nennen wir dich als Finder" />
+          </div>
+          <div>
+            <label for="sf-email">E-Mail für Rückfragen (optional)</label>
+            <input id="sf-email" name="email" type="email" maxlength="120" autocomplete="email" placeholder="deine@email.de" />
+          </div>
+        </div>
+
+        <input type="text" name="website" value="" tabindex="-1" autocomplete="off" class="nl-hp" aria-hidden="true" />
+
+        <label class="nl-consent">
+          <input type="checkbox" name="zustimmung" value="ja" required />
+          <span>Ich bin einverstanden, dass Palmenpixel meine Angaben speichert, um die Einsendung zu prüfen und gegebenenfalls zu veröffentlichen. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.</span>
+        </label>
+
+        <button type="submit" class="btn">Absenden</button>
+      </form>
+      <p class="nl-status" role="status" aria-live="polite" hidden></p>
+    </section>
+
+    <h2>Was passiert mit deiner Einsendung?</h2>
+    <ol>
+      <li><strong>Wir lesen jede Einsendung</strong> und spielen das Easter Egg selbst nach.</li>
+      <li><strong>Klappt es</strong>, schreiben wir eine Schritt-für-Schritt-Anleitung dazu.</li>
+      <li><strong>Hast du einen Namen angegeben</strong>, nennen wir dich im Artikel als Finder.</li>
+    </ol>
+    <p>Bitte schick uns keine Leaks, Glitches oder Cheats. So etwas veröffentlichen wir nicht.</p>
+  </div>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('form[data-submit]').forEach((form) => {
+    const status = form.parentElement!.querySelector<HTMLElement>('.nl-status')!;
+    const show = (msg: string, ok: boolean) => {
+      status.textContent = msg;
+      status.hidden = false;
+      status.classList.toggle('nl-error', !ok);
+    };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      btn.disabled = true;
+      let ok = false;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        const data = await res.json().catch(() => null);
+        ok = Boolean(res.ok && data && data.ok);
+      } catch {
+        ok = false;
+      }
+      if (ok) {
+        form.hidden = true;
+        show('Danke! Deine Einsendung ist bei uns angekommen. Wir prüfen sie und melden uns, falls du eine E-Mail angegeben hast.', true);
+        status.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } else {
+        btn.disabled = false;
+        show('Das hat leider nicht geklappt. Bitte prüf deine Angaben und versuch es in ein paar Minuten noch einmal.', false);
+      }
+    });
+  });
+</script>

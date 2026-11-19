@@ -1,11 +1,21 @@
 // Cloudflare Workers: liefert die fertig gebaute statische Seite aus ./dist aus.
+// worker/index.js beantwortet nur /api/* (Einsende-Formular).
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "palmenpixel",
+  "main": "worker/index.js",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
-  }
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
+  },
+  // Ohne feste Zieladresse: darf an jede in Email Routing bestätigte Adresse senden.
+  // Die Adresse selbst steht als Variable EINSENDUNG_AN im Dashboard, nicht im Code.
+  "send_email": [{ "name": "EMAIL" }],
+  // Im Dashboard gesetzte Variablen (EINSENDUNG_AN) bei jedem Deploy behalten.
+  "keep_vars": true,
+  "observability": { "enabled": true }
 }
