@@ -1,0 +1,78 @@
+---
+// Startseiten-Teaser für die interaktive Leonida-Karte (eigene Grafik).
+import { COAST, R, keys } from '../lib/leonida';
+
+const href = '/karte/gta-6-karte-regionen/';
+const regions = [
+  { id: 'vice', name: 'Vice City', c: '#ff4fa3' },
+  { id: 'keys', name: 'Leonida Keys', c: '#3ee7f0' },
+  { id: 'grass', name: 'Grassrivers', c: '#4dff9a' },
+  { id: 'gell', name: 'Port Gellhorn', c: '#ff9a4d' },
+  { id: 'amb', name: 'Ambrosia', c: '#ffd166' },
+  { id: 'kal', name: 'Mount Kalaga', c: '#b07cff' },
+];
+---
+<a class="mt" href={href} aria-label="Interaktive Karte von Leonida öffnen">
+  <div class="mt-text">
+    <p class="eyebrow">Neu: Interaktive Karte</p>
+    <h2>Entdecke die Karte von Leonida</h2>
+    <p>Sechs Regionen, von den Stränden in Vice City bis zu den Wäldern am Mount Kalaga. Fahr mit der Maus drüber und sieh, was dich wo erwartet.</p>
+    <ul class="mt-chips">
+      {regions.map((r) => <li style={`--c:${r.c}`}><i></i>{r.name}</li>)}
+    </ul>
+    <span class="btn">Zur Karte →</span>
+  </div>
+  <div class="mt-map" aria-hidden="true">
+    <svg viewBox="0 0 1000 1000">
+      <defs>
+        <filter id="mt-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="6" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        {Object.entries(R).map(([k, d]) => <clipPath id={`mt-c-${k}`}><path d={d} /></clipPath>)}
+      </defs>
+      <path d={COAST} fill="#2b1a4d" />
+      {regions.filter((r) => r.id !== 'keys').map((r, i) => (
+        <path class="mt-rg" d={COAST} clip-path={`url(#mt-c-${r.id})`} style={`--c:${r.c};--i:${i}`} />
+      ))}
+      {keys.map((k) => <ellipse class="mt-isle" cx={k.cx} cy={k.cy} rx={k.rx} ry={k.ry} transform={`rotate(${k.rot} ${k.cx} ${k.cy})`} />)}
+      <path class="mt-coast" d={COAST} />
+      <g transform="translate(880 662)"><circle class="mt-pulse" r="9" /><circle r="7" fill="#ff4fa3" /></g>
+    </svg>
+  </div>
+</a>
+
+<style>
+  .mt { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: center;
+    margin: 28px 0; padding: 26px 28px; border-radius: 20px; text-decoration: none; color: var(--text);
+    background:
+      radial-gradient(500px 300px at 85% 80%, rgb(255 122 89 / .22), transparent 70%),
+      linear-gradient(135deg, rgb(62 231 240 / .1), rgb(155 92 255 / .12) 50%, rgb(255 79 163 / .12)),
+      var(--night-2);
+    border: 1px solid rgb(62 231 240 / .45); box-shadow: 0 0 34px -8px rgb(62 231 240 / .5);
+    transition: transform .25s, box-shadow .25s; }
+  .mt:hover { color: var(--text); text-shadow: none; transform: translateY(-3px); box-shadow: 0 0 46px -6px rgb(255 79 163 / .6); }
+  .mt h2 { margin: .1em 0 .4em; line-height: 1.15; font-size: clamp(1.6rem, 3.6vw, 2.3rem); color: #fff; text-shadow: 0 0 18px rgb(62 231 240 / .55); }
+  .mt p { margin: .4em 0; }
+  .mt-chips { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 0; margin: 14px 0 18px; font-size: .9rem; font-weight: 600; }
+  .mt-chips li { display: inline-flex; align-items: center; gap: 7px; }
+  .mt-chips i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+  .mt-map svg { display: block; width: 100%; max-width: 360px; margin-inline: auto; height: auto; overflow: visible;
+    transition: transform .4s; }
+  .mt:hover .mt-map svg { transform: rotate(-2deg) scale(1.04); }
+  .mt-rg { fill: var(--c); fill-opacity: .2; animation: mt-blink 6s ease-in-out infinite; animation-delay: calc(var(--i) * 1s); }
+  @keyframes mt-blink { 8% { fill-opacity: .6; } 18% { fill-opacity: .2; } }
+  .mt-isle { fill: #3ee7f0; fill-opacity: .4; stroke: #3ee7f0; stroke-width: 2; }
+  .mt-coast { fill: none; stroke: #3ee7f0; stroke-width: 4; filter: url(#mt-glow); }
+  .mt-pulse { fill: none; stroke: #ff4fa3; stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: mt-pulse 1.8s ease-out infinite; }
+  @keyframes mt-pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(3.4); opacity: 0; } }
+  @media (max-width: 700px) {
+    .mt { grid-template-columns: 1fr; padding: 20px 18px; }
+    .mt-map { order: -1; }
+    .mt-map svg { max-width: 240px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mt-rg, .mt-pulse { animation: none; }
+    .mt, .mt-map svg { transition: none; }
+  }
+</style>
