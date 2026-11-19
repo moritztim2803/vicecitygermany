@@ -35,7 +35,7 @@ import Base from '../layouts/Base.astro';
           </div>
         </div>
 
-        <input type="text" name="pp_feld_x" value="" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore class="nl-hp" aria-hidden="true" />
+        <input type="hidden" name="pp_t" value="" />
 
         <label class="nl-consent">
           <input type="checkbox" name="zustimmung" value="ja" required />
@@ -65,8 +65,11 @@ import Base from '../layouts/Base.astro';
       status.hidden = false;
       status.classList.toggle('nl-error', !ok);
     };
+    const loadedAt = Date.now();
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      // Spam-Schutz: Zeit seit dem Laden der Seite mitschicken (Bots senden sofort oder ohne JavaScript)
+      form.querySelector<HTMLInputElement>('input[name=pp_t]')!.value = String(Date.now() - loadedAt);
       const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
       btn.disabled = true;
       let ok = false;
