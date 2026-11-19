@@ -1,171 +1,347 @@
 ---
-// Interaktiver Sammelkarten-Tracker. Speichert den Stand nur im Browser (localStorage).
-const sets: { id: string; name: string; n: number; c: string }[] = [
-  { id: 'vc-flamingos', name: 'Vice City Flamingos', n: 24, c: '#ff4fa3' },
-  { id: 'vc-narcos', name: 'Vice City Narcos', n: 24, c: '#ff4fa3' },
-  { id: 'vc-manatees', name: 'Vice City Manatees', n: 24, c: '#ff4fa3' },
-  { id: 'vc-futbol', name: 'Vice City Club De Futbol', n: 30, c: '#ff4fa3' },
-  { id: 'lc-swingers', name: 'Liberty City Swingers', n: 24, c: '#3ee7f0' },
-  { id: 'lc-penetrators', name: 'Liberty City Penetrators', n: 24, c: '#3ee7f0' },
-  { id: 'lc-wrath', name: 'Liberty City Wrath', n: 24, c: '#3ee7f0' },
-  { id: 'ls-corkers', name: 'Los Santos Corkers', n: 24, c: '#ffd166' },
-  { id: 'ls-panic', name: 'Los Santos Panic', n: 24, c: '#ffd166' },
-  { id: 'ls-pounders', name: 'Los Santos Pounders', n: 24, c: '#ffd166' },
-  { id: 'backyard', name: 'Backyard Wrestling', n: 12, c: '#ff9a4d' },
-  { id: 'antm', name: "America's Next Top Hooker", n: 24, c: '#ff9a4d' },
-  { id: 'delights', name: 'Delights Dancers', n: 18, c: '#b07cff' },
-  { id: 'jack', name: 'Jack of Hearts Dancers', n: 36, c: '#b07cff' },
-  { id: 'nine1nine', name: 'Nine1Nine Dancers', n: 36, c: '#b07cff' },
-  { id: 'ratface', name: 'The Legends of Ratface', n: 36, c: '#4dff9a' },
-  { id: 'rightwing', name: 'Right Wing: America\'s Hero', n: 36, c: '#4dff9a' },
-  { id: 'edcomics', name: 'Ed Comics Universe', n: 36, c: '#4dff9a' },
+// Sammelkarten-Album: Pro Set eine Albumseite mit Kartenplätzen zum Antippen.
+// Speichert den Stand nur im Browser (localStorage). Übernimmt alte Zählerstände aus v1.
+type Known = { name: string; where: string; hint: string };
+type Set = { id: string; name: string; n: number; c: string; g: string; known?: Known[] };
+const sets: Set[] = [
+  { id: 'vc-flamingos', name: 'Vice City Flamingos', n: 24, c: '#ff4fa3', g: 'vc', known: [
+    { name: 'Julian Cruz (Gold)', where: 'Little Cuba, Vice City', hint: 'Pinnwand im Büro, im Gebäude südlich von Yasmanis Laden.' },
+    { name: 'Mateo Caballero (Silber)', where: 'La Perle, Vice City', hint: 'Schlafzimmer in einem Haus nördlich von Zenons Pfandhaus.' },
+    { name: 'Ulysses Whitlock (Silber)', where: 'Tequesta, Vice City', hint: 'Hubschrauber-Landeplatz auf dem Dach östlich vom Grand Majestic Gym. Mit dem Aufzug im Gebäude nach oben.' },
+  ] },
+  { id: 'vc-narcos', name: 'Vice City Narcos', n: 24, c: '#ff4fa3', g: 'vc' },
+  { id: 'vc-manatees', name: 'Vice City Manatees', n: 24, c: '#ff4fa3', g: 'vc' },
+  { id: 'vc-futbol', name: 'Vice City Club De Futbol', n: 30, c: '#ff4fa3', g: 'vc' },
+  { id: 'lc-swingers', name: 'Liberty City Swingers', n: 24, c: '#3ee7f0', g: 'lc' },
+  { id: 'lc-penetrators', name: 'Liberty City Penetrators', n: 24, c: '#3ee7f0', g: 'lc' },
+  { id: 'lc-wrath', name: 'Liberty City Wrath', n: 24, c: '#3ee7f0', g: 'lc' },
+  { id: 'ls-corkers', name: 'Los Santos Corkers', n: 24, c: '#ffd166', g: 'ls' },
+  { id: 'ls-panic', name: 'Los Santos Panic', n: 24, c: '#ffd166', g: 'ls' },
+  { id: 'ls-pounders', name: 'Los Santos Pounders', n: 24, c: '#ffd166', g: 'ls' },
+  { id: 'delights', name: 'Delights Dancers', n: 18, c: '#b07cff', g: 'club' },
+  { id: 'jack', name: 'Jack of Hearts Dancers', n: 36, c: '#b07cff', g: 'club' },
+  { id: 'nine1nine', name: 'Nine1Nine Dancers', n: 36, c: '#b07cff', g: 'club' },
+  { id: 'backyard', name: 'Backyard Wrestling', n: 12, c: '#ff9a4d', g: 'more' },
+  { id: 'antm', name: "America's Next Top Hooker", n: 24, c: '#ff9a4d', g: 'more' },
+  { id: 'ratface', name: 'The Legends of Ratface', n: 36, c: '#4dff9a', g: 'more' },
+  { id: 'rightwing', name: "Right Wing: America's Hero", n: 36, c: '#4dff9a', g: 'more' },
+  { id: 'edcomics', name: 'Ed Comics Universe', n: 36, c: '#4dff9a', g: 'more' },
+];
+const groups = [
+  { id: 'all', name: 'Alle' },
+  { id: 'vc', name: 'Vice City' },
+  { id: 'lc', name: 'Liberty City' },
+  { id: 'ls', name: 'Los Santos' },
+  { id: 'club', name: 'Dancers' },
+  { id: 'more', name: 'Weitere' },
 ];
 const total = sets.reduce((s, x) => s + x.n, 0);
+const R = 34, C = 2 * Math.PI * R;
 ---
-<section class="ct" data-ct aria-label="Sammelkarten-Tracker">
-  <div class="ct-head">
-    <div class="ct-stat"><b data-ct-cards>0</b><span>/ {total} Karten</span></div>
-    <div class="ct-stat"><b data-ct-sets>0</b><span>/ {sets.length} Sets komplett</span></div>
+<section class="ct2" data-ct aria-label="Sammelkarten-Album">
+  <div class="ct2-goals">
+    <div class="ct2-goal" data-goal="3">
+      <svg class="ct2-ring" viewBox="0 0 80 80" aria-hidden="true">
+        <circle cx="40" cy="40" r={R} class="ct2-ring-bg" />
+        <circle cx="40" cy="40" r={R} class="ct2-ring-fg" stroke-dasharray={C} stroke-dashoffset={C} style="--rc:var(--sun-1)" />
+        <text x="40" y="47" text-anchor="middle" data-ring-num>0/3</text>
+      </svg>
+      <div>
+        <p class="ct2-goal-k">🏆 Trophäe „Don't Touch My Deck“</p>
+        <p class="ct2-goal-v" data-goal-text>Noch 3 komplette Sets</p>
+      </div>
+    </div>
+    <div class="ct2-goal" data-goal="15">
+      <svg class="ct2-ring" viewBox="0 0 80 80" aria-hidden="true">
+        <circle cx="40" cy="40" r={R} class="ct2-ring-bg" />
+        <circle cx="40" cy="40" r={R} class="ct2-ring-fg" stroke-dasharray={C} stroke-dashoffset={C} style="--rc:var(--cyan)" />
+        <text x="40" y="47" text-anchor="middle" data-ring-num>0/15</text>
+      </svg>
+      <div>
+        <p class="ct2-goal-k">Ziel: 100 % Spielfortschritt</p>
+        <p class="ct2-goal-v" data-goal-text>Noch 15 komplette Sets</p>
+      </div>
+    </div>
   </div>
 
-  <div class="ct-goals">
-    <div class="ct-goal">
-      <div class="ct-goal-top"><span>🏆 Trophäe „Don't Touch My Deck“</span><span data-ct-g1>0 / 3 Sets</span></div>
-      <div class="ct-bar"><i data-ct-b1></i></div>
-    </div>
-    <div class="ct-goal">
-      <div class="ct-goal-top"><span>💯 100 % Spielfortschritt</span><span data-ct-g2>0 / 15 Sets</span></div>
-      <div class="ct-bar ct-bar-2"><i data-ct-b2></i></div>
-    </div>
+  <p class="ct2-tip" data-tip></p>
+
+  <div class="ct2-total">
+    <span><b data-ct-cards>0</b> / {total} Karten</span>
+    <span><b data-ct-sets>0</b> / {sets.length} Sets komplett</span>
   </div>
 
-  <ul class="ct-list">
+  <div class="ct2-filter" role="group" aria-label="Sets filtern">
+    {groups.map((g, i) => <button type="button" data-g={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.name}</button>)}
+    <label class="ct2-open"><input type="checkbox" data-only-open /> Nur offene</label>
+  </div>
+
+  <ul class="ct2-list">
     {sets.map((s) => (
-      <li class="ct-row" data-id={s.id} data-n={s.n} style={`--c:${s.c}`}>
-        <div class="ct-name">
-          <span class="ct-dot"></span>
-          <span>{s.name}</span>
-          <span class="ct-done" aria-hidden="true">✓</span>
+      <li class="ct2-set" data-id={s.id} data-n={s.n} data-g={s.g} style={`--c:${s.c}`}>
+        <button type="button" class="ct2-head" aria-expanded="false">
+          <span class="ct2-dot"></span>
+          <span class="ct2-name">{s.name}</span>
+          <span class="ct2-count"><b data-have>0</b>/{s.n}</span>
+          <span class="ct2-chev" aria-hidden="true"></span>
+          <span class="ct2-mini"><i></i></span>
+        </button>
+        <div class="ct2-body" hidden>
+          <div class="ct2-slots" role="group" aria-label={`${s.name}: Karten antippen, die du hast`}></div>
+          <div class="ct2-actions">
+            <button type="button" data-all>Alle {s.n} markieren</button>
+            <button type="button" data-none>Set leeren</button>
+          </div>
+          {s.known && (
+            <div class="ct2-known">
+              <p>Bestätigte Fundorte ({s.known.length} von {s.n})</p>
+              <ul>
+                {s.known.map((k) => <li><b>{k.name}</b> <span>{k.where}</span><br />{k.hint}</li>)}
+              </ul>
+            </div>
+          )}
         </div>
-        <div class="ct-ctrl">
-          <button type="button" class="ct-btn" data-d="-1" aria-label={`${s.name}: eine Karte weniger`}>−</button>
-          <label class="ct-num">
-            <input type="number" inputmode="numeric" min="0" max={s.n} value="0" aria-label={`${s.name}: gefundene Karten`} />
-            <span>/ {s.n}</span>
-          </label>
-          <button type="button" class="ct-btn" data-d="1" aria-label={`${s.name}: eine Karte mehr`}>+</button>
-          <button type="button" class="ct-full" aria-label={`${s.name}: als komplett markieren`}>Komplett</button>
-        </div>
-        <div class="ct-mini"><i></i></div>
       </li>
     ))}
   </ul>
 
-  <div class="ct-foot">
-    <span class="ct-note">Dein Stand wird nur in diesem Browser gespeichert.</span>
-    <button type="button" class="ct-reset" data-ct-reset>Alles zurücksetzen</button>
+  <div class="ct2-foot">
+    <span>Tipp an, welche Karten du hast. Dein Stand wird nur in diesem Browser gespeichert.</span>
+    <button type="button" class="ct2-reset" data-ct-reset>Alles zurücksetzen</button>
   </div>
+  <div class="ct2-confetti" aria-hidden="true"></div>
+  <p class="ct2-sr" role="status" aria-live="polite" data-live></p>
 </section>
 
-<style>
-  .ct { margin: 1.6em 0 2em; padding: 18px; border-radius: 18px; background: linear-gradient(160deg, rgb(155 92 255 / .14), var(--night-2) 55%);
+<style is:global>
+  .ct2 { position: relative; margin: 1.6em 0 2em; padding: 18px; border-radius: 18px; overflow: hidden;
+    background: radial-gradient(420px 240px at 100% 0, rgb(62 231 240 / .12), transparent 70%), linear-gradient(160deg, rgb(155 92 255 / .16), var(--night-2) 55%);
     border: 1px solid rgb(155 92 255 / .5); box-shadow: 0 0 30px -10px rgb(155 92 255 / .7); }
-  .ct-head { display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 14px; }
-  .ct-stat b { font: 2.4rem/1 var(--font-display); font-weight: 400; color: #fff; text-shadow: var(--glow-pink); margin-right: 6px; }
-  .ct-stat span { color: var(--muted); font-weight: 600; }
-  .ct-goals { display: grid; gap: 10px; margin-bottom: 16px; }
-  .ct-goal-top { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; font-weight: 600; margin-bottom: 5px; }
-  .ct-bar { height: 10px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
-  .ct-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--sun-1), var(--pink));
-    box-shadow: 0 0 12px rgb(255 79 163 / .7); transition: width .4s ease; }
-  .ct-bar-2 i { background: linear-gradient(90deg, var(--cyan), var(--violet)); box-shadow: 0 0 12px rgb(62 231 240 / .6); }
-  .ct-goal.is-done .ct-goal-top span:last-child { color: var(--sun-1); }
-
-  .ct-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .ct-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 12px; padding: 10px 12px 12px;
-    border-radius: 12px; background: rgb(20 10 36 / .55); border: 1px solid var(--night-3); position: relative; transition: border-color .3s, box-shadow .3s; }
-  .ct-row.is-full { border-color: var(--c); box-shadow: 0 0 16px -4px var(--c); }
-  .ct-name { display: flex; align-items: center; gap: 9px; font-weight: 600; min-width: 0; }
-  .ct-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); flex: none; }
-  .ct-done { color: var(--c); font-weight: 800; opacity: 0; transform: scale(.4); transition: .3s; }
-  .ct-row.is-full .ct-done { opacity: 1; transform: none; }
-  .ct-ctrl { display: flex; align-items: center; gap: 6px; }
-  .ct-btn { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--night-3); background: var(--night-2); color: #fff;
-    font-size: 1.15rem; cursor: pointer; }
-  .ct-btn:hover { border-color: var(--c); }
-  .ct-num { display: flex; align-items: baseline; gap: 4px; color: var(--muted); font-size: .9rem; }
-  .ct-num input { width: 3.2em; padding: 6px 4px; text-align: center; border-radius: 8px; border: 1px solid var(--night-3);
-    background: var(--night); color: #fff; font: 700 1rem var(--font-body); -moz-appearance: textfield; }
-  .ct-num input::-webkit-inner-spin-button, .ct-num input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-  .ct-full { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--c); background: transparent; color: var(--c);
-    font: 700 .78rem var(--font-body); cursor: pointer; }
-  .ct-row.is-full .ct-full { background: var(--c); color: #140a24; }
-  .ct-mini { grid-column: 1 / -1; height: 4px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
-  .ct-mini i { display: block; height: 100%; width: 0; background: var(--c); transition: width .3s; }
-  .ct-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; font-size: .85rem; }
-  .ct-note { color: var(--muted); }
-  .ct-reset { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
-  .ct-reset:hover { color: #fff; }
+  .ct2 p { margin: 0; }
+  .ct2-goals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .ct2-goal { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: rgb(20 10 36 / .55); border: 1px solid var(--night-3); transition: border-color .4s, box-shadow .4s; }
+  .ct2-goal.is-done { border-color: var(--sun-1); box-shadow: 0 0 22px -6px var(--sun-1); }
+  .ct2-ring { width: 64px; height: 64px; flex: none; transform: rotate(-90deg); }
+  .ct2-ring circle { fill: none; stroke-width: 8; }
+  .ct2-ring-bg { stroke: var(--night-3); }
+  .ct2-ring-fg { stroke: var(--rc); stroke-linecap: round; filter: drop-shadow(0 0 5px var(--rc)); transition: stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1); }
+  .ct2-ring text { transform: rotate(90deg); transform-origin: 40px 40px; fill: #fff; font: 700 17px var(--font-body); }
+  .ct2-goal-k { font-size: .82rem; color: var(--muted); font-weight: 600; }
+  .ct2-goal-v { font: 1.15rem/1.25 var(--font-display); color: #fff; margin-top: 2px !important; }
+  .ct2-goal.is-done .ct2-goal-v { color: var(--sun-1); text-shadow: 0 0 12px rgb(255 209 102 / .6); }
+  .ct2-tip { margin: 12px 0 0 !important; padding: 10px 12px; border-radius: 12px; border-left: 3px solid var(--pink); background: rgb(255 79 163 / .08); font-size: .92rem; }
+  .ct2-tip b { color: #fff; }
+  .ct2-total { display: flex; gap: 18px; flex-wrap: wrap; margin: 14px 0 10px; color: var(--muted); font-weight: 600; font-size: .9rem; }
+  .ct2-total b { font: 1.6rem/1 var(--font-display); font-weight: 400; color: #fff; text-shadow: var(--glow-pink); }
+  .ct2-filter { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; }
+  .ct2-filter button { padding: 6px 12px; border-radius: 99px; border: 1px solid var(--night-3); background: var(--night-2); color: var(--text); font: 600 .82rem var(--font-body); cursor: pointer; transition: .2s; }
+  .ct2-filter button[aria-pressed='true'] { border-color: var(--cyan); color: #fff; background: rgb(62 231 240 / .12); box-shadow: 0 0 12px -3px var(--cyan); }
+  .ct2-open { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; font-size: .82rem; color: var(--muted); cursor: pointer; }
+  .ct2-open input { accent-color: var(--cyan); }
+  .ct2-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ct2-set { border-radius: 14px; background: rgb(20 10 36 / .55); border: 1px solid var(--night-3); transition: border-color .3s, box-shadow .3s; animation: ct2-in .45s both; }
+  .ct2-set.is-full { border-color: var(--c); box-shadow: 0 0 18px -5px var(--c); }
+  .ct2-set.is-open { border-color: color-mix(in srgb, var(--c) 60%, transparent); }
+  @keyframes ct2-in { from { opacity: 0; transform: translateY(8px); } }
+  .ct2-head { position: relative; width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px;
+    padding: 12px 14px 14px; background: none; border: 0; color: var(--text); font: 600 1rem var(--font-body); text-align: left; cursor: pointer; overflow: hidden; border-radius: 14px; }
+  .ct2-set.is-full .ct2-head::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / .16) 50%, transparent 65%);
+    transform: translateX(-100%); animation: ct2-shine 3.5s ease-in-out infinite; pointer-events: none; }
+  @keyframes ct2-shine { 40%, 100% { transform: translateX(100%); } }
+  .ct2-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+  .ct2-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ct2-set.is-full .ct2-name::after { content: ' ✓'; color: var(--c); }
+  .ct2-count { color: var(--muted); font-size: .9rem; }
+  .ct2-count b { color: #fff; }
+  .ct2-chev { width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-2px); transition: transform .3s; }
+  .ct2-set.is-open .ct2-chev { transform: rotate(225deg); }
+  .ct2-mini { position: absolute; left: 14px; right: 14px; bottom: 6px; height: 3px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
+  .ct2-mini i { display: block; height: 100%; width: 0; background: var(--c); box-shadow: 0 0 8px var(--c); transition: width .4s; }
+  .ct2-body { padding: 4px 14px 14px; }
+  .ct2-body:not([hidden]) { animation: ct2-in .35s both; }
+  .ct2-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 7px; }
+  .ct2-slot { position: relative; aspect-ratio: 3 / 4; border: 0; padding: 0; background: none; cursor: pointer;
+    animation: ct2-pop .4s both; animation-delay: calc(var(--i) * 12ms); }
+  @keyframes ct2-pop { from { opacity: 0; transform: scale(.6); } }
+  .ct2-slot.is-flip { animation: ct2-flip .45s ease-out; }
+  @keyframes ct2-flip { 0% { transform: rotateY(0) scale(1); } 50% { transform: perspective(300px) rotateY(90deg) scale(1.08); } 100% { transform: rotateY(0) scale(1); } }
+  .ct2-slot span { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 7px; font: 700 .9rem var(--font-body); }
+  .ct2-slot .b { border: 1px dashed color-mix(in srgb, var(--c) 45%, var(--night-3)); background: repeating-linear-gradient(135deg, rgb(255 255 255 / .03) 0 6px, transparent 6px 12px), var(--night); color: var(--muted); }
+  .ct2-slot:hover .b { border-color: var(--c); color: #fff; }
+  .ct2-slot .f { display: none; color: #140a24; background: linear-gradient(160deg, #fff 0%, var(--c) 45%, color-mix(in srgb, var(--c) 60%, #140a24)); box-shadow: 0 0 12px -2px var(--c); }
+  .ct2-slot[aria-pressed='true'] .f { display: grid; }
+  .ct2-slot[aria-pressed='true'] .b { display: none; }
+  .ct2-slot .f::before { content: '★'; position: absolute; top: 3px; left: 5px; font-size: .6rem; opacity: .7; }
+  .ct2-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .ct2-actions button { padding: 7px 12px; border-radius: 10px; border: 1px solid var(--c); background: transparent; color: var(--c); font: 700 .8rem var(--font-body); cursor: pointer; }
+  .ct2-actions button[data-none] { border-color: var(--night-3); color: var(--muted); }
+  .ct2-known { margin-top: 14px; padding: 12px; border-radius: 12px; background: rgb(0 0 0 / .2); font-size: .9rem; }
+  .ct2-known > p { font-weight: 700; color: #fff; margin-bottom: 6px !important; }
+  .ct2-known ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; }
+  .ct2-known span { color: var(--c); font-size: .82rem; font-weight: 600; }
+  .ct2-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; font-size: .85rem; color: var(--muted); }
+  .ct2-reset { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
+  .ct2-reset:hover { color: #fff; }
+  .ct2-confetti { position: absolute; inset: 0; pointer-events: none; }
+  .ct2-confetti i { position: absolute; width: 7px; height: 11px; border-radius: 2px; animation: ct2-fall 1.4s cubic-bezier(.2,.6,.4,1) forwards; }
+  @keyframes ct2-fall { from { transform: translate(0, 0) rotate(0); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) rotate(var(--r)); opacity: 0; } }
+  .ct2-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   @media (max-width: 560px) {
-    .ct-row { grid-template-columns: 1fr; }
-    .ct-ctrl { justify-content: space-between; }
+    .ct2 { padding: 14px; }
+    .ct2-goals { grid-template-columns: 1fr; }
+    .ct2-open { margin-left: 0; }
+    .ct2-slots { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 6px; }
   }
-  @media (prefers-reduced-motion: reduce) { .ct-bar i, .ct-mini i, .ct-done { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .ct2 *, .ct2 *::after { animation: none !important; transition: none !important; }
+  }
 </style>
 
 <script>
-  const KEY = 'palmenpixel-sammelkarten-v1';
-  document.querySelectorAll<HTMLElement>('[data-ct]').forEach((root) => {
-    const rows = [...root.querySelectorAll<HTMLElement>('.ct-row')];
-    let state: Record<string, number> = {};
-    try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { state = {}; }
+  const KEY = 'palmenpixel-sammelkarten-v2';
+  const OLD = 'palmenpixel-sammelkarten-v1';
+  const C = 2 * Math.PI * 34;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* privat-Modus */ } };
-    const $ = <T extends Element>(s: string) => root.querySelector<T>(s)!;
+  document.querySelectorAll<HTMLElement>('[data-ct]').forEach((root) => {
+    const sets = [...root.querySelectorAll<HTMLElement>('.ct2-set')];
+    const meta = sets.map((el) => ({ el, id: el.dataset.id!, n: Number(el.dataset.n), name: el.querySelector('.ct2-name')!.textContent! }));
+    const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+
+    // Stand laden: v2 = Liste der Kartennummern je Set. v1 (nur Anzahl) wird übernommen.
+    let state: Record<string, number[]> = {};
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (raw) state = JSON.parse(raw) || {};
+      else {
+        const old = JSON.parse(localStorage.getItem(OLD) || '{}') || {};
+        meta.forEach((m) => { const v = Math.min(m.n, Number(old[m.id]) || 0); if (v) state[m.id] = Array.from({ length: v }, (_, i) => i + 1); });
+      }
+    } catch { state = {}; }
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* privater Modus */ } };
+    const have = (id: string) => new Set(state[id] || []);
+
+    let prevFull = -1;
+    const confetti = (colors: string[]) => {
+      if (reduce) return;
+      const box = $('.ct2-confetti');
+      for (let i = 0; i < 46; i++) {
+        const p = document.createElement('i');
+        p.style.left = `${50 + (Math.random() - .5) * 30}%`;
+        p.style.top = '30%';
+        p.style.background = colors[i % colors.length];
+        p.style.setProperty('--dx', `${(Math.random() - .5) * 520}px`);
+        p.style.setProperty('--dy', `${120 + Math.random() * 380}px`);
+        p.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+        p.style.animationDelay = `${Math.random() * 150}ms`;
+        box.appendChild(p);
+        setTimeout(() => p.remove(), 1700);
+      }
+    };
 
     const render = () => {
       let cards = 0, full = 0;
-      rows.forEach((r) => {
-        const n = Number(r.dataset.n), v = Math.min(n, Math.max(0, state[r.dataset.id!] || 0));
-        const input = r.querySelector('input')!;
-        if (document.activeElement !== input) input.value = String(v);
-        r.classList.toggle('is-full', v === n);
-        r.querySelector<HTMLElement>('.ct-mini i')!.style.width = `${(v / n) * 100}%`;
-        cards += v; if (v === n) full++;
+      const open: { name: string; left: number }[] = [];
+      meta.forEach((m) => {
+        const v = Math.min(m.n, (state[m.id] || []).length);
+        cards += v;
+        const isFull = v === m.n;
+        if (isFull) full++; else open.push({ name: m.name, left: m.n - v });
+        m.el.classList.toggle('is-full', isFull);
+        m.el.querySelector('[data-have]')!.textContent = String(v);
+        m.el.querySelector<HTMLElement>('.ct2-mini i')!.style.width = `${(v / m.n) * 100}%`;
       });
       $('[data-ct-cards]').textContent = String(cards);
       $('[data-ct-sets]').textContent = String(full);
-      $('[data-ct-g1]').textContent = `${Math.min(full, 3)} / 3 Sets`;
-      $('[data-ct-g2]').textContent = `${Math.min(full, 15)} / 15 Sets`;
-      $<HTMLElement>('[data-ct-b1]').style.width = `${Math.min(full / 3, 1) * 100}%`;
-      $<HTMLElement>('[data-ct-b2]').style.width = `${Math.min(full / 15, 1) * 100}%`;
-      $('[data-ct-g1]').closest('.ct-goal')!.classList.toggle('is-done', full >= 3);
-      $('[data-ct-g2]').closest('.ct-goal')!.classList.toggle('is-done', full >= 15);
+
+      open.sort((a, b) => a.left - b.left);
+      root.querySelectorAll<HTMLElement>('[data-goal]').forEach((g) => {
+        const goal = Number(g.dataset.goal), done = Math.min(full, goal), need = goal - done;
+        g.querySelector<SVGCircleElement>('.ct2-ring-fg')!.style.strokeDashoffset = String(C * (1 - done / goal));
+        g.querySelector('[data-ring-num]')!.textContent = `${done}/${goal}`;
+        const minCards = open.slice(0, need).reduce((s, o) => s + o.left, 0);
+        g.querySelector('[data-goal-text]')!.textContent = need === 0
+          ? (goal === 3 ? 'Geschafft! Trophäe sicher' : 'Geschafft! 100 % bei den Karten')
+          : `Noch ${need} ${need === 1 ? 'Set' : 'Sets'} · mind. ${minCards} Karten`;
+        g.classList.toggle('is-done', need === 0);
+      });
+
+      const tip = $('[data-tip]');
+      if (cards === 0) tip.innerHTML = '<b>Schnellster Weg zur Trophäe:</b> Backyard Wrestling (12 Karten), Delights Dancers (18) und ein 24er-Set. Das sind nur 54 Karten.';
+      else if (full < 15 && open.length) tip.innerHTML = `<b>Am nächsten dran:</b> ${open[0].name}, nur noch ${open[0].left} ${open[0].left === 1 ? 'Karte' : 'Karten'}.`;
+      else tip.innerHTML = '<b>Für 100 % reichen dir 15 Sets.</b> Die restlichen sind nur noch für Sammler.';
+
+      if (prevFull >= 0 && full > prevFull) {
+        confetti(['#ff4fa3', '#3ee7f0', '#ffd166', '#b07cff']);
+        $('[data-live]').textContent = full === 3 ? 'Trophäe geschafft!' : full === 15 ? '100 Prozent bei den Sammelkarten geschafft!' : 'Set komplett!';
+      }
+      prevFull = full;
     };
 
-    rows.forEach((r) => {
-      const id = r.dataset.id!, n = Number(r.dataset.n);
-      const set = (v: number) => { state[id] = Math.min(n, Math.max(0, Math.round(v) || 0)); save(); render(); };
-      r.querySelectorAll<HTMLButtonElement>('.ct-btn').forEach((b) => b.addEventListener('click', () => set((state[id] || 0) + Number(b.dataset.d))));
-      r.querySelector('.ct-full')!.addEventListener('click', () => set((state[id] || 0) === n ? 0 : n));
-      const input = r.querySelector('input')!;
-      input.addEventListener('input', () => set(Number(input.value)));
-      input.addEventListener('blur', render);
+    const fillSlots = (m: (typeof meta)[number]) => {
+      const box = m.el.querySelector<HTMLElement>('.ct2-slots')!;
+      const h = have(m.id);
+      if (!box.childElementCount) {
+        box.innerHTML = Array.from({ length: m.n }, (_, i) =>
+          `<button type="button" class="ct2-slot" data-k="${i + 1}" style="--i:${i}" aria-label="Karte ${i + 1} von ${m.n}" aria-pressed="false"><span class="b">${i + 1}</span><span class="f">${i + 1}</span></button>`).join('');
+      }
+      box.querySelectorAll<HTMLButtonElement>('.ct2-slot').forEach((b) => b.setAttribute('aria-pressed', String(h.has(Number(b.dataset.k)))));
+    };
+
+    meta.forEach((m) => {
+      const head = m.el.querySelector<HTMLButtonElement>('.ct2-head')!;
+      const body = m.el.querySelector<HTMLElement>('.ct2-body')!;
+      head.addEventListener('click', () => {
+        const open = head.getAttribute('aria-expanded') !== 'true';
+        head.setAttribute('aria-expanded', String(open));
+        m.el.classList.toggle('is-open', open);
+        body.hidden = !open;
+        if (open) fillSlots(m);
+      });
+      body.querySelector('.ct2-slots')!.addEventListener('click', (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.ct2-slot');
+        if (!b) return;
+        const k = Number(b.dataset.k), h = have(m.id);
+        h.has(k) ? h.delete(k) : h.add(k);
+        state[m.id] = [...h].sort((a, z) => a - z);
+        b.setAttribute('aria-pressed', String(h.has(k)));
+        if (!reduce) { b.classList.remove('is-flip'); void b.offsetWidth; b.classList.add('is-flip'); }
+        save(); render();
+      });
+      body.querySelector('[data-all]')!.addEventListener('click', () => { state[m.id] = Array.from({ length: m.n }, (_, i) => i + 1); save(); fillSlots(m); render(); });
+      body.querySelector('[data-none]')!.addEventListener('click', () => { delete state[m.id]; save(); fillSlots(m); render(); });
     });
 
+    // Filter
+    const fbtns = [...root.querySelectorAll<HTMLButtonElement>('.ct2-filter button')];
+    const onlyOpen = $<HTMLInputElement>('[data-only-open]');
+    let group = 'all';
+    const applyFilter = () => meta.forEach((m) => {
+      m.el.hidden = (group !== 'all' && m.el.dataset.g !== group) || (onlyOpen.checked && m.el.classList.contains('is-full'));
+    });
+    fbtns.forEach((b) => b.addEventListener('click', () => {
+      group = b.dataset.g!;
+      fbtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      applyFilter();
+    }));
+    onlyOpen.addEventListener('change', applyFilter);
+
+    // Zurücksetzen mit Bestätigung durch zweiten Klick
     const reset = $<HTMLButtonElement>('[data-ct-reset]');
     let armed = false;
     reset.addEventListener('click', () => {
-      if (!Object.values(state).some(Boolean)) return;
+      if (!Object.values(state).some((a) => a.length)) return;
       if (!armed) {
         armed = true; reset.textContent = 'Wirklich alles löschen? Nochmal klicken';
         setTimeout(() => { armed = false; reset.textContent = 'Alles zurücksetzen'; }, 4000);
         return;
       }
       armed = false; reset.textContent = 'Alles zurücksetzen';
-      state = {}; save(); render();
+      state = {}; save(); meta.forEach((m) => { if (m.el.querySelector('.ct2-slot')) fillSlots(m); }); render(); applyFilter();
     });
 
     render();
+    // Erstes Set aufklappen, damit man sofort sieht, wie es funktioniert
+    meta[0].el.querySelector<HTMLButtonElement>('.ct2-head')!.click();
   });
 </script>

@@ -13,16 +13,30 @@ faq:
     a: "Nein. Verkaufte Karten bleiben in deiner Sammlung und zählen weiter."
 ---
 
-> **Stand: 19. November 2026.** Spoilerfrei. Den Tracker oben kannst du direkt benutzen: Er merkt sich deinen Stand in diesem Browser.
+> **Stand: 19. November 2026.** Spoilerfrei. Das Sammelalbum oben kannst du direkt benutzen: Es merkt sich deinen Stand in diesem Browser.
 
 **Kurz gesagt:** In GTA 6 gibt es **480 Sammelkarten in 18 Sets**. Für die Trophäe **„Don't Touch My Deck“** brauchst du **3 komplette Sets**, für **100 Prozent 15 Sets**. Verkaufte Karten zählen weiter.
 
 ## So benutzt du den Tracker
 
-1. **Such das Set** in der Liste, zu dem deine neue Karte gehört.
-2. **Drück auf +**, oder tipp die Zahl direkt ein.
-3. **Ein Set ist voll?** Dann leuchtet es auf. Mit „Komplett“ setzt du es in einem Schritt auf voll.
-4. **Oben siehst du**, wie weit du bis zur Trophäe und bis 100 Prozent bist.
+1. **Tipp auf ein Set**, um seine Albumseite aufzuklappen.
+2. **Tipp auf die Kartenplätze**, die du schon hast. Die Karte dreht sich um und leuchtet.
+3. **Oben siehst du**, wie viele Sets dir noch zur Trophäe und zu 100 Prozent fehlen und wie viele Karten das mindestens sind.
+4. **Mit „Nur offene“** blendest du fertige Sets aus.
+
+## Schnellster Weg zur Trophäe
+
+Für „Don't Touch My Deck“ brauchst du **3 komplette Sets**. Am wenigsten Karten sammelst du so:
+
+1. **Backyard Wrestling:** 12 Karten
+2. **Delights Dancers:** 18 Karten
+3. **Ein beliebiges 24er-Set**, zum Beispiel die Vice City Flamingos
+
+Das sind zusammen **54 Karten**.
+
+## Schnellster Weg zu 100 Prozent
+
+Für 100 Prozent brauchst du **15 von 18 Sets**. Lass die drei Sets mit **36 Karten** weg, dann sparst du dir **108 Karten** und brauchst nur **372**.
 
 ## Wo du Sammelkarten findest
 
@@ -67,6 +81,16 @@ Mehr Geldquellen: [GTA 6 schnell Geld verdienen](/guides/gta-6-schnell-geld-verd
 | Ed Comics Universe | 36 |
 | **Gesamt** | **480** |
 
-Fundorte der einzelnen Karten ergänzen wir nach und nach. Alle Regionen findest du auf unserer [interaktiven GTA-6-Karte](/karte/gta-6-karte-regionen/).
+## Bestätigte Fundorte
+
+Die Fundorte stehen auch direkt im Tracker unter dem jeweiligen Set.
+
+**Vice City Flamingos**
+
+1. **Julian Cruz (Gold):** Little Cuba, Vice City. Pinnwand im Büro, im Gebäude südlich von Yasmanis Laden.
+2. **Mateo Caballero (Silber):** La Perle, Vice City. Schlafzimmer in einem Haus nördlich von Zenons Pfandhaus.
+3. **Ulysses Whitlock (Silber):** Tequesta, Vice City. Hubschrauber-Landeplatz auf dem Dach östlich vom Grand Majestic Gym. Fahr mit dem Aufzug im Gebäude nach oben.
+
+Weitere Fundorte ergänzen wir, sobald sie bestätigt sind. Alle Regionen findest du auf unserer [interaktiven GTA-6-Karte](/karte/gta-6-karte-regionen/).
 
 *Quellen: PowerPyx, Push Square, GTADB, Leonida Verse (19.11.2026).*
