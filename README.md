@@ -40,7 +40,9 @@ Schema.org (Article, Breadcrumb, FAQ) und Werbeplätze kommen automatisch dazu.
 ## Online stellen (kostenlos)
 
 1. Code in ein GitHub-Repository legen.
-2. Bei **Cloudflare Pages** (oder Netlify) mit GitHub verbinden. Build-Befehl `npm run build`, Ausgabeordner `dist`.
+2. In Cloudflare unter **Workers & Pages** ein neues Projekt aus dem GitHub-Repo anlegen.
+   Projektname `palmenpixel` (muss zum `name` in `wrangler.jsonc` passen), Build-Befehl `npm run build`,
+   Deploy-Befehl `npx wrangler deploy`. Die Einstellungen stehen in `wrangler.jsonc`.
 3. Eigene Domain verbinden (ca. 10 €/Jahr). **Tipp:** Kein „gta“ oder „rockstar“ im Domainnamen, das sind Marken von Take-Two.
 4. Domain in `src/site.config.ts` (`url`) und `public/robots.txt` eintragen.
 5. Seite in der **Google Search Console** anmelden und `sitemap-index.xml` einreichen.

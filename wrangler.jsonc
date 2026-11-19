@@ -1,0 +1,11 @@
+// Cloudflare Workers: liefert die fertig gebaute statische Seite aus ./dist aus.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "palmenpixel",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
