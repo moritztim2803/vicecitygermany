@@ -5,6 +5,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
 import NewsletterBox from '../../components/NewsletterBox.astro';
 import SubmitCta from '../../components/SubmitCta.astro';
+import LeonidaMap from '../../components/LeonidaMap.astro';
 import { SITE, categoryBySlug } from '../../site.config';
 import { allArtikel, artikelUrl, type Artikel } from '../../lib/artikel';
 
@@ -47,6 +48,7 @@ if (a.data.faq.length) {
     <article class="prose">
       <h1>{a.data.title}</h1>
       <p class="meta">Aktualisiert am <time datetime={updated.toISOString()}>{updated.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}</time></p>
+      {a.id === 'gta-6-karte-regionen' && <LeonidaMap />}
       {toc.length > 2 && (
         <details class="toc" open><summary>Inhalt</summary>
           <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
