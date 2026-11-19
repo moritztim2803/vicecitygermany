@@ -4,6 +4,9 @@ import '@fontsource-variable/inter';
 import '../styles/global.css';
 import { SITE, ADS, CATEGORIES } from '../site.config';
 import CookieBanner from '../components/CookieBanner.astro';
+import { allArtikel } from '../lib/artikel';
+const usedCats = new Set((await allArtikel()).map((a) => a.data.category));
+const navCats = CATEGORIES.filter((c) => usedCats.has(c.slug));
 
 interface Props {
   title: string;
@@ -46,7 +49,7 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
         <a class="logo" href="/"><span class="logo-sun" aria-hidden="true"></span>{SITE.name}</a>
         <nav aria-label="Hauptnavigation">
           <ul>
-            {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+            {navCats.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
           </ul>
         </nav>
       </div>

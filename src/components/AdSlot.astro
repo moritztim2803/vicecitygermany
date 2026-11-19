@@ -4,8 +4,9 @@ interface Props { name: 'header' | 'in-article' | 'sidebar' | 'footer' }
 const { name } = Astro.props;
 const slot = ADS.slots[name];
 const live = Boolean(ADS.adsenseClient);
+const show = live || import.meta.env.DEV;
 ---
-<aside class={`ad ad-${name}`} aria-label="Anzeige">
+{show && <aside class={`ad ad-${name}`} aria-label="Anzeige">
   <span class="ad-label">Anzeige</span>
   {live ? (
     <ins class="adsbygoogle" style="display:block" data-ad-client={ADS.adsenseClient}
@@ -13,4 +14,4 @@ const live = Boolean(ADS.adsenseClient);
   ) : (
     <div class="ad-placeholder">Werbeplatz „{name}“</div>
   )}
-</aside>
+</aside>}

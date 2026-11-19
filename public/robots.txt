@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# TODO: Domain anpassen
 Sitemap: https://palmenpixel.de/sitemap-index.xml
