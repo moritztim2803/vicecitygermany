@@ -1,7 +1,7 @@
 ---
 title: "GTA 6 auf Deutsch? Sprachausgabe, Untertitel und Sprache ändern"
 description: "Gibt es GTA 6 mit deutscher Sprachausgabe? Nein, aber mit deutschen Texten und Untertiteln. So stellst du die Sprache auf PS5 und Xbox um."
-category: tipps
+category: technik
 publishDate: 2026-11-19
 keywords: ["gta 6 deutsch", "gta 6 deutsche sprachausgabe", "gta 6 untertitel", "gta 6 sprache ändern", "gta 6 synchronisation"]
 faq:

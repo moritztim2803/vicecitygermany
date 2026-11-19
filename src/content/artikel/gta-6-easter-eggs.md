@@ -1,7 +1,7 @@
 ---
 title: "GTA 6 Easter Eggs: Fundorte Schritt für Schritt erklärt"
 description: "Dexters Wohnung, Bigfoot und das Ei auf dem Funkturm: So findest du die besten Easter Eggs in GTA 6, Schritt für Schritt und spoilerfrei."
-category: karte
+category: easter-eggs
 publishDate: 2026-11-19
 keywords: ["gta 6 easter eggs", "gta 6 geheimnisse", "gta 6 dexter wohnung", "gta 6 bigfoot", "gta 6 ei funkturm", "gta 6 secrets"]
 faq:
