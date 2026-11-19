@@ -70,9 +70,10 @@ async function einsenden(request, env) {
   const raw = headers.join('\r\n') + '\r\n\r\n' + b64(text).replace(/.{1,76}/g, '$&\r\n');
 
   try {
-    await env.EMAIL.send(new EmailMessage(FROM, env.EINSENDUNG_AN, raw));
+    const res = await env.EMAIL.send(new EmailMessage(FROM, env.EINSENDUNG_AN, raw));
+    console.log('send ok', JSON.stringify(res ?? null));
   } catch (e) {
-    console.error('send failed', e);
+    console.error('send failed', e?.code ?? '', e?.message ?? String(e));
     return json({ ok: false, error: 'send' }, 502);
   }
   return json({ ok: true });
