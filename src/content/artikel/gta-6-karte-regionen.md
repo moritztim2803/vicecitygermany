@@ -115,6 +115,8 @@ Ein **Nationalpark** im Norden von Leonida mit Seen, Flüssen und Offroad-Streck
 
 Zum Abhaken: unser [Sammelkarten-Tracker](/guides/gta-6-sammelkarten-tracker/) mit allen 18 Sets. Die einzelnen Fundorte ergänzen wir nach und nach.
 
+Welche Region passt zu dir? Mach unser [Leonida-Quiz](/karte/gta-6-quiz-welche-region/).
+
 ## Tipp: Erst die Keys, dann die Stadt
 
 Am Anfang lohnt es sich, in den **Leonida Keys** zu bleiben: Dort liegen die Tauchgänge für Kenton, und die Easter Eggs rund um Vice City und den Cottonmouth Lake erreichst du schon nach der ersten Mission.
