@@ -1,0 +1,186 @@
+---
+// Quiz „Welche Leonida-Region passt zu dir?“. Läuft komplett im Browser, keine Daten werden gesendet.
+type R = 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
+const regions: Record<R, { name: string; c: string; typ: string; text: string; link: string; linkText: string }> = {
+  vice: { name: 'Vice City', c: '#ff4fa3', typ: 'Großstadt', text: 'Du brauchst Neonlicht, Lärm und Leute um dich herum. Tagsüber Strand, nachts Club: In der Großstadt nach dem Vorbild von Miami bist du zu Hause.', link: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden', linkText: 'Dein erstes Ziel: Dexters Wohnung' },
+  keys: { name: 'Leonida Keys', c: '#3ee7f0', typ: 'Inselkette', text: 'Boot, Sonne, türkises Wasser. Du lässt es lieber ruhig angehen und tauchst nach Schätzen, statt im Stau zu stehen.', link: '/guides/gta-6-schnell-geld-verdienen/', linkText: 'Schatztauchen mit Kenton' },
+  grass: { name: 'Grassrivers', c: '#4dff9a', typ: 'Sumpfgebiet', text: 'Je seltsamer, desto besser. Alligatoren schrecken dich nicht ab, du willst wissen, was da draußen im Sumpf lauert.', link: '/easter-eggs/gta-6-easter-eggs/', linkText: 'Alle Easter Eggs' },
+  gell: { name: 'Port Gellhorn', c: '#ff9a4d', typ: 'Küstenort', text: 'Billigmotel statt Luxushotel. Du magst Orte mit Geschichte, verlassene Attraktionen und Leute, die keine Fragen stellen.', link: '/karte/gta-6-karte-regionen/#port-gellhorn', linkText: 'Mehr über Port Gellhorn' },
+  amb: { name: 'Ambrosia', c: '#ffd166', typ: 'Industriestadt', text: 'Ehrliche Arbeit, laute Motoren. Zwischen Zuckerraffinerie und Biker-Gang fühlst du dich wohler als in jeder Strandbar.', link: '/karte/gta-6-karte-regionen/#ambrosia', linkText: 'Mehr über Ambrosia' },
+  kal: { name: 'Mount Kalaga', c: '#b07cff', typ: 'Nationalpark', text: 'Weg von allem. Angeln am See, Jagen im Wald, Offroad über Schotter: Im Nationalpark findest du deine Ruhe.', link: '/karte/gta-6-karte-regionen/#mount-kalaga', linkText: 'Mehr über Mount Kalaga' },
+};
+const questions: { q: string; a: { t: string; r: R[] }[] }[] = [
+  { q: 'Dein perfekter Abend in Leonida?', a: [
+    { t: 'Club, Cocktails, Neonlicht', r: ['vice'] },
+    { t: 'Sonnenuntergang auf dem Boot', r: ['keys'] },
+    { t: 'Lagerfeuer am See', r: ['kal'] },
+    { t: 'Bier in der Biker-Bar', r: ['amb', 'gell'] },
+  ] },
+  { q: 'Welches Fahrzeug nimmst du?', a: [
+    { t: 'Sportwagen', r: ['vice'] },
+    { t: 'Speedboot', r: ['keys'] },
+    { t: 'Motorrad', r: ['amb'] },
+    { t: 'Geländewagen oder Propellerboot', r: ['kal', 'grass'] },
+  ] },
+  { q: 'Wo übernachtest du?', a: [
+    { t: 'Penthouse mit Meerblick', r: ['vice'] },
+    { t: 'Hütte am Strand', r: ['keys'] },
+    { t: 'Billigmotel an der Landstraße', r: ['gell'] },
+    { t: 'Zelt im Wald', r: ['kal'] },
+  ] },
+  { q: 'Wie verdienst du dein Geld?', a: [
+    { t: 'Nach Wracks tauchen', r: ['keys'] },
+    { t: 'Autos „besorgen“ und verkaufen', r: ['gell'] },
+    { t: 'Jagen und Angeln', r: ['kal', 'grass'] },
+    { t: 'Große Coups in der Stadt', r: ['vice'] },
+  ] },
+  { q: 'Welches Tier wärst du?', a: [
+    { t: 'Flamingo', r: ['vice'] },
+    { t: 'Delfin', r: ['keys'] },
+    { t: 'Alligator', r: ['grass'] },
+    { t: 'Bär', r: ['kal'] },
+  ] },
+  { q: 'Was hörst du im Auto?', a: [
+    { t: 'Club-Hits, laut', r: ['vice'] },
+    { t: 'Reggae und Strandmusik', r: ['keys'] },
+    { t: 'Rock und Metal', r: ['amb'] },
+    { t: 'Alte Hits aus dem Kassettenrekorder', r: ['gell', 'grass'] },
+  ] },
+  { q: 'Was suchst du in GTA 6 als Erstes?', a: [
+    { t: 'Die besten Partys', r: ['vice'] },
+    { t: 'Geheimnisse und Easter Eggs', r: ['grass'] },
+    { t: 'Ruhe und Natur', r: ['kal', 'keys'] },
+    { t: 'Ärger', r: ['amb', 'gell'] },
+  ] },
+];
+const order: R[] = ['vice', 'keys', 'grass', 'gell', 'amb', 'kal'];
+---
+<section class="rq" data-rq aria-label="Quiz: Welche Region passt zu dir?" data-regions={JSON.stringify(regions)} data-order={JSON.stringify(order)}>
+  <div class="rq-progress" aria-hidden="true"><i></i></div>
+  {questions.map((q, i) => (
+    <fieldset class="rq-q" data-i={i} hidden={i !== 0}>
+      <legend><span class="rq-step">Frage {i + 1} von {questions.length}</span>{q.q}</legend>
+      <div class="rq-answers">
+        {q.a.map((a) => <button type="button" class="rq-a" data-r={a.r.join(',')}>{a.t}</button>)}
+      </div>
+    </fieldset>
+  ))}
+  <div class="rq-result" hidden aria-live="polite">
+    <p class="rq-kicker">Deine Region</p>
+    <h3 class="rq-name"></h3>
+    <p class="rq-typ"></p>
+    <p class="rq-text"></p>
+    <ul class="rq-bars"></ul>
+    <div class="rq-actions">
+      <a class="btn rq-link" href="#"></a>
+      <button type="button" class="btn btn-secondary rq-share">Ergebnis teilen</button>
+      <button type="button" class="rq-again">Nochmal spielen</button>
+    </div>
+    <p class="rq-copied" hidden>Link kopiert!</p>
+  </div>
+</section>
+
+<style>
+  .rq { --c: #ff4fa3; margin: 1.6em 0 2em; padding: 22px; border-radius: 18px; position: relative; overflow: hidden;
+    background: radial-gradient(400px 220px at 100% 0, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%), var(--night-2);
+    border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 0 30px -10px var(--c); transition: border-color .4s, box-shadow .4s; }
+  .rq-progress { height: 6px; border-radius: 99px; background: var(--night-3); overflow: hidden; margin-bottom: 18px; }
+  .rq-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--sun-1), var(--pink), var(--violet)); transition: width .35s ease; }
+  .rq-q { border: 0; margin: 0; padding: 0; animation: rq-in .35s ease-out; }
+  .rq-q legend { font: 1.45rem/1.25 var(--font-display); color: #fff; margin-bottom: 14px; padding: 0; }
+  .rq-step { display: block; font: 700 .75rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 6px; }
+  .rq-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 520px) { .rq-answers { grid-template-columns: 1fr; } }
+  .rq-a { text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--night-3); background: rgb(20 10 36 / .6);
+    color: var(--text); font: 600 1rem var(--font-body); cursor: pointer; transition: border-color .2s, transform .15s, box-shadow .2s; }
+  .rq-a:hover, .rq-a:focus-visible { border-color: var(--pink); box-shadow: 0 0 16px -4px var(--pink); transform: translateY(-2px); }
+  .rq-result { animation: rq-in .5s ease-out; }
+  .rq-kicker { margin: 0; font: 700 .75rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .rq-name { margin: .1em 0 0; font-size: clamp(2.2rem, 7vw, 3.2rem); line-height: 1.05; color: var(--c); text-shadow: 0 0 22px color-mix(in srgb, var(--c) 70%, transparent); }
+  .rq-typ { margin: .2em 0 .8em; font-weight: 700; color: #fff; }
+  .rq-bars { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 6px; font-size: .85rem; }
+  .rq-bars :global(li) { display: grid; grid-template-columns: 8.5em 1fr 2.6em; align-items: center; gap: 8px; }
+  .rq-bars :global(span:last-child) { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rq-bars :global(.bar) { height: 8px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
+  .rq-bars :global(.bar i) { display: block; height: 100%; border-radius: inherit; }
+  .rq-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  .rq-again { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
+  .rq-again:hover { color: #fff; }
+  .rq-copied { color: var(--cyan); font-weight: 700; margin: 8px 0 0; }
+  @keyframes rq-in { from { opacity: 0; transform: translateY(8px); } }
+  @media (prefers-reduced-motion: reduce) { .rq-q, .rq-result { animation: none; } .rq-a { transition: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-rq]').forEach((root) => {
+    const regions = JSON.parse(root.dataset.regions!);
+    const order: string[] = JSON.parse(root.dataset.order!);
+    const qs = [...root.querySelectorAll<HTMLFieldSetElement>('.rq-q')];
+    const bar = root.querySelector<HTMLElement>('.rq-progress i')!;
+    const res = root.querySelector<HTMLElement>('.rq-result')!;
+    let score: Record<string, number> = {};
+    let step = 0;
+
+    const showResult = (best: string, sc: Record<string, number>) => {
+      const r = regions[best];
+      qs.forEach((q) => (q.hidden = true));
+      bar.style.width = '100%';
+      root.style.setProperty('--c', r.c);
+      res.querySelector('.rq-name')!.textContent = r.name;
+      res.querySelector('.rq-typ')!.textContent = r.typ;
+      res.querySelector('.rq-text')!.textContent = r.text;
+      const link = res.querySelector<HTMLAnchorElement>('.rq-link')!;
+      link.href = r.link; link.textContent = r.linkText + ' →';
+      const sum = Object.values(sc).reduce((a, b) => a + b, 0) || 1;
+      const list = res.querySelector('.rq-bars')!;
+      list.innerHTML = '';
+      [...order].sort((a, b) => (sc[b] || 0) - (sc[a] || 0)).forEach((k) => {
+        const pct = Math.round(((sc[k] || 0) / sum) * 100);
+        const li = document.createElement('li');
+        li.innerHTML = `<span></span><span class="bar"><i></i></span><span>${pct} %</span>`;
+        li.querySelector('span')!.textContent = regions[k].name;
+        const i = li.querySelector<HTMLElement>('.bar i')!;
+        i.style.width = `${pct}%`; i.style.background = regions[k].c;
+        list.appendChild(li);
+      });
+      res.hidden = false;
+      try { history.replaceState(null, '', `#ergebnis-${best}`); } catch { /* egal */ }
+    };
+
+    const finish = () => {
+      let best = order[0];
+      order.forEach((k) => { if ((score[k] || 0) > (score[best] || 0)) best = k; });
+      showResult(best, score);
+    };
+
+    qs.forEach((q, i) => q.querySelectorAll<HTMLButtonElement>('.rq-a').forEach((b) => b.addEventListener('click', () => {
+      b.dataset.r!.split(',').forEach((k, idx) => { score[k] = (score[k] || 0) + (idx === 0 ? 2 : 1); });
+      step = i + 1;
+      bar.style.width = `${(step / qs.length) * 100}%`;
+      q.hidden = true;
+      if (step < qs.length) { qs[step].hidden = false; qs[step].querySelector<HTMLButtonElement>('.rq-a')!.focus({ preventScroll: true }); }
+      else finish();
+    })));
+
+    root.querySelector('.rq-again')!.addEventListener('click', () => {
+      score = {}; step = 0; res.hidden = true; root.style.removeProperty('--c');
+      bar.style.width = '0'; qs.forEach((q, i) => (q.hidden = i !== 0));
+      try { history.replaceState(null, '', location.pathname); } catch { /* egal */ }
+    });
+
+    root.querySelector('.rq-share')!.addEventListener('click', async () => {
+      const name = res.querySelector('.rq-name')!.textContent;
+      const url = location.href;
+      const text = `Meine GTA-6-Region ist ${name}! Welche passt zu dir?`;
+      try {
+        if (navigator.share) { await navigator.share({ title: 'Welche Leonida-Region passt zu dir?', text, url }); return; }
+        await navigator.clipboard.writeText(`${text} ${url}`);
+        const c = res.querySelector<HTMLElement>('.rq-copied')!; c.hidden = false; setTimeout(() => (c.hidden = true), 2500);
+      } catch { /* abgebrochen */ }
+    });
+
+    // Geteilter Link mit #ergebnis-xyz zeigt direkt das Ergebnis
+    const m = location.hash.match(/^#ergebnis-(\w+)$/);
+    if (m && regions[m[1]]) showResult(m[1], { [m[1]]: 1 });
+  });
+</script>

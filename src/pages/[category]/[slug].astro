@@ -7,6 +7,7 @@ import NewsletterBox from '../../components/NewsletterBox.astro';
 import SubmitCta from '../../components/SubmitCta.astro';
 import LeonidaMap from '../../components/LeonidaMap.astro';
 import CardTracker from '../../components/CardTracker.astro';
+import RegionQuiz from '../../components/RegionQuiz.astro';
 import { SITE, categoryBySlug } from '../../site.config';
 import { allArtikel, artikelUrl, type Artikel } from '../../lib/artikel';
 
@@ -51,6 +52,7 @@ if (a.data.faq.length) {
       <p class="meta">Aktualisiert am <time datetime={updated.toISOString()}>{updated.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}</time></p>
       {a.id === 'gta-6-karte-regionen' && <LeonidaMap />}
       {a.id === 'gta-6-sammelkarten-tracker' && <CardTracker />}
+      {a.id === 'gta-6-quiz-welche-region' && <RegionQuiz />}
       {toc.length > 2 && (
         <details class="toc" open><summary>Inhalt</summary>
           <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
