@@ -1,0 +1,171 @@
+---
+// Interaktiver Sammelkarten-Tracker. Speichert den Stand nur im Browser (localStorage).
+const sets: { id: string; name: string; n: number; c: string }[] = [
+  { id: 'vc-flamingos', name: 'Vice City Flamingos', n: 24, c: '#ff4fa3' },
+  { id: 'vc-narcos', name: 'Vice City Narcos', n: 24, c: '#ff4fa3' },
+  { id: 'vc-manatees', name: 'Vice City Manatees', n: 24, c: '#ff4fa3' },
+  { id: 'vc-futbol', name: 'Vice City Club De Futbol', n: 30, c: '#ff4fa3' },
+  { id: 'lc-swingers', name: 'Liberty City Swingers', n: 24, c: '#3ee7f0' },
+  { id: 'lc-penetrators', name: 'Liberty City Penetrators', n: 24, c: '#3ee7f0' },
+  { id: 'lc-wrath', name: 'Liberty City Wrath', n: 24, c: '#3ee7f0' },
+  { id: 'ls-corkers', name: 'Los Santos Corkers', n: 24, c: '#ffd166' },
+  { id: 'ls-panic', name: 'Los Santos Panic', n: 24, c: '#ffd166' },
+  { id: 'ls-pounders', name: 'Los Santos Pounders', n: 24, c: '#ffd166' },
+  { id: 'backyard', name: 'Backyard Wrestling', n: 12, c: '#ff9a4d' },
+  { id: 'antm', name: "America's Next Top Hooker", n: 24, c: '#ff9a4d' },
+  { id: 'delights', name: 'Delights Dancers', n: 18, c: '#b07cff' },
+  { id: 'jack', name: 'Jack of Hearts Dancers', n: 36, c: '#b07cff' },
+  { id: 'nine1nine', name: 'Nine1Nine Dancers', n: 36, c: '#b07cff' },
+  { id: 'ratface', name: 'The Legends of Ratface', n: 36, c: '#4dff9a' },
+  { id: 'rightwing', name: 'Right Wing: America\'s Hero', n: 36, c: '#4dff9a' },
+  { id: 'edcomics', name: 'Ed Comics Universe', n: 36, c: '#4dff9a' },
+];
+const total = sets.reduce((s, x) => s + x.n, 0);
+---
+<section class="ct" data-ct aria-label="Sammelkarten-Tracker">
+  <div class="ct-head">
+    <div class="ct-stat"><b data-ct-cards>0</b><span>/ {total} Karten</span></div>
+    <div class="ct-stat"><b data-ct-sets>0</b><span>/ {sets.length} Sets komplett</span></div>
+  </div>
+
+  <div class="ct-goals">
+    <div class="ct-goal">
+      <div class="ct-goal-top"><span>🏆 Trophäe „Don't Touch My Deck“</span><span data-ct-g1>0 / 3 Sets</span></div>
+      <div class="ct-bar"><i data-ct-b1></i></div>
+    </div>
+    <div class="ct-goal">
+      <div class="ct-goal-top"><span>💯 100 % Spielfortschritt</span><span data-ct-g2>0 / 15 Sets</span></div>
+      <div class="ct-bar ct-bar-2"><i data-ct-b2></i></div>
+    </div>
+  </div>
+
+  <ul class="ct-list">
+    {sets.map((s) => (
+      <li class="ct-row" data-id={s.id} data-n={s.n} style={`--c:${s.c}`}>
+        <div class="ct-name">
+          <span class="ct-dot"></span>
+          <span>{s.name}</span>
+          <span class="ct-done" aria-hidden="true">✓</span>
+        </div>
+        <div class="ct-ctrl">
+          <button type="button" class="ct-btn" data-d="-1" aria-label={`${s.name}: eine Karte weniger`}>−</button>
+          <label class="ct-num">
+            <input type="number" inputmode="numeric" min="0" max={s.n} value="0" aria-label={`${s.name}: gefundene Karten`} />
+            <span>/ {s.n}</span>
+          </label>
+          <button type="button" class="ct-btn" data-d="1" aria-label={`${s.name}: eine Karte mehr`}>+</button>
+          <button type="button" class="ct-full" aria-label={`${s.name}: als komplett markieren`}>Komplett</button>
+        </div>
+        <div class="ct-mini"><i></i></div>
+      </li>
+    ))}
+  </ul>
+
+  <div class="ct-foot">
+    <span class="ct-note">Dein Stand wird nur in diesem Browser gespeichert.</span>
+    <button type="button" class="ct-reset" data-ct-reset>Alles zurücksetzen</button>
+  </div>
+</section>
+
+<style>
+  .ct { margin: 1.6em 0 2em; padding: 18px; border-radius: 18px; background: linear-gradient(160deg, rgb(155 92 255 / .14), var(--night-2) 55%);
+    border: 1px solid rgb(155 92 255 / .5); box-shadow: 0 0 30px -10px rgb(155 92 255 / .7); }
+  .ct-head { display: flex; gap: 22px; flex-wrap: wrap; margin-bottom: 14px; }
+  .ct-stat b { font: 2.4rem/1 var(--font-display); font-weight: 400; color: #fff; text-shadow: var(--glow-pink); margin-right: 6px; }
+  .ct-stat span { color: var(--muted); font-weight: 600; }
+  .ct-goals { display: grid; gap: 10px; margin-bottom: 16px; }
+  .ct-goal-top { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; font-weight: 600; margin-bottom: 5px; }
+  .ct-bar { height: 10px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
+  .ct-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--sun-1), var(--pink));
+    box-shadow: 0 0 12px rgb(255 79 163 / .7); transition: width .4s ease; }
+  .ct-bar-2 i { background: linear-gradient(90deg, var(--cyan), var(--violet)); box-shadow: 0 0 12px rgb(62 231 240 / .6); }
+  .ct-goal.is-done .ct-goal-top span:last-child { color: var(--sun-1); }
+
+  .ct-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .ct-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 12px; padding: 10px 12px 12px;
+    border-radius: 12px; background: rgb(20 10 36 / .55); border: 1px solid var(--night-3); position: relative; transition: border-color .3s, box-shadow .3s; }
+  .ct-row.is-full { border-color: var(--c); box-shadow: 0 0 16px -4px var(--c); }
+  .ct-name { display: flex; align-items: center; gap: 9px; font-weight: 600; min-width: 0; }
+  .ct-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); flex: none; }
+  .ct-done { color: var(--c); font-weight: 800; opacity: 0; transform: scale(.4); transition: .3s; }
+  .ct-row.is-full .ct-done { opacity: 1; transform: none; }
+  .ct-ctrl { display: flex; align-items: center; gap: 6px; }
+  .ct-btn { width: 34px; height: 34px; border-radius: 10px; border: 1px solid var(--night-3); background: var(--night-2); color: #fff;
+    font-size: 1.15rem; cursor: pointer; }
+  .ct-btn:hover { border-color: var(--c); }
+  .ct-num { display: flex; align-items: baseline; gap: 4px; color: var(--muted); font-size: .9rem; }
+  .ct-num input { width: 3.2em; padding: 6px 4px; text-align: center; border-radius: 8px; border: 1px solid var(--night-3);
+    background: var(--night); color: #fff; font: 700 1rem var(--font-body); -moz-appearance: textfield; }
+  .ct-num input::-webkit-inner-spin-button, .ct-num input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .ct-full { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--c); background: transparent; color: var(--c);
+    font: 700 .78rem var(--font-body); cursor: pointer; }
+  .ct-row.is-full .ct-full { background: var(--c); color: #140a24; }
+  .ct-mini { grid-column: 1 / -1; height: 4px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
+  .ct-mini i { display: block; height: 100%; width: 0; background: var(--c); transition: width .3s; }
+  .ct-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; font-size: .85rem; }
+  .ct-note { color: var(--muted); }
+  .ct-reset { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
+  .ct-reset:hover { color: #fff; }
+  @media (max-width: 560px) {
+    .ct-row { grid-template-columns: 1fr; }
+    .ct-ctrl { justify-content: space-between; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ct-bar i, .ct-mini i, .ct-done { transition: none; } }
+</style>
+
+<script>
+  const KEY = 'palmenpixel-sammelkarten-v1';
+  document.querySelectorAll<HTMLElement>('[data-ct]').forEach((root) => {
+    const rows = [...root.querySelectorAll<HTMLElement>('.ct-row')];
+    let state: Record<string, number> = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { state = {}; }
+
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* privat-Modus */ } };
+    const $ = <T extends Element>(s: string) => root.querySelector<T>(s)!;
+
+    const render = () => {
+      let cards = 0, full = 0;
+      rows.forEach((r) => {
+        const n = Number(r.dataset.n), v = Math.min(n, Math.max(0, state[r.dataset.id!] || 0));
+        const input = r.querySelector('input')!;
+        if (document.activeElement !== input) input.value = String(v);
+        r.classList.toggle('is-full', v === n);
+        r.querySelector<HTMLElement>('.ct-mini i')!.style.width = `${(v / n) * 100}%`;
+        cards += v; if (v === n) full++;
+      });
+      $('[data-ct-cards]').textContent = String(cards);
+      $('[data-ct-sets]').textContent = String(full);
+      $('[data-ct-g1]').textContent = `${Math.min(full, 3)} / 3 Sets`;
+      $('[data-ct-g2]').textContent = `${Math.min(full, 15)} / 15 Sets`;
+      $<HTMLElement>('[data-ct-b1]').style.width = `${Math.min(full / 3, 1) * 100}%`;
+      $<HTMLElement>('[data-ct-b2]').style.width = `${Math.min(full / 15, 1) * 100}%`;
+      $('[data-ct-g1]').closest('.ct-goal')!.classList.toggle('is-done', full >= 3);
+      $('[data-ct-g2]').closest('.ct-goal')!.classList.toggle('is-done', full >= 15);
+    };
+
+    rows.forEach((r) => {
+      const id = r.dataset.id!, n = Number(r.dataset.n);
+      const set = (v: number) => { state[id] = Math.min(n, Math.max(0, Math.round(v) || 0)); save(); render(); };
+      r.querySelectorAll<HTMLButtonElement>('.ct-btn').forEach((b) => b.addEventListener('click', () => set((state[id] || 0) + Number(b.dataset.d))));
+      r.querySelector('.ct-full')!.addEventListener('click', () => set((state[id] || 0) === n ? 0 : n));
+      const input = r.querySelector('input')!;
+      input.addEventListener('input', () => set(Number(input.value)));
+      input.addEventListener('blur', render);
+    });
+
+    const reset = $<HTMLButtonElement>('[data-ct-reset]');
+    let armed = false;
+    reset.addEventListener('click', () => {
+      if (!Object.values(state).some(Boolean)) return;
+      if (!armed) {
+        armed = true; reset.textContent = 'Wirklich alles löschen? Nochmal klicken';
+        setTimeout(() => { armed = false; reset.textContent = 'Alles zurücksetzen'; }, 4000);
+        return;
+      }
+      armed = false; reset.textContent = 'Alles zurücksetzen';
+      state = {}; save(); render();
+    });
+
+    render();
+  });
+</script>

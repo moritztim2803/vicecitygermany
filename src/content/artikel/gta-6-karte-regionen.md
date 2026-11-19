@@ -113,7 +113,7 @@ Ein **Nationalpark** im Norden von Leonida mit Seen, Flüssen und Offroad-Streck
 - **Trophäe:** Für **3 komplette Sets** bekommst du „Don't Touch My Deck“. Für 100 Prozent brauchst du **15 Sets**.
 - **Geld:** Pfandleiher kaufen dir Karten ab. Verkaufte Karten **bleiben in deiner Sammlung** und zählen weiter.
 
-Die einzelnen Fundorte mit Karte ergänzen wir hier nach und nach.
+Zum Abhaken: unser [Sammelkarten-Tracker](/guides/gta-6-sammelkarten-tracker/) mit allen 18 Sets. Die einzelnen Fundorte ergänzen wir nach und nach.
 
 ## Tipp: Erst die Keys, dann die Stadt
 
