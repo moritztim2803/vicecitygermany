@@ -14,12 +14,23 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
     <Sunset />
     <div class="hero-text">
       <p class="eyebrow">GTA 6 auf Deutsch</p>
-      <h1>Guides, Tipps &amp; News aus dem Sonnenstaat</h1>
+      <h1>Guides, Easter Eggs &amp; News aus dem Sonnenstaat</h1>
       <p>Kurze, ehrliche Antworten auf das, was du gerade in GTA 6 suchst. Ohne Spoiler, wenn nicht anders markiert.</p>
       <ul class="hero-cats">
         {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
       </ul>
     </div>
+  </section>
+  <section class="egg-teaser">
+    <p class="eyebrow">Easter Eggs</p>
+    <h2>Bigfoot, Dexters Wohnung und ein Ei ganz oben auf dem Funkturm</h2>
+    <p>Die verrücktesten Geheimnisse in GTA 6, Schritt für Schritt zum Nachspielen. Spoilerfrei.</p>
+    <ul>
+      <li><a href="/easter-eggs/gta-6-easter-eggs/#bigfoot-finden">Bigfoot finden</a></li>
+      <li><a href="/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden">Dexters Wohnung finden</a></li>
+      <li><a href="/easter-eggs/gta-6-easter-eggs/#das-ei-auf-dem-höchsten-funkturm">Das Ei auf dem Funkturm</a></li>
+    </ul>
+    <a class="btn" href="/kategorie/easter-eggs/">Alle Easter Eggs</a>
   </section>
   <AdSlot name="header" />
   <h2 class="section-title">Neueste Artikel</h2>

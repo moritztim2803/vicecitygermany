@@ -28,7 +28,7 @@ export const AFFILIATE = {
 export const CATEGORIES = [
   { slug: 'news', name: 'News', description: 'Release, Updates, Patches und alles, was gerade zu GTA 6 passiert.' },
   { slug: 'guides', name: 'Guides', description: 'Schritt-für-Schritt-Anleitungen zu Missionen, Geld, Fahrzeugen und mehr.' },
-  { slug: 'tipps', name: 'Tipps & Tricks', description: 'Kurze Tipps für Einsteiger und Profis.' },
+  { slug: 'easter-eggs', name: 'Easter Eggs', description: 'Geheimnisse, Anspielungen und versteckte Orte in GTA 6, Schritt für Schritt zum Nachspielen.' },
   { slug: 'karte', name: 'Karte & Orte', description: 'Leonida, Vice City und alle Orte, Fundorte und Sammelobjekte.' },
   { slug: 'technik', name: 'Technik & Hardware', description: 'Performance, Einstellungen, Speicherplatz, Controller und Zubehör.' },
 ] as const;

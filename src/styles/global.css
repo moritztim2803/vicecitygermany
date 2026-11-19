@@ -164,3 +164,11 @@ main { padding-block: 24px 56px; }
 .consent-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Easter-Egg-Teaser auf der Startseite */
+.egg-teaser { margin: 28px 0; padding: 22px; border-radius: 18px; border: 1px solid rgb(255 79 163 / .6);
+  background: linear-gradient(135deg, rgb(255 79 163 / .14), rgb(62 231 240 / .08)); box-shadow: 0 0 24px rgb(255 79 163 / .25); }
+.egg-teaser h2 { margin: 4px 0 8px; }
+.egg-teaser p { margin: 0 0 12px; }
+.egg-teaser ul { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; margin: 0 0 16px; }
+.egg-teaser li a { display: inline-block; padding: 6px 14px; border-radius: 99px; border: 1px solid rgb(62 231 240 / .6); }

@@ -7,7 +7,7 @@ const artikel = defineCollection({
   schema: z.object({
     title: z.string().max(70, 'SEO-Titel max. 70 Zeichen'),
     description: z.string().max(160, 'Meta-Description max. 160 Zeichen'),
-    category: z.enum(['news', 'guides', 'tipps', 'karte', 'technik']),
+    category: z.enum(['news', 'guides', 'easter-eggs', 'karte', 'technik']),
     publishDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     keywords: z.array(z.string()).default([]),
