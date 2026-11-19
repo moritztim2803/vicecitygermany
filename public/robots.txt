@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # TODO: Domain anpassen
-Sitemap: https://palmenpixel.moritz-beschh.workers.dev/sitemap-index.xml
+Sitemap: https://palmenpixel.de/sitemap-index.xml

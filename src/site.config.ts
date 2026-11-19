@@ -3,7 +3,7 @@
 export const SITE = {
   name: 'Palmenpixel',
   tagline: 'GTA 6 Guides, Tipps & News auf Deutsch',
-  url: 'https://palmenpixel.moritz-beschh.workers.dev', // TODO: auf eigene Domain umstellen
+  url: 'https://palmenpixel.de',
   lang: 'de',
   locale: 'de_DE',
 };
