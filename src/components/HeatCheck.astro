@@ -1,0 +1,118 @@
+---
+// „Erkennt mich die Polizei?“: Interaktive Checkliste zum Abschütteln der Beschreibung nach einer Fahndung.
+const items: { id: string; icon: string; label: string; fix: string }[] = [
+  { id: 'cloth', icon: 'M8 3l4 3 4-3 5 4-3 4-2-1v11H8V10l-2 1-3-4z', label: 'Kleidung', fix: 'Zieh dich um. Am schnellsten mit dem Ersatz-Outfit aus dem Kofferraum deines eigenen Autos.' },
+  { id: 'car', icon: 'M3 15l2-5h14l2 5v4H3zM7 19v2M17 19v2M6 15h3M15 15h3', label: 'Auto', fix: 'Wechsle das Auto oder lass es umlackieren. Lehnt die Werkstatt ab, hat es ein Ortungsgerät, dann lieber ein anderes nehmen.' },
+  { id: 'weapon', icon: 'M3 14h11l2-3h5v3h-4l-1 2H9l-1 3H5l1-3H3z', label: 'Waffe', fix: 'Steck die Waffe weg. Große Waffen wie Gewehre kannst du nicht verstecken, die gehören in den Kofferraum.' },
+  { id: 'duo', icon: 'M8 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM16 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2 20c.5-3 3-5 6-5s5.5 2 6 5M10 20c.5-3 3-5 6-5s5.5 2 6 5', label: 'Jason & Lucia zusammen', fix: 'Trennt euch. Über das Partner-Menü (Steuerkreuz rechts halten) geht ihr getrennte Wege.' },
+  { id: 'cam', icon: 'M4 8h11l5-3v12l-5-3H4zM8 11h.01', label: 'Kamera', fix: 'Zerstör Überwachungskameras im Laden direkt vor Ort, dann gibt es keine Aufnahme von dir.' },
+];
+---
+<section class="hc" data-hc aria-label="Erkennt mich die Polizei?">
+  <div class="hc-stars" aria-hidden="true">
+    {Array.from({ length: 6 }, () => <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" /></svg>)}
+  </div>
+  <h3>Erkennt mich die Polizei?</h3>
+  <p class="hc-lead">Tipp an, was die Polizei nach deiner Flucht über dich weiß. Darunter siehst du, was du tun musst.</p>
+
+  <div class="hc-grid" role="group" aria-label="Was weiß die Polizei?">
+    {items.map((it) => (
+      <button type="button" class="hc-item" data-id={it.id} aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={it.icon} /></svg>
+        <span>{it.label}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="hc-out" aria-live="polite">
+    <p class="hc-empty">Noch nichts ausgewählt. Wenn die Polizei gar nichts über dich weiß, bist du schon sauber.</p>
+    <ol class="hc-steps">
+      {items.map((it) => (
+        <li data-step={it.id} hidden>
+          <label>
+            <input type="checkbox" />
+            <span><b>{it.label}:</b> {it.fix}</span>
+          </label>
+        </li>
+      ))}
+    </ol>
+    <div class="hc-meter" hidden>
+      <div class="hc-meter-top"><span>Wiedererkennung</span><span data-hc-pct>100 %</span></div>
+      <div class="hc-bar"><i></i></div>
+    </div>
+    <p class="hc-clean" hidden>✓ Sauber! Die Polizei erkennt dich nicht mehr wieder.</p>
+    <p class="hc-tip"><b>Tipp fürs nächste Mal:</b> Maske auf, bevor du ein Verbrechen begehst. Dann hat die Polizei dein Gesicht gar nicht erst.</p>
+  </div>
+</section>
+
+<style>
+  .hc { margin: 1.6em 0 2em; padding: 20px; border-radius: 18px; border: 1px solid rgb(62 231 240 / .45);
+    background: radial-gradient(360px 200px at 0 0, rgb(255 79 163 / .18), transparent 70%), radial-gradient(360px 200px at 100% 0, rgb(62 231 240 / .16), transparent 70%), var(--night-2);
+    box-shadow: 0 0 28px -10px rgb(62 231 240 / .8); }
+  .hc h3 { margin: 6px 0 4px; font-size: 1.5rem; color: #fff; }
+  .hc-lead { margin: 0 0 14px; color: var(--muted); }
+  .hc-stars { display: flex; gap: 4px; }
+  .hc-stars svg { width: 22px; height: 22px; fill: #fff; filter: drop-shadow(0 0 6px rgb(255 79 163 / .9)); animation: hc-flash 1.6s infinite; }
+  .hc-stars svg:nth-child(odd) { filter: drop-shadow(0 0 6px rgb(62 231 240 / .9)); animation-delay: .8s; }
+  @keyframes hc-flash { 50% { opacity: .35; } }
+  .hc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 520px) { .hc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .hc-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border-radius: 12px; cursor: pointer;
+    background: rgb(20 10 36 / .6); border: 1px solid var(--night-3); color: var(--text); font: 600 .9rem var(--font-body); text-align: center;
+    transition: border-color .2s, box-shadow .2s, background .2s; }
+  .hc-item svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .hc-item[aria-pressed='true'] { border-color: var(--pink); color: #fff; background: rgb(255 79 163 / .14); box-shadow: 0 0 16px -4px var(--pink); }
+  .hc-item[aria-pressed='true'].is-fixed { border-color: var(--cyan); background: rgb(62 231 240 / .1); box-shadow: 0 0 16px -4px var(--cyan); }
+  .hc-out { margin-top: 16px; }
+  .hc-empty { color: var(--muted); margin: 0; }
+  .hc-steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+  .hc-steps label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .hc-steps input { margin-top: .35em; width: 18px; height: 18px; accent-color: var(--cyan); flex: none; }
+  .hc-steps input:checked + span { opacity: .55; text-decoration: line-through; }
+  .hc-meter { margin-top: 14px; }
+  .hc-meter-top { display: flex; justify-content: space-between; font-weight: 700; font-size: .9rem; margin-bottom: 5px; }
+  .hc-bar { height: 10px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
+  .hc-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--pink), #ff3b3b); box-shadow: 0 0 12px rgb(255 79 163 / .7); transition: width .35s; }
+  .hc-tip { margin: 14px 0 0; font-size: .88rem; color: var(--muted); }
+  .hc-clean { margin: 12px 0 0; font: 1.25rem var(--font-display); color: var(--cyan); text-shadow: var(--glow-cyan); }
+  @media (prefers-reduced-motion: reduce) { .hc-stars svg { animation: none; } .hc-bar i { transition: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-hc]').forEach((root) => {
+    const btns = [...root.querySelectorAll<HTMLButtonElement>('.hc-item')];
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const empty = root.querySelector<HTMLElement>('.hc-empty')!;
+    const meter = root.querySelector<HTMLElement>('.hc-meter')!;
+    const clean = root.querySelector<HTMLElement>('.hc-clean')!;
+    const bar = root.querySelector<HTMLElement>('.hc-bar i')!;
+    const pct = root.querySelector<HTMLElement>('[data-hc-pct]')!;
+
+    const update = () => {
+      const active = btns.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.id!);
+      let done = 0;
+      steps.forEach((s) => {
+        const on = active.includes(s.dataset.step!);
+        s.hidden = !on;
+        const ok = on && s.querySelector('input')!.checked;
+        if (ok) done++;
+        root.querySelector(`.hc-item[data-id="${s.dataset.step}"]`)!.classList.toggle('is-fixed', ok);
+      });
+      empty.hidden = active.length > 0;
+      meter.hidden = active.length === 0;
+      const left = active.length ? Math.round(((active.length - done) / active.length) * 100) : 0;
+      bar.style.width = `${left}%`;
+      pct.textContent = `${left} %`;
+      clean.hidden = !(active.length > 0 && done === active.length);
+    };
+
+    btns.forEach((b) => b.addEventListener('click', () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', String(on));
+      if (!on) root.querySelector<HTMLInputElement>(`[data-step="${b.dataset.id}"] input`)!.checked = false;
+      update();
+    }));
+    steps.forEach((s) => s.querySelector('input')!.addEventListener('change', update));
+    update();
+  });
+</script>
