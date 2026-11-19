@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { CATEGORIES } from '../../site.config';
+import { allArtikel, artikelUrl } from '../../lib/artikel';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { slug: c.slug }, props: { cat: c } }));
+}
+const { cat } = Astro.props;
+const artikel = (await allArtikel()).filter((a) => a.data.category === cat.slug);
+---
+<Base title={`GTA 6 ${cat.name}`} description={cat.description} noindex={artikel.length === 0}>
+  <h1>GTA 6 {cat.name}</h1>
+  <p class="lead">{cat.description}</p>
+  <AdSlot name="header" />
+  {artikel.length === 0 ? <p>Hier erscheinen bald die ersten Artikel.</p> : (
+    <div class="grid">
+      {artikel.map((a) => (
+        <ArticleCard href={artikelUrl(a)} title={a.data.title} description={a.data.description}
+          category={a.data.category} date={a.data.updatedDate ?? a.data.publishDate} />
+      ))}
+    </div>
+  )}
+</Base>

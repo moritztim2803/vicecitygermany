@@ -1,0 +1,70 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { SITE, categoryBySlug } from '../../site.config';
+import { allArtikel, artikelUrl, type Artikel } from '../../lib/artikel';
+
+export async function getStaticPaths() {
+  const all = await allArtikel();
+  return all.map((a) => ({ params: { category: a.data.category, slug: a.id }, props: { a, all } }));
+}
+const { a, all } = Astro.props as { a: Artikel; all: Artikel[] };
+const { Content, headings } = await render(a);
+const cat = categoryBySlug(a.data.category)!;
+const updated = a.data.updatedDate ?? a.data.publishDate;
+const url = new URL(artikelUrl(a), Astro.site).href;
+const related = all.filter((x) => x.id !== a.id).slice(0, 3);
+const toc = headings.filter((h) => h.depth === 2);
+
+const jsonLd: object[] = [
+  {
+    '@context': 'https://schema.org', '@type': 'Article', headline: a.data.title, description: a.data.description,
+    datePublished: a.data.publishDate.toISOString(), dateModified: updated.toISOString(), inLanguage: 'de-DE',
+    mainEntityOfPage: url, author: { '@type': 'Organization', name: SITE.name }, publisher: { '@type': 'Organization', name: SITE.name },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: cat.name, item: new URL(`/kategorie/${cat.slug}/`, Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: a.data.title, item: url },
+    ],
+  },
+];
+if (a.data.faq.length) {
+  jsonLd.push({
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: a.data.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  });
+}
+---
+<Base title={a.data.title} description={a.data.description} type="article" jsonLd={jsonLd}>
+  <nav class="breadcrumb" aria-label="Brotkrumen"><a href="/">Start</a> › <a href={`/kategorie/${cat.slug}/`}>{cat.name}</a></nav>
+  <div class="article-layout">
+    <article class="prose">
+      <h1>{a.data.title}</h1>
+      <p class="meta">Aktualisiert am <time datetime={updated.toISOString()}>{updated.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}</time></p>
+      {toc.length > 2 && (
+        <details class="toc" open><summary>Inhalt</summary>
+          <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </details>
+      )}
+      <AdSlot name="in-article" />
+      <Content />
+      {a.data.faq.length > 0 && (
+        <section class="faq">
+          <h2>Häufige Fragen</h2>
+          {a.data.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+        </section>
+      )}
+      <AdSlot name="footer" />
+    </article>
+    <aside class="sidebar">
+      <AdSlot name="sidebar" />
+      {related.length > 0 && <div><h2 class="h-small">Weiterlesen</h2>
+        {related.map((r) => <ArticleCard href={artikelUrl(r)} title={r.data.title} description={r.data.description}
+          category={r.data.category} date={r.data.updatedDate ?? r.data.publishDate} />)}</div>}
+    </aside>
+  </div>
+</Base>

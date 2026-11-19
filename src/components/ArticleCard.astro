@@ -1,0 +1,11 @@
+---
+import { categoryBySlug } from '../site.config';
+interface Props { href: string; title: string; description: string; category: string; date: Date }
+const { href, title, description, category, date } = Astro.props;
+const cat = categoryBySlug(category);
+---
+<article class="card">
+  <p class="meta"><span class="pill">{cat?.name}</span> <time datetime={date.toISOString()}>{date.toLocaleDateString('de-DE')}</time></p>
+  <h3><a href={href}>{title}</a></h3>
+  <p>{description}</p>
+</article>

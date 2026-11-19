@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+---
+<Base title="Über uns" description={`Wer hinter ${SITE.name} steckt und wie wir arbeiten.`}>
+  <div class="prose">
+    <h1>Über {SITE.name}</h1>
+    <p>[Ein paar Sätze über dich: Seit wann spielst du GTA, auf welcher Plattform spielst du GTA 6, warum gibt es diese Seite. Google bewertet Guides besser, wenn erkennbar ist, dass ein echter Mensch selbst gespielt und getestet hat.]</p>
+    <h2>So arbeiten wir</h2>
+    <ul>
+      <li>Wir testen Tipps selbst im Spiel, bevor wir sie veröffentlichen.</li>
+      <li>Jeder Artikel zeigt, wann er zuletzt aktualisiert wurde.</li>
+      <li>Story-Spoiler werden immer deutlich markiert.</li>
+      <li>Wir verbreiten keine Leaks und keine Anleitungen zu Glitches, Exploits oder Mod-Menüs.</li>
+    </ul>
+  </div>
+</Base>

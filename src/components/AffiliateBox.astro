@@ -1,0 +1,13 @@
+---
+// Amazon-Produktbox. Nutzung in Artikeln: siehe README (MDX optional) oder direkt in Seiten.
+import { AFFILIATE } from '../site.config';
+interface Props { asin: string; title: string; note?: string }
+const { asin, title, note } = Astro.props;
+const href = `https://www.amazon.de/dp/${asin}${AFFILIATE.amazonTag ? `?tag=${AFFILIATE.amazonTag}` : ''}`;
+---
+<div class="affiliate">
+  <span class="ad-label">Anzeige</span>
+  <p class="affiliate-title">{title}</p>
+  {note && <p>{note}</p>}
+  <a class="btn" href={href} rel="sponsored nofollow noopener" target="_blank">Bei Amazon ansehen*</a>
+</div>

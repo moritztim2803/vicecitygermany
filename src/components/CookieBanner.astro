@@ -1,0 +1,59 @@
+---
+// Einfaches Opt-in-Banner (TDDDG/DSGVO): Werbe-Skripte laden erst nach "Akzeptieren".
+// HINWEIS: Sobald AdSense live geht, verlangt Google für Besucher aus EU/EWR eine
+// Google-zertifizierte CMP (IAB TCF). Dann dieses Banner durch Googles kostenlose
+// "Datenschutz & Mitteilungen"-CMP ersetzen (siehe README).
+---
+<div id="consent" class="consent" role="dialog" aria-live="polite" aria-label="Cookie-Einwilligung" hidden>
+  <p>
+    Wir möchten Werbung anzeigen, um diese Seite kostenlos zu finanzieren. Dafür setzen Werbepartner (Google AdSense) Cookies
+    und verarbeiten Nutzungsdaten. Das passiert nur mit deiner Einwilligung. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+  </p>
+  <div class="consent-actions">
+    <button type="button" data-consent="denied" class="btn btn-secondary">Nur notwendige</button>
+    <button type="button" data-consent="granted" class="btn">Akzeptieren</button>
+  </div>
+</div>
+<script>
+  const KEY = 'consent-v1';
+  const banner = document.getElementById('consent')!;
+  const client = document.querySelector<HTMLMetaElement>('meta[name="x-adsense-client"]')?.content ?? '';
+
+  function read(): string | null {
+    try { return localStorage.getItem(KEY); } catch { return null; }
+  }
+  function write(v: string) {
+    try { localStorage.setItem(KEY, v); } catch {}
+  }
+  function loadAds() {
+    if (!client || document.getElementById('adsense-js')) return;
+    const s = document.createElement('script');
+    s.id = 'adsense-js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(client)}`;
+    s.onload = () => {
+      document.querySelectorAll('ins.adsbygoogle').forEach(() => {
+        // @ts-ignore
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      });
+    };
+    document.head.appendChild(s);
+  }
+
+  const state = read();
+  if (state === 'granted') loadAds();
+  else if (state === null) banner.hidden = false;
+
+  banner.addEventListener('click', (e) => {
+    const v = (e.target as HTMLElement).closest('[data-consent]')?.getAttribute('data-consent');
+    if (!v) return;
+    write(v);
+    banner.hidden = true;
+    if (v === 'granted') loadAds();
+    else if (document.getElementById('adsense-js')) location.reload();
+  });
+  document.querySelectorAll('[data-open-consent]').forEach((b) =>
+    b.addEventListener('click', () => { banner.hidden = false; })
+  );
+</script>

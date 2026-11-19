@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+import { SITE, ADS, CATEGORIES } from '../site.config';
+import CookieBanner from '../components/CookieBanner.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  type?: 'website' | 'article';
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+const { title, description, type = 'website', jsonLd = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).href;
+const fullTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
+---
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+    <!-- AdSense wird NICHT hier geladen, sondern erst nach Einwilligung (siehe CookieBanner). -->
+    <meta name="x-adsense-client" content={ADS.adsenseClient} />
+  </head>
+  <body>
+    <a class="skip" href="#inhalt">Zum Inhalt springen</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="logo" href="/">{SITE.name}</a>
+        <nav aria-label="Hauptnavigation">
+          <ul>
+            {CATEGORIES.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="inhalt" class="wrap">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="disclaimer">
+          {SITE.name} ist eine inoffizielle Fanseite und steht in keiner Verbindung zu Rockstar Games oder Take-Two Interactive.
+          „Grand Theft Auto“ und „GTA“ sind Marken von Take-Two Interactive Software, Inc.
+        </p>
+        <p class="disclaimer">Mit * markierte Links sind Affiliate-Links. Kaufst du darüber, erhalten wir eine kleine Provision. Für dich ändert sich der Preis nicht.</p>
+        <ul class="footer-links">
+          <li><a href="/impressum/">Impressum</a></li>
+          <li><a href="/datenschutz/">Datenschutz</a></li>
+          <li><a href="/ueber-uns/">Über uns</a></li>
+          <li><button type="button" class="linklike" data-open-consent>Cookie-Einstellungen</button></li>
+        </ul>
+      </div>
+    </footer>
+    <CookieBanner />
+  </body>
+</html>

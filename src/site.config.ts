@@ -1,0 +1,37 @@
+// Zentrale Einstellungen der Seite. Hier änderst du Name, Domain, Werbung und Affiliate.
+
+export const SITE = {
+  name: 'Leonida Guide',
+  tagline: 'Deutsche Guides, Tipps & News zu GTA 6',
+  url: 'https://example.com', // TODO: echte Domain eintragen
+  lang: 'de',
+  locale: 'de_DE',
+};
+
+export const ADS = {
+  // AdSense Publisher-ID, z. B. 'ca-pub-1234567890123456'. Leer = es werden nur Platzhalter angezeigt.
+  adsenseClient: '',
+  // Slot-IDs aus dem AdSense-Konto (Anzeigenblöcke). Leer = automatische Anzeigen / Platzhalter.
+  slots: {
+    'header': '',
+    'in-article': '',
+    'sidebar': '',
+    'footer': '',
+  } as Record<string, string>,
+};
+
+export const AFFILIATE = {
+  // Amazon PartnerNet Tracking-ID, z. B. 'deinname-21'
+  amazonTag: '',
+};
+
+export const CATEGORIES = [
+  { slug: 'news', name: 'News', description: 'Release, Updates, Patches und alles, was gerade zu GTA 6 passiert.' },
+  { slug: 'guides', name: 'Guides', description: 'Schritt-für-Schritt-Anleitungen zu Missionen, Geld, Fahrzeugen und mehr.' },
+  { slug: 'tipps', name: 'Tipps & Tricks', description: 'Kurze Tipps für Einsteiger und Profis.' },
+  { slug: 'karte', name: 'Karte & Orte', description: 'Leonida, Vice City und alle Orte, Fundorte und Sammelobjekte.' },
+  { slug: 'technik', name: 'Technik & Hardware', description: 'Performance, Einstellungen, Speicherplatz, Controller und Zubehör.' },
+] as const;
+
+export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
+export const categoryBySlug = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
