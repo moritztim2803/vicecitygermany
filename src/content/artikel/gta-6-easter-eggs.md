@@ -1,82 +1,78 @@
 ---
-title: "GTA 6 Easter Eggs: Alle bisherigen Funde und wo du sie findest"
-description: "Dexters Wohnung, das Ei auf dem Funkturm, Bigfoot und der Hund auf dem Jetski: alle Easter Eggs in GTA 6, die Spieler bisher gefunden haben. Spoilerfrei."
+title: "GTA 6 Easter Eggs: Fundorte Schritt für Schritt erklärt"
+description: "Dexters Wohnung, Bigfoot und das Ei auf dem Funkturm: So findest du die besten Easter Eggs in GTA 6, Schritt für Schritt und spoilerfrei."
 category: karte
 publishDate: 2026-11-19
 keywords: ["gta 6 easter eggs", "gta 6 geheimnisse", "gta 6 dexter wohnung", "gta 6 bigfoot", "gta 6 ei funkturm", "gta 6 secrets"]
 faq:
-  - q: "Welche Easter Eggs gibt es in GTA 6?"
-    a: "Bisher gefunden wurden unter anderem eine Anspielung auf Dexters Wohnung aus der Serie Dexter, ein Ei in einem Nest auf dem höchsten Funkturm von Vice City, eine Bigfoot-Begegnung in den Sümpfen und ein Hund, der Jetski fährt."
   - q: "Wo ist Dexters Wohnung in GTA 6?"
-    a: "Auf Washington Island in Vice Beach. Du kommst bis zur Wohnungstür, aber nicht hinein."
-  - q: "Enthält diese Seite Story-Spoiler?"
-    a: "Nein. Wir beschreiben nur Fundorte und Anspielungen, keine Story-Wendungen. Wenn ein Easter Egg an eine Mission gebunden ist, sagen wir nicht, welche."
+    a: "Auf Washington Island, zwischen Penmarch Isle und dem Norden von Vice Beach, ganz im Osten der Karte. Das Gebäude heißt Trinity Apartments."
+  - q: "Wo finde ich Bigfoot in GTA 6?"
+    a: "Am Cottonmouth Lake südlich von Hamlet, auf der Südostseite des Sees. Bigfoot frisst dort an einem Feldweg an einem Hirschkadaver."
+  - q: "Kann man Bigfoot in GTA 6 erschießen?"
+    a: "Nein. Kugeln richten nichts aus. Folge ihm einfach, bis du am markierten Baum ankommst."
 ---
 
-> **Stand: 19. November 2026, 18 Uhr. Wird laufend ergänzt.** GTA 6 ist erst seit heute draußen, und Spieler finden stündlich Neues. Wir nehmen ein Easter Egg nur auf, wenn mindestens zwei unabhängige Quellen darüber berichten oder es Video- oder Bildbelege gibt. **Diese Seite ist spoilerfrei.**
+> **Stand: 19. November 2026. Neue Easter Eggs ergänzen wir laufend.** Alle Anleitungen sind spoilerfrei.
 
-**Kurz gesagt:** In den ersten Stunden nach dem Release haben Spieler schon mehrere Easter Eggs entdeckt. Die bekanntesten: **Dexters Wohnung** aus der Serie *Dexter*, ein **Ei auf dem höchsten Funkturm** von Vice City, eine **Bigfoot-Begegnung** in den Sümpfen und ein **Hund, der dich mit dem Jetski rettet**.
+**Kurz gesagt:** Die drei besten Easter Eggs, die du schon früh im Spiel findest: **Dexters Wohnung** auf Washington Island, **Bigfoot** am Cottonmouth Lake und ein **Ei im Vogelnest** ganz oben auf dem höchsten Funkturm. Alle drei erreichst du schon früh im Spiel.
 
 ## Übersicht
 
-| Easter Egg | Wo | Bestätigt durch |
+| Easter Egg | Wo | Ab wann |
 |---|---|---|
-| Dexters Wohnung | Washington Island, Vice Beach | Video, mehrere Berichte |
-| Ei auf dem Funkturm | höchster Funkturm in Vice City | mehrere Spieler auf X |
-| Bigfoot | Sümpfe | Reddit, Kotaku |
-| Hund auf dem Jetski | auf dem Meer | Videos auf X und Reddit |
+| Dexters Wohnung | Washington Island, Vice Beach | nach der ersten Mission |
+| Bigfoot | Cottonmouth Lake, südlich von Hamlet | nach der ersten Mission |
+| Ei auf dem Funkturm | höchster Funkturm, Vice Dale County | früh im Spiel |
 
-## Dexters Wohnung (Trinity Apartments)
+## Dexters Wohnung finden
 
-**Anspielung auf:** die Serie *Dexter*, die in Miami spielt. Hauptfigur Dexter Morgan wohnt dort in einem auffälligen Apartmentkomplex mit Innenhof.
+Eine Anspielung auf die Serie *Dexter*, die in Miami spielt. Das Gebäude sieht dem Apartmentkomplex aus der Serie zum Verwechseln ähnlich, inklusive Dexters Werkzeug und seinem Boot.
 
-**Wo:** Auf **Washington Island in Vice Beach**, laut GameSpot in der Nähe des Ladens „Top Fun Drones“. Das Gebäude heißt im Spiel **Trinity Apartments** und sieht dem Haus aus der Serie zum Verwechseln ähnlich. Du kommst bis zur Wohnungstür, aber **nicht hinein**.
+1. **Schließe die erste Mission ab.** Danach ist die Gegend frei erreichbar.
+2. **Öffne die Karte** und zoome ganz nach **Osten** (rechter Kartenrand).
+3. **Suche Washington Island.** Die Insel liegt zwischen **Penmarch Isle** und dem **nördlichen Teil von Vice Beach**.
+4. **Setze dort einen Wegpunkt** auf den Apartmentkomplex **Trinity Apartments** und fahr hin.
+5. **Geh durch den Innenhof** bis zu Dexters Wohnungstür. Hinein kommst du nicht.
+6. **Steig aufs Dach.** Dort liegt Dexters Set: Messer, Klebeband, Seil und eine Spritze.
+7. **Schau in den Behälter daneben.** Darin findest du rund **200 $** und ein **Messer**, das du mitnehmen kannst.
+8. **Geh runter zum Steg vor dem Gebäude.** Dort liegt ein Boot vom Typ **Lure Predator**, das Dexters Boot „Slice of Life“ nachempfunden ist. Du kannst es dir nehmen.
 
-**Was du dort findest:** Laut Dexerto liegt auf dem Dach ein Set aus Messer, Klebeband, Seil und Spritze, genau wie Dexter es in der Serie benutzt. Außerdem kannst du in der Nähe ein Boot namens **Lure Predator** stehlen, das an Dexters Boot „Slice of Life“ erinnert. Belegt ist das durch Videomaterial des Accounts DETONATED auf X.
+<!-- Screenshot von Moritz: Kartenausschnitt Washington Island mit Wegpunkt -->
+<!-- Screenshot von Moritz: Innenhof Trinity Apartments -->
 
-**Ab wann erreichbar:** Hier widersprechen sich die Quellen. Laut einem Bericht ist der Komplex von Anfang an zugänglich, laut einem anderen erst nach den ersten Missionen. Wir prüfen das selbst und tragen es nach.
+## Bigfoot finden
 
-Rockstar selbst hat das Gebäude nicht offiziell als Dexters Wohnung bezeichnet. Fans hatten es schon im August im Trailer erkannt.
+Bigfoot ist ein Rockstar-Klassiker und taucht seit Red Dead Redemption und GTA 5 immer wieder auf. In GTA 6 begegnest du ihm schon ganz am Anfang.
+
+1. **Schließe die erste Mission ab.**
+2. **Fahr zum Cottonmouth Lake**, direkt **südlich von Hamlet**.
+3. **Fahr auf die Südostseite des Sees**, gegenüber von Key Lento auf der anderen Seeseite.
+4. **Folge dem Feldweg** durch das Waldstück bis zu seinem Ende. **Hör auf ein tiefes Knurren.**
+5. **Bigfoot frisst an einem Hirschkadaver.** Steig aus dem Auto, sobald du ihn siehst.
+6. **Verfolge ihn zu Fuß** in den Wald. **Schieß nicht**, Kugeln bringen nichts. Behalte ihn im Blick und folge der Spur.
+7. **Die Spur endet an einem Baum** mit einer seltsamen, menschenähnlichen Figur daran.
+8. **Halte L2 (PS5) bzw. LT (Xbox)**, um den Baum zu untersuchen.
+9. **Jason wird ohnmächtig** und es folgt eine kurze Zwischensequenz. Danach wachst du neben deinem Auto auf.
+
+<!-- Screenshot von Moritz: Feldweg am Cottonmouth Lake -->
 
 ## Das Ei auf dem höchsten Funkturm
 
-**Was:** Ganz oben auf dem **höchsten Funkturm von Vice City** liegt ein **Ei in einem Nest**. Wer es vom Turm wirft, löst eine kurze Zwischensequenz aus. Was darin passiert, verraten wir nicht.
+Ein echtes „Easter Egg“: ganz oben auf dem höchsten Turm liegt ein Vogelnest mit Eiern. Wer eins herunterwirft, bekommt eine kurze, witzige Zwischensequenz.
 
-**Wie:** Der Aufstieg ist lang. Spieler berichten von **etwa 6 bis 7 Minuten** Klettern. Nimm dir also Zeit und pass auf, wo du hintrittst.
+1. **Öffne die Karte** und suche den **höchsten Funkturm** in **Vice Dale County**. Du erkennst ihn auch von unten, er überragt alles in der Gegend.
+2. **Fahr zum Fuß des Turms** und such den Einstieg der **Leiter**.
+3. **Kletter nach oben.** Das dauert etwa **7 Minuten**, nimm dir Zeit.
+4. **Oben findest du ein Vogelnest** mit bunten Eiern. **Interagiere mit dem Nest**, um ein Ei zu nehmen.
+5. **Geh an den Rand** der Plattform und **wirf das Ei hinunter**.
+6. **Schau dir die Zwischensequenz an.** Was passiert, verraten wir nicht.
+7. **Bonus:** Kletter noch eine Ebene höher Richtung Antenne. Dort steht ein Influencer, mit dem du reden kannst, und ein **Fallschirm** liegt bereit. Damit springst du direkt wieder runter.
 
-**Gefunden von:** Mehrere Spieler haben es am Launch-Abend unabhängig voneinander auf X gezeigt, unter anderem @xGarbett und @cantworkitout. Kotaku und TechRadar haben darüber berichtet.
+<!-- Screenshot von Moritz: Turm von unten, Nest oben -->
 
-## Bigfoot in den Sümpfen
+## Mehr Easter Eggs folgen
 
-**Was:** Eine Begegnung mit **Bigfoot**, die Kotaku als „ziemlich gruselig“ beschreibt. Bigfoot ist ein Rockstar-Klassiker: Schon in GTA San Andreas gab es Gerüchte, in Red Dead Redemption und GTA 5 tauchte er tatsächlich auf.
+Spieler finden gerade jeden Tag neue Geheimnisse. Wir nehmen ein Easter Egg auf, sobald der Weg dorthin klar ist, und erklären ihn Schritt für Schritt.
 
-**Wo:** In den **Sümpfen** außerhalb der Stadt. Wie genau die Begegnung ausgelöst wird, ist noch nicht klar. Laut einer Quelle passiert sie beim freien Erkunden, laut einer anderen im Rahmen einer Mission. Welche Mission, verraten wir aus Spoilergründen nicht.
-
-**Gefunden von:** Reddit-Nutzer u/Impressive-Room-2312 in r/GTA, nur wenige Stunden nach dem Start.
-
-## Der Hund auf dem Jetski
-
-**Was:** Wenn du auf dem Meer strandest, kann dich ein **Hund mit Schwimmbrille auf einem Jetski** retten. Danach könnt ihr zusammen eine Runde drehen.
-
-**Gefunden von:** Clips davon kursieren seit dem Launch-Abend auf X und Reddit. Kotaku, TechRadar und Gulf News haben sie aufgegriffen.
-
-## Parodien und Anspielungen
-
-Typisch Rockstar: Die Welt steckt voller Parodien auf echte Marken. Laut Kotaku und ersten Tests gibt es unter anderem:
-
-- **Sahara:** ein Online-Versandhändler, der mit eigenen Lastwagen Pakete ausliefert. Unschwer als Amazon-Parodie zu erkennen.
-- **BuckMe:** eine Bezahl-App, angelehnt an Venmo.
-- **Gorge:** eine Ketchup-Marke im Stil von Heinz.
-
-## Noch nicht bestätigt
-
-Diese Funde wurden gemeldet, aber bisher nur von **einer** Quelle. Wir nehmen sie in die Übersicht auf, sobald es weitere Belege gibt:
-
-- **UFO-Ereignis in Kelly County:** Ein Bericht beschreibt eine nächtliche UFO-Begegnung mit eigener Trophäe.
-- **Riesenkrabbe:** Ein Spieler zeigt auf X eine Zwischensequenz mit einer riesigen Krabbe. Wie er dorthin kam, ist unklar.
-
-## Du hast ein Easter Egg gefunden?
-
-Wir ergänzen diese Seite jeden Tag. Neue Funde prüfen wir, bevor sie hier landen. Fundorte zeigen wir mit eigenen Screenshots, sobald wir sie selbst besucht haben.
-
-*Quellen: Kotaku und TechRadar (Live-Blogs zum Launch, 19.11.2026), Dexerto (19.11.2026), LibertyCity (19.11.2026), Endgame Tools mit Verweis auf GameSpot (19.11.2026), Beiträge auf X und Reddit.*
+*Quellen: Dexter Daily, DETONATED, Beebom, Game Rant, IBTimes, GamerHour, Prodigy Gamers (alle 19.11.2026).*
