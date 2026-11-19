@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Sunset from '../components/Sunset.astro';
+import MapTeaser from '../components/MapTeaser.astro';
 import { SITE, CATEGORIES } from '../site.config';
 import { allArtikel, artikelUrl } from '../lib/artikel';
 
@@ -23,6 +24,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       </ul>
     </div>
   </section>
+  <MapTeaser />
   <section class="egg-teaser">
     <p class="eyebrow">Easter Eggs</p>
     <h2>Bigfoot, Dexters Wohnung und ein Ei ganz oben auf dem Funkturm</h2>

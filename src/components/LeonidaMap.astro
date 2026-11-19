@@ -1,0 +1,453 @@
+---
+// Interaktive Übersichtskarte von Leonida.
+// Komplett selbst gezeichnet (SVG), schematisch und nicht maßstabsgetreu.
+// Keine Grafiken von Rockstar.
+
+import { COAST, R, keys, type Pt } from '../lib/leonida';
+
+type Region = {
+  id: 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
+  name: string; vorbild: string; typ: string; color: string;
+  text: string; facts: string[]; link?: { href: string; label: string };
+  label: { x: number; y: number; anchor?: 'start' | 'middle' | 'end'; leader?: Pt };
+  icon: { x: number; y: number; d: string };
+};
+
+// Icons: einfache eigene Piktogramme in 24er-Box
+const I = {
+  palm: 'M12 22v-9M12 13c-3-3-7-3-9-1 3-.5 6 .5 9 1zm0 0c3-3 7-3 9-1-3-.5-6 .5-9 1zm0 0c-1-4-4-6-7-6 3 1 5 3 7 6zm0 0c1-4 4-6 7-6-3 1-5 3-7 6z',
+  dive: 'M3 9h18v5a3 3 0 0 1-3 3h-3l-3-3-3 3H6a3 3 0 0 1-3-3zM8 9V6M16 9V6',
+  gator: 'M2 14c3-3 7-4 12-3l6-2 2 2-5 2c-1 2-4 4-9 4-3 0-5-1-6-3zM14 11l1-2',
+  car: 'M3 15l2-5h14l2 5v4H3zM7 19v2M17 19v2M6 15h3M15 15h3',
+  factory: 'M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17zM7 18h2M12 18h2M17 18h2',
+  peak: 'M2 20l7-12 4 6 3-4 6 10zM9 8l2 3',
+};
+
+const regions: Region[] = [
+  {
+    id: 'vice', name: 'Vice City', vorbild: 'Miami', typ: 'Großstadt', color: '#ff4fa3',
+    text: 'Die Metropole im Südosten: Hochhäuser, Strände, Nachtleben. Zur Stadt gehört Vice Beach, ganz im Osten liegt Washington Island.',
+    facts: ['Vice Beach mit Strand und Nachtleben', 'Washington Island ganz im Osten', 'Easter Egg: Dexters Wohnung'],
+    link: { href: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden', label: 'Dexters Wohnung finden' },
+    label: { x: 880, y: 395, anchor: 'middle', leader: [800, 560] },
+    icon: { x: 790, y: 735, d: I.palm },
+  },
+  {
+    id: 'keys', name: 'Leonida Keys', vorbild: 'Florida Keys', typ: 'Inselkette', color: '#3ee7f0',
+    text: 'Tropische Inseln südlich von Vice City. Hier liegt Key Lento, und hier schickt dich Kenton auf Schatztauchgänge.',
+    facts: ['Inseln, Boote, Tauchen', 'Key Lento', 'Schatztauchen mit Kenton: beste Geldquelle am Anfang'],
+    link: { href: '/guides/gta-6-schnell-geld-verdienen/', label: 'Schnell Geld verdienen' },
+    label: { x: 668, y: 980, anchor: 'middle' },
+    icon: { x: 846, y: 912, d: I.dive },
+  },
+  {
+    id: 'grass', name: 'Grassrivers', vorbild: 'Everglades', typ: 'Sumpfgebiet', color: '#4dff9a',
+    text: 'Marschland voller Alligatoren. Laut Rockstar warten hier „gefährlichere Raubtiere und seltsamere Entdeckungen“.',
+    facts: ['Sumpf und Marschland', 'Alligatoren', 'Gefährlichere Raubtiere, seltsamere Entdeckungen'],
+    label: { x: 650, y: 680, anchor: 'middle' },
+    icon: { x: 660, y: 760, d: I.gator },
+  },
+  {
+    id: 'gell', name: 'Port Gellhorn', vorbild: 'Floridas „vergessene Küste“', typ: 'Küstenort', color: '#ff9a4d',
+    text: 'Früher ein Urlaubsort, heute voller Billigmotels, geschlossener Attraktionen und leerer Einkaufszentren.',
+    facts: ['Billigmotels und leere Malls', 'Geschlossene Attraktionen', 'Ab Kapitel 2: Moses kauft gestohlene Autos'],
+    label: { x: 205, y: 210, anchor: 'middle' },
+    icon: { x: 120, y: 190, d: I.car },
+  },
+  {
+    id: 'amb', name: 'Ambrosia', vorbild: 'Industriestadt', typ: 'Industrie', color: '#ffd166',
+    text: 'Alles dreht sich um die Zuckerraffinerie Allied Crystal. Große Teile der Stadt kontrolliert die Biker-Gang Final Chapter.',
+    facts: ['Zuckerraffinerie Allied Crystal', 'Biker-Gang Final Chapter'],
+    label: { x: 628, y: 420, anchor: 'middle' },
+    icon: { x: 690, y: 360, d: I.factory },
+  },
+  {
+    id: 'kal', name: 'Mount Kalaga', vorbild: 'Nationalpark', typ: 'Wildnis', color: '#b07cff',
+    text: 'Der Nationalpark im Norden von Leonida, mit Seen, Flüssen und Offroad-Strecken.',
+    facts: ['Seen, Flüsse und Wälder', 'Jagen und Angeln', 'Offroad-Touren'],
+    label: { x: 548, y: 228, anchor: 'middle' },
+    icon: { x: 460, y: 190, d: I.peak },
+  },
+];
+---
+<figure class="lm" data-lm>
+  <div class="lm-stage">
+    <svg class="lm-svg" viewBox="0 0 1000 1000" role="group" aria-labelledby="lm-title" xmlns="http://www.w3.org/2000/svg">
+      <title id="lm-title">Schematische Karte von Leonida mit den sechs Regionen</title>
+      <defs>
+        <radialGradient id="lm-sea" cx="70%" cy="85%" r="95%">
+          <stop offset="0" stop-color="#2a1250" />
+          <stop offset=".55" stop-color="#170b2e" />
+          <stop offset="1" stop-color="#0d0619" />
+        </radialGradient>
+        <radialGradient id="lm-sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#ff7a59" stop-opacity=".55" />
+          <stop offset=".5" stop-color="#ff4fa3" stop-opacity=".18" />
+          <stop offset="1" stop-color="#ff4fa3" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="lm-land" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2b1a4d" />
+          <stop offset="1" stop-color="#231240" />
+        </linearGradient>
+        <linearGradient id="lm-scan" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#3ee7f0" stop-opacity="0" />
+          <stop offset=".9" stop-color="#3ee7f0" stop-opacity=".06" />
+          <stop offset="1" stop-color="#3ee7f0" stop-opacity=".22" />
+        </linearGradient>
+        <pattern id="lm-waves" width="60" height="24" patternUnits="userSpaceOnUse">
+          <path d="M0 12 q15 -8 30 0 t30 0" fill="none" stroke="#3ee7f0" stroke-opacity=".07" stroke-width="1.2" />
+          <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="60 0" dur="9s" repeatCount="indefinite" />
+        </pattern>
+        <pattern id="lm-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M50 0H0V50" fill="none" stroke="#9b5cff" stroke-opacity=".09" />
+        </pattern>
+        <!-- Texturen je Region -->
+        <pattern id="lm-p-vice" width="14" height="14" patternUnits="userSpaceOnUse">
+          <rect x="2" y="2" width="9" height="9" fill="none" stroke="#ff4fa3" stroke-opacity=".55" />
+        </pattern>
+        <pattern id="lm-p-grass" width="16" height="12" patternUnits="userSpaceOnUse">
+          <path d="M3 9l2-5 2 5M10 6l1.5-4 1.5 4" fill="none" stroke="#4dff9a" stroke-opacity=".55" />
+        </pattern>
+        <pattern id="lm-p-gell" width="18" height="10" patternUnits="userSpaceOnUse">
+          <path d="M2 5h9" stroke="#ff9a4d" stroke-opacity=".55" stroke-width="1.4" />
+        </pattern>
+        <pattern id="lm-p-amb" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+          <path d="M0 0v10" stroke="#ffd166" stroke-opacity=".45" stroke-width="1.4" />
+        </pattern>
+        <pattern id="lm-p-kal" width="22" height="18" patternUnits="userSpaceOnUse">
+          <path d="M4 14l5-9 5 9z" fill="none" stroke="#b07cff" stroke-opacity=".55" />
+        </pattern>
+        <filter id="lm-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="5" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <filter id="lm-soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.5" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <clipPath id="lm-clip-land"><path d={COAST} /></clipPath>
+        {Object.entries(R).map(([k, d]) => <clipPath id={`lm-c-${k}`}><path d={d} /></clipPath>)}
+      </defs>
+
+      <!-- Meer -->
+      <rect width="1000" height="1000" fill="url(#lm-sea)" />
+      <rect width="1000" height="1000" fill="url(#lm-grid)" />
+      <rect width="1000" height="1000" fill="url(#lm-waves)" />
+      <circle cx="930" cy="960" r="360" fill="url(#lm-sun)" class="lm-sunglow" />
+
+      <!-- Schatten des Festlands -->
+      <path d={COAST} fill="#000" opacity=".45" transform="translate(10 14)" filter="url(#lm-soft)" />
+      <path d={COAST} fill="url(#lm-land)" />
+
+      <!-- Regionen -->
+      {regions.filter((r) => r.id !== 'keys').map((r) => (
+        <g class="lm-rg" data-r={r.id} style={`--c:${r.color}`} tabindex="0" role="button" aria-label={`${r.name}, Vorbild ${r.vorbild}`}>
+          <path class="lm-fill" d={COAST} clip-path={`url(#lm-c-${r.id})`} />
+          <path class="lm-pat" d={COAST} clip-path={`url(#lm-c-${r.id})`} fill={`url(#lm-p-${r.id})`} />
+          <g clip-path={`url(#lm-c-${r.id})`}><path class="lm-coast-hi" d={COAST} /></g>
+          <g clip-path="url(#lm-clip-land)"><path class="lm-edge" d={R[r.id as keyof typeof R]} /></g>
+        </g>
+      ))}
+
+      <!-- kleine Inseln an der Küste (Deko) -->
+      <g class="lm-deco-isles" aria-hidden="true">
+        <ellipse cx="250" cy="286" rx="22" ry="4" transform="rotate(-3 250 286)" />
+        <ellipse cx="140" cy="280" rx="16" ry="3.5" transform="rotate(4 140 280)" />
+        <ellipse cx="575" cy="694" rx="4" ry="12" transform="rotate(-14 575 694)" />
+        <ellipse cx="552" cy="620" rx="3.5" ry="9" transform="rotate(-20 552 620)" />
+        <ellipse cx="610" cy="806" rx="7" ry="4" />
+      </g>
+
+      <!-- Washington Island (gehört zu Vice City) -->
+      <g class="lm-rg lm-sub" data-r="vice" style="--c:#ff4fa3" aria-hidden="true">
+        <ellipse class="lm-fill lm-isle" cx="880" cy="690" rx="9" ry="26" transform="rotate(-8 880 690)" />
+      </g>
+
+      <!-- Leonida Keys -->
+      <g class="lm-rg" data-r="keys" style="--c:#3ee7f0" tabindex="0" role="button" aria-label="Leonida Keys, Vorbild Florida Keys">
+        <path class="lm-hit" d="M830 878 Q 700 935 545 945" />
+        <path class="lm-bridge" d="M826 880 Q 700 930 556 942" />
+        {keys.map((k) => <ellipse class="lm-fill lm-isle" cx={k.cx} cy={k.cy} rx={k.rx} ry={k.ry} transform={`rotate(${k.rot} ${k.cx} ${k.cy})`} />)}
+      </g>
+
+      <!-- Küste mit Neon-Leuchten -->
+      <path class="lm-coast" d={COAST} pathLength="1" />
+
+      <!-- Abtast-Strahl -->
+      <rect class="lm-sweep" x="0" y="-160" width="1000" height="160" fill="url(#lm-scan)" />
+
+      <!-- Symbole -->
+      {regions.map((r) => (
+        <g class="lm-icon" data-for={r.id} style={`--c:${r.color}`} transform={`translate(${r.icon.x - 16} ${r.icon.y - 16})`} aria-hidden="true">
+          <circle cx="16" cy="16" r="16" />
+          <path d={r.icon.d} transform="translate(4 4)" />
+        </g>
+      ))}
+
+      <!-- Dexter-Pin -->
+      <g class="lm-pin" transform="translate(880 662)" aria-hidden="true">
+        <circle class="lm-pulse" r="7" />
+        <circle r="5" />
+        <text x="14" y="-6">Dexter</text>
+      </g>
+
+      <!-- Beschriftungen -->
+      {regions.map((r) => (
+        <g class="lm-label" data-for={r.id} style={`--c:${r.color}`} aria-hidden="true">
+          {r.label.leader && <path class="lm-leader" d={`M${r.label.x - 40} ${r.label.y + 8} L${r.label.leader[0]} ${r.label.leader[1]}`} />}
+          <text x={r.label.x} y={r.label.y} text-anchor={r.label.anchor ?? 'middle'}>{r.name.toUpperCase()}</text>
+          <text class="lm-sublabel" x={r.label.x} y={r.label.y + 20} text-anchor={r.label.anchor ?? 'middle'}>{r.typ}</text>
+        </g>
+      ))}
+
+      <!-- Kartusche -->
+      <g class="lm-cart" aria-hidden="true">
+        <text x="955" y="74" text-anchor="end" class="lm-cart-t">LEONIDA</text>
+        <text x="955" y="102" text-anchor="end" class="lm-cart-s">BUNDESSTAAT · 6 REGIONEN</text>
+      </g>
+
+      <!-- Kompass -->
+      <g class="lm-compass" transform="translate(110 860)" aria-hidden="true">
+        <circle r="46" />
+        <circle r="34" class="lm-compass-in" />
+        <path d="M0 -42 L9 0 L0 42 L-9 0Z" class="lm-needle-b" />
+        <path d="M0 -42 L9 0 L-9 0Z" class="lm-needle" />
+        <text y="-54" text-anchor="middle">N</text>
+      </g>
+    </svg>
+    <div class="lm-tip" aria-hidden="true"><b></b><span></span></div>
+  </div>
+
+  <div class="lm-side">
+    <div class="lm-legend" role="toolbar" aria-label="Region wählen">
+      {regions.map((r) => (
+        <button type="button" class="lm-chip" data-r={r.id} style={`--c:${r.color}`} aria-pressed="false">
+          <i></i>{r.name}
+        </button>
+      ))}
+    </div>
+
+    <div class="lm-cards" aria-live="polite">
+      <section class="lm-card lm-card-default" data-card="none">
+        <p class="lm-kicker">Interaktive Karte</p>
+        <h3>Wohin geht's?</h3>
+        <p>Fahr mit der Maus über eine Region oder tipp sie an. Hier siehst du dann, was dich dort erwartet.</p>
+      </section>
+      {regions.map((r) => (
+        <section class="lm-card" data-card={r.id} style={`--c:${r.color}`} hidden>
+          <p class="lm-kicker">{r.typ} · Vorbild: {r.vorbild}</p>
+          <h3>{r.name}</h3>
+          <p>{r.text}</p>
+          <ul>{r.facts.map((f) => <li>{f}</li>)}</ul>
+          {r.link && <a class="lm-cta" href={r.link.href}>{r.link.label} →</a>}
+        </section>
+      ))}
+    </div>
+  </div>
+  <figcaption>Eigene schematische Darstellung, nicht maßstabsgetreu.</figcaption>
+</figure>
+
+<style>
+  .lm { --c: #ff4fa3; margin: 1.6em 0 2em; display: grid; gap: 16px; container-type: inline-size; }
+  .lm-stage { position: relative; border-radius: 18px; overflow: hidden; isolation: isolate;
+    border: 1px solid rgb(255 79 163 / .45);
+    box-shadow: 0 0 0 1px rgb(62 231 240 / .12) inset, 0 0 40px rgb(255 79 163 / .25), 0 30px 60px -30px #000;
+    transform: perspective(1400px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .25s ease-out; will-change: transform; }
+  .lm-stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: repeating-linear-gradient(0deg, rgb(255 255 255 / .025) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay; }
+  .lm-svg { display: block; width: 100%; height: auto; }
+
+  .lm-sunglow { animation: lm-breathe 6s ease-in-out infinite; transform-origin: 930px 960px; }
+  @keyframes lm-breathe { 50% { opacity: .65; transform: scale(1.06); } }
+
+  /* Regionen */
+  .lm-rg { cursor: pointer; outline: none; }
+  .lm-rg .lm-fill { fill: var(--c); fill-opacity: .16; transition: fill-opacity .3s; }
+  .lm-rg .lm-pat { opacity: .6; transition: opacity .3s; pointer-events: none; }
+  .lm-rg .lm-edge { fill: none; stroke: #f6efff; stroke-opacity: .28; stroke-width: 1.5; stroke-dasharray: 6 6; pointer-events: none; }
+  .lm-rg .lm-coast-hi { fill: none; stroke: var(--c); stroke-width: 3; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .lm-deco-isles ellipse { fill: #2b1a4d; stroke: #3ee7f0; stroke-opacity: .45; stroke-width: 1.2; }
+  .lm-isle { stroke: var(--c); stroke-width: 1.5; stroke-opacity: .7; }
+  .lm-hit { fill: none; stroke: transparent; stroke-width: 46; pointer-events: stroke; }
+  .lm-bridge { fill: none; stroke: #3ee7f0; stroke-opacity: .35; stroke-width: 1.5; stroke-dasharray: 2 5; pointer-events: none; }
+
+  .lm-svg .lm-rg, .lm-svg .lm-label, .lm-svg .lm-icon { transition: opacity .3s, filter .3s; }
+  .lm.has-active .lm-rg:not(.is-on), .lm.has-active .lm-label:not(.is-on), .lm.has-active .lm-icon:not(.is-on) { opacity: .38; }
+  .lm-rg.is-on .lm-fill { fill-opacity: .38; }
+  .lm-rg.is-on .lm-pat { opacity: .9; }
+  .lm-rg.is-on .lm-coast-hi { opacity: 1; filter: url(#lm-glow); }
+  .lm-rg.is-on .lm-isle { fill-opacity: .6; stroke-opacity: 1; filter: url(#lm-glow); }
+  .lm-rg:focus-visible .lm-coast-hi { opacity: 1; }
+
+  /* Küste */
+  .lm-coast { fill: none; stroke: #3ee7f0; stroke-width: 2.2; filter: url(#lm-glow); pointer-events: none;
+    stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .lm.lm-anim:not(.lm-in) .lm-coast { stroke-dashoffset: 1; }
+  .lm.lm-in .lm-coast { animation: lm-draw 2.4s cubic-bezier(.6,.1,.2,1) both; }
+  @keyframes lm-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+  .lm-sweep { pointer-events: none; animation: lm-sweep 7s linear infinite; mix-blend-mode: screen; }
+  @keyframes lm-sweep { from { transform: translateY(0); } to { transform: translateY(1160px); } }
+
+  /* Symbole und Pins */
+  .lm-icon { pointer-events: none; }
+  .lm-icon circle { fill: #140a24; stroke: var(--c); stroke-width: 1.5; }
+  .lm-icon path { fill: none; stroke: var(--c); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .lm-icon.is-on circle { filter: url(#lm-glow); }
+  .lm-pin { pointer-events: none; }
+  .lm-pin circle { fill: #ff4fa3; }
+  .lm-pin .lm-pulse { fill: none; stroke: #ff4fa3; stroke-width: 2; transform-box: fill-box; transform-origin: center;
+    animation: lm-pulse 1.8s ease-out infinite; }
+  @keyframes lm-pulse { from { transform: scale(1); opacity: 1; } to { transform: scale(3.2); opacity: 0; } }
+  .lm-pin text { fill: #fff; font: 700 15px var(--font-body); paint-order: stroke; stroke: #140a24; stroke-width: 4px; }
+
+  /* Beschriftungen */
+  .lm-label { pointer-events: none; }
+  .lm-label text { fill: #fff; font: 22px var(--font-display); letter-spacing: .08em; paint-order: stroke;
+    stroke: #140a24; stroke-width: 5px; stroke-linejoin: round; }
+  .lm-label .lm-sublabel { fill: var(--c); font: 700 13px var(--font-body); letter-spacing: .14em; text-transform: uppercase; stroke-width: 4px; }
+  .lm-label.is-on text:first-of-type { fill: var(--c); filter: url(#lm-soft); }
+  .lm-leader { fill: none; stroke: var(--c); stroke-width: 1.5; stroke-dasharray: 3 4; }
+
+  .lm-cart-t { fill: #fff; font: 52px var(--font-display); letter-spacing: .14em;
+    paint-order: stroke; stroke: #ff4fa3; stroke-width: 1px; filter: url(#lm-soft); }
+  .lm-cart-s { fill: #3ee7f0; font: 700 13px var(--font-body); letter-spacing: .22em; }
+
+  .lm-compass circle { fill: rgb(20 10 36 / .6); stroke: #3ee7f0; stroke-opacity: .5; }
+  .lm-compass .lm-compass-in { fill: none; stroke-dasharray: 2 4; }
+  .lm-needle { fill: #ff4fa3; filter: url(#lm-soft); }
+  .lm-needle-b { fill: rgb(246 239 255 / .25); }
+  .lm-compass text { fill: #fff; font: 18px var(--font-display); }
+
+  /* Tooltip */
+  .lm-tip { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; padding: 8px 12px; border-radius: 10px;
+    background: rgb(20 10 36 / .92); border: 1px solid var(--c); box-shadow: 0 0 18px color-mix(in srgb, var(--c) 50%, transparent);
+    opacity: 0; transform: translate(-50%, calc(-100% - 14px)); transition: opacity .15s; white-space: nowrap; }
+  .lm-tip.show { opacity: 1; }
+  .lm-tip b { display: block; font-family: var(--font-display); font-weight: 400; color: var(--c); font-size: 1.05rem; }
+  .lm-tip span { font-size: .8rem; color: var(--muted); }
+
+  /* Legende und Karten */
+  .lm-legend { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lm-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 999px; cursor: pointer;
+    font: 600 .88rem var(--font-body); color: var(--text); background: var(--night-2); border: 1px solid var(--night-3);
+    transition: border-color .2s, box-shadow .2s, background .2s; }
+  .lm-chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+  .lm-chip:hover, .lm-chip[aria-pressed='true'] { border-color: var(--c); box-shadow: 0 0 14px color-mix(in srgb, var(--c) 45%, transparent);
+    background: color-mix(in srgb, var(--c) 12%, var(--night-2)); }
+
+  .lm-card { border-radius: var(--radius); padding: 16px 20px; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 14%, var(--night-2)), var(--night-2) 60%);
+    border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 0 24px -8px var(--c);
+    animation: lm-card-in .35s ease-out; }
+  .lm-card-default { --c: #3ee7f0; }
+  @keyframes lm-card-in { from { opacity: 0; transform: translateY(6px); } }
+  .lm-card h3 { margin: .1em 0 .3em; font-size: 1.6rem; color: var(--c); text-shadow: 0 0 14px color-mix(in srgb, var(--c) 60%, transparent); }
+  .lm-card p { margin: .4em 0; }
+  .lm-kicker { font-size: .75rem !important; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); font-weight: 700; }
+  .lm-card ul { margin: .5em 0; padding-left: 1.1em; }
+  .lm-card li::marker { color: var(--c); }
+  .lm-cta { display: inline-block; margin-top: 6px; font-weight: 700; color: var(--c); text-decoration: none; }
+  .lm-cta:hover { color: #fff; }
+  .lm figcaption { font-size: .8rem; color: var(--muted); text-align: right; }
+
+  @container (max-width: 560px) {
+    .lm-label text { font-size: 34px; stroke-width: 7px; }
+    .lm-label .lm-sublabel { display: none; }
+    .lm-pin text { font-size: 26px; stroke-width: 6px; }
+    .lm-cart-s { display: none; }
+    .lm-icon { display: none; }
+  }
+  @container (min-width: 1000px) {
+    .lm { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+    .lm figcaption { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lm-stage { transform: none !important; transition: none; }
+    .lm-sweep, .lm-sunglow, .lm-pin .lm-pulse { animation: none; }
+    .lm-sweep { display: none; }
+    .lm.lm-in .lm-coast { animation: none; }
+    .lm.lm-anim:not(.lm-in) .lm-coast { stroke-dashoffset: 0; }
+  }
+</style>
+
+<script>
+  const META: Record<string, [string, string, string]> = {
+    vice: ['Vice City', 'Großstadt · Miami', '#ff4fa3'],
+    keys: ['Leonida Keys', 'Inselkette · Florida Keys', '#3ee7f0'],
+    grass: ['Grassrivers', 'Sumpf · Everglades', '#4dff9a'],
+    gell: ['Port Gellhorn', 'Küstenort · vergessene Küste', '#ff9a4d'],
+    amb: ['Ambrosia', 'Industriestadt', '#ffd166'],
+    kal: ['Mount Kalaga', 'Nationalpark', '#b07cff'],
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-lm]').forEach((root) => {
+    const stage = root.querySelector<HTMLElement>('.lm-stage')!;
+    const tip = root.querySelector<HTMLElement>('.lm-tip')!;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let pinned: string | null = null;
+    root.classList.add('lm-anim');
+
+    const show = (id: string | null) => {
+      root.classList.toggle('has-active', !!id);
+      root.querySelectorAll<SVGElement>('[data-r], [data-for]').forEach((el) => {
+        const k = el.dataset.r ?? el.dataset.for;
+        el.classList.toggle('is-on', !!id && k === id);
+      });
+      root.querySelectorAll<HTMLButtonElement>('.lm-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.r === id)));
+      root.querySelectorAll<HTMLElement>('.lm-card').forEach((c) => { c.hidden = c.dataset.card !== (id ?? 'none'); });
+    };
+
+    const regions = root.querySelectorAll<SVGGElement>('.lm-rg');
+    regions.forEach((g) => {
+      const id = g.dataset.r!;
+      g.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'mouse') show(id);
+        const [n, s, c] = META[id];
+        tip.querySelector('b')!.textContent = n;
+        tip.querySelector('span')!.textContent = s;
+        tip.style.setProperty('--c', c);
+        if (e.pointerType === 'mouse') tip.classList.add('show');
+      });
+      g.addEventListener('pointerleave', (e) => {
+        tip.classList.remove('show');
+        if (e.pointerType === 'mouse') show(pinned);
+      });
+      g.addEventListener('click', () => { pinned = pinned === id ? null : id; show(pinned ?? id); });
+      g.addEventListener('focus', () => show(id));
+      g.addEventListener('blur', () => show(pinned));
+      g.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinned = id; show(id); }
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('.lm-chip').forEach((b) => {
+      b.addEventListener('click', () => { pinned = pinned === b.dataset.r ? null : b.dataset.r!; show(pinned); });
+    });
+
+    stage.addEventListener('pointermove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      tip.style.left = `${x * 100}%`;
+      tip.style.top = `${y * 100}%`;
+      if (!reduce && e.pointerType === 'mouse') {
+        stage.style.setProperty('--ry', `${(x - 0.5) * 6}deg`);
+        stage.style.setProperty('--rx', `${(0.5 - y) * 6}deg`);
+      }
+    });
+    stage.addEventListener('pointerleave', () => {
+      stage.style.setProperty('--rx', '0deg');
+      stage.style.setProperty('--ry', '0deg');
+      tip.classList.remove('show');
+    });
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => {
+        if (es.some((e) => e.isIntersecting)) { root.classList.add('lm-in'); io.disconnect(); }
+      }, { threshold: 0.25 });
+      io.observe(root);
+    } else root.classList.add('lm-in');
+  });
+</script>
