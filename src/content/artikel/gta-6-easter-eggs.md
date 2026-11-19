@@ -71,8 +71,8 @@ Ein echtes „Easter Egg“: ganz oben auf dem höchsten Turm liegt ein Vogelnes
 
 <!-- Screenshot von Moritz: Turm von unten, Nest oben -->
 
+*Quellen: Dexter Daily, DETONATED, Beebom, Game Rant, IBTimes, GamerHour, Prodigy Gamers (alle 19.11.2026).*
+
 ## Mehr Easter Eggs folgen
 
-Spieler finden gerade jeden Tag neue Geheimnisse. Wir nehmen ein Easter Egg auf, sobald der Weg dorthin klar ist, und erklären ihn Schritt für Schritt.
-
-*Quellen: Dexter Daily, DETONATED, Beebom, Game Rant, IBTimes, GamerHour, Prodigy Gamers (alle 19.11.2026).*
+Spieler finden gerade jeden Tag neue Geheimnisse. Wir nehmen ein Easter Egg auf, sobald der Weg dorthin klar ist, und erklären es Schritt für Schritt.

@@ -20,6 +20,16 @@ export const ADS = {
   } as Record<string, string>,
 };
 
+export const NEWSLETTER = {
+  // Formular-Adresse aus dem Newsletter-Dienst (z. B. Brevo: Formular > Teilen > HTML-Code > action="...").
+  // Leer = das Anmeldefeld wird auf der Live-Seite nicht angezeigt.
+  action: 'https://85133445.sibforms.com/serve/MUIFAAOAcqikvZOXawQs1TGyGXkTBb05c_cEHwc3I3il75iqyF-nBBiZ3sgo6xtQ6Sbt82Zuzma40v7hRN73yez_k3_mj84yfOl4sqFeHoeMXgIxiqWwyemxp54ZN4gmLtUeJ6anJ3CZca-or7LNtOGhZVFkikbA4KCbW2Sx8wvE36qlYG6k5ZbPZXW-aLM7hjT8ahZm5I3gS9GjgA==',
+  // Name des E-Mail-Feldes im Formular des Dienstes (Brevo: 'EMAIL', MailerLite: 'fields[email]').
+  emailField: 'EMAIL',
+  // Name des Dienstes für den Datenschutzhinweis.
+  provider: 'Brevo',
+};
+
 export const AFFILIATE = {
   // Amazon PartnerNet Tracking-ID, z. B. 'deinname-21'
   amazonTag: '',
