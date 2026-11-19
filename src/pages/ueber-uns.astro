@@ -1,17 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
+import ToolTiles from '../components/ToolTiles.astro';
 import { SITE } from '../site.config';
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'AboutPage', name: `Über ${SITE.name}`, url: `${SITE.url}/ueber-uns/`,
+  about: { '@type': 'Organization', name: SITE.name, url: SITE.url, email: 'kontakt@palmenpixel.de' },
+}];
 ---
-<Base title="Über uns" description={`Wer hinter ${SITE.name} steckt und wie wir arbeiten.`}>
+<Base title="Über uns" description={`Wer hinter ${SITE.name} steckt, wie wir arbeiten und woher unsere Infos kommen.`} jsonLd={jsonLd}>
   <div class="prose">
     <h1>Über {SITE.name}</h1>
-    <p>[Ein paar Sätze über dich: Seit wann spielst du GTA, auf welcher Plattform spielst du GTA 6, warum gibt es diese Seite. Google bewertet Guides besser, wenn erkennbar ist, dass ein echter Mensch selbst gespielt und getestet hat.]</p>
+    <p class="lead">{SITE.name} ist ein deutschsprachiger Fan-Guide zu GTA 6. Hier findest du Anleitungen, die dich Schritt für Schritt ans Ziel bringen, und Tools, mit denen du deinen Fortschritt in Leonida im Blick behältst.</p>
+
+    <h2>Wer hier schreibt</h2>
+    <p>Hinter {SITE.name} steckt ein GTA-Fan aus München. Die Seite ist entstanden, weil es zu GTA 6 viele englische Videos und Listen gibt, aber kaum deutsche Anleitungen, die einfach sagen: Fahr dorthin, tu das, fertig. Genau das wollen wir liefern.</p>
+
     <h2>So arbeiten wir</h2>
     <ul>
-      <li>Wir testen Tipps selbst im Spiel, bevor wir sie veröffentlichen.</li>
-      <li>Jeder Artikel zeigt, wann er zuletzt aktualisiert wurde.</li>
-      <li>Story-Spoiler werden immer deutlich markiert.</li>
-      <li>Wir verbreiten keine Leaks und keine Anleitungen zu Glitches, Exploits oder Mod-Menüs.</li>
+      <li><strong>Nur geprüfte Angaben.</strong> Wir veröffentlichen eine Info erst, wenn mindestens zwei unabhängige Quellen sie bestätigen oder wir sie selbst im Spiel gesehen haben. Die Quellen nennen wir unter dem Artikel.</li>
+      <li><strong>Schritt für Schritt.</strong> Jeder Guide beginnt mit einer Kurzantwort und erklärt dann jeden Schritt einzeln.</li>
+      <li><strong>Spoilerfrei.</strong> Story-Details verraten wir nicht. Wo es nicht anders geht, steht eine deutliche Warnung davor.</li>
+      <li><strong>Keine Leaks, keine Glitches.</strong> Wir verbreiten keine geleakten Inhalte und keine Anleitungen zu Exploits, Geld-Glitches oder Mod-Menüs.</li>
+      <li><strong>Immer aktuell.</strong> Jeder Artikel zeigt, wann er zuletzt aktualisiert wurde. Wenn sich etwas ändert, passen wir ihn an.</li>
     </ul>
+
+    <h2>Wie sich die Seite finanziert</h2>
+    <p>{SITE.name} ist kostenlos. Wir finanzieren die Seite über Werbung und Partner-Links. Links mit Sternchen (*) sind Partner-Links: Kaufst du darüber etwas, bekommen wir eine kleine Provision. Für dich ändert sich der Preis nicht, und unsere Empfehlungen hängen nicht davon ab.</p>
+
+    <h2>Mitmachen</h2>
+    <p>Du hast ein Easter Egg entdeckt oder einen Fehler gefunden? <a href="/easter-egg-melden/">Schick es uns</a>. Wir prüfen jede Einsendung und nennen dich als Finder, wenn du möchtest. Für alles andere: <a href="mailto:kontakt@palmenpixel.de">kontakt@palmenpixel.de</a>.</p>
+
+    <h2>Unsere Tools</h2>
   </div>
+  <ToolTiles />
+  <p class="ueber-hinweis">{SITE.name} ist eine inoffizielle Fanseite und steht in keiner Verbindung zu Rockstar Games oder Take-Two Interactive.</p>
 </Base>
+
+<style>
+  .ueber-hinweis { color: var(--muted); font-size: .9rem; margin: 26px 0; }
+</style>

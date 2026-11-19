@@ -1,27 +1,71 @@
 ---
 import Base from '../layouts/Base.astro';
-// PLATZHALTER-GERÜST. Den finalen Text mit einem Generator erstellen (z. B. datenschutz-generator.de
-// oder e-recht24.de) und hier einfügen. Die Abschnitte unten zeigen, was abgedeckt sein muss.
+import { AFFILIATE, ADS } from '../site.config';
+// Stand: 19.11.2026. Bitte vor dem Livegang einmal gegenlesen (oder mit einem Generator abgleichen).
+// Abschnitt 7 (Amazon) erscheint erst, wenn eine Amazon-Tracking-ID eingetragen ist.
+const stand = '19. November 2026';
 ---
-<Base title="Datenschutzerklärung" description="Informationen zur Verarbeitung personenbezogener Daten." noindex>
+<Base title="Datenschutzerklärung" description="Welche Daten Palmenpixel verarbeitet, warum und welche Rechte du hast." noindex>
   <div class="prose">
     <h1>Datenschutzerklärung</h1>
-    <p><strong>[ENTWURF: vor dem Livegang durch einen generierten, vollständigen Text ersetzen.]</strong></p>
+    <p>Stand: {stand}</p>
+
     <h2>1. Verantwortlicher</h2>
-    <p>Verantwortlich ist der im <a href="/impressum/">Impressum</a> genannte Betreiber dieser Website.</p>
-    <h2>2. Hosting und Server-Logfiles</h2>
-    <p>[Hosting-Anbieter nennen, z. B. Cloudflare Pages / Netlify. Welche Logdaten (IP-Adresse, Zeitpunkt, Browser) wie lange gespeichert werden. Rechtsgrundlage Art. 6 Abs. 1 lit. f DSGVO. Auftragsverarbeitungsvertrag abschließen.]</p>
-    <h2>3. Einwilligungsverwaltung (Cookie-Banner)</h2>
-    <p>Deine Auswahl im Cookie-Banner speichern wir im lokalen Speicher deines Browsers. Du kannst sie jederzeit über „Cookie-Einstellungen“ im Seitenfuß ändern. Rechtsgrundlage: § 25 Abs. 2 TDDDG, Art. 6 Abs. 1 lit. c DSGVO.</p>
-    <h2>4. Werbung mit Google AdSense</h2>
-    <p>[Nur mit Einwilligung: Google Ireland Ltd., Cookies/Kennungen für personalisierte Werbung, Drittlandübermittlung USA (EU-US Data Privacy Framework), Widerrufsmöglichkeit. Rechtsgrundlage Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG.]</p>
-    <h2>5. Newsletter</h2>
-    <p>Für den Versand nutzen wir Brevo (Sendinblue SAS, 106 boulevard Haussmann, 75008 Paris, Frankreich). Deine Daten werden auf Servern in der EU verarbeitet; mit Brevo besteht ein Vertrag zur Auftragsverarbeitung. Für den Newsletter brauchen wir nur deine E-Mail-Adresse. Nach dem Eintragen bekommst du eine Bestätigungsmail; erst wenn du den Link darin anklickst, bist du angemeldet (Double-Opt-in). Wir speichern Zeitpunkt der Anmeldung und Bestätigung als Nachweis. Rechtsgrundlage ist deine Einwilligung, Art. 6 Abs. 1 lit. a DSGVO. Du kannst dich jederzeit über den Link in jeder E-Mail abmelden; deine Adresse wird dann gelöscht.</p>
-    <h2>6. Einsende-Formular (Easter Egg melden)</h2>
-    <p>Wenn du uns über das Formular ein Easter Egg oder eine Anregung schickst, verarbeiten wir deine Angaben (Inhalt der Einsendung sowie freiwillig Name/Gamertag und E-Mail-Adresse), um die Einsendung zu prüfen, dir bei Rückfragen zu antworten und sie gegebenenfalls zu veröffentlichen. Den Namen veröffentlichen wir nur, wenn du ihn angibst. Die Einsendung wird über Cloudflare (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA; zertifiziert nach dem EU-US Data Privacy Framework) per E-Mail an uns weitergeleitet. Rechtsgrundlage ist deine Einwilligung, Art. 6 Abs. 1 lit. a DSGVO. Wir löschen Einsendungen, sobald sie bearbeitet sind, spätestens nach 12 Monaten. Du kannst deine Einwilligung jederzeit per E-Mail an uns widerrufen.</p>
-    <h2>7. Amazon-Partnerprogramm</h2>
-    <p>[Hinweis, dass wir Teilnehmer des Amazon EU-Partnerprogramms sind und Amazon beim Klick auf Affiliate-Links Cookies setzt.]</p>
-    <h2>8. Deine Rechte</h2>
-    <p>[Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch, Widerruf von Einwilligungen, Beschwerderecht bei einer Aufsichtsbehörde.]</p>
+    <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist der im <a href="/impressum/">Impressum</a> genannte Betreiber. Du erreichst uns per E-Mail an <a href="mailto:kontakt@palmenpixel.de">kontakt@palmenpixel.de</a>.</p>
+
+    <h2>2. Kurz gesagt</h2>
+    <ul>
+      <li>Du kannst die Seite nutzen, ohne dich anzumelden.</li>
+      <li>Deine Fortschritte in den Tools (Sammelalbum, Checklisten, Region-Test) bleiben in deinem Browser. Wir bekommen sie nicht.</li>
+      <li>Werbung und Werbe-Cookies gibt es nur, wenn du im Cookie-Banner zustimmst.</li>
+      <li>Wir verkaufen keine Daten.</li>
+    </ul>
+
+    <h2>3. Hosting und Server-Logfiles</h2>
+    <p>Die Website wird über Cloudflare Workers ausgeliefert (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107, USA). Beim Aufruf jeder Seite verarbeitet Cloudflare technisch notwendige Daten: deine IP-Adresse, Datum und Uhrzeit, die aufgerufene Adresse, die verweisende Seite sowie Browser und Betriebssystem. Das ist nötig, um die Seite auszuliefern, sie vor Angriffen zu schützen und Fehler zu finden. Fehlerprotokolle des Servers werden nach wenigen Tagen automatisch gelöscht.</p>
+    <p>Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und funktionierenden Website (Art. 6 Abs. 1 lit. f DSGVO). Mit Cloudflare besteht ein Vertrag zur Auftragsverarbeitung. Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert, eine Übermittlung in die USA ist damit abgesichert (Art. 45 DSGVO).</p>
+
+    <h2>4. Speicher in deinem Browser (localStorage)</h2>
+    <p>Damit die Tools ohne Anmeldung funktionieren, speichern wir einige Angaben im lokalen Speicher deines Browsers. Sie verlassen dein Gerät nicht und werden nicht an uns übertragen:</p>
+    <ul>
+      <li>deine Auswahl im Cookie-Banner,</li>
+      <li>abgehakte Sammelkarten, Checklisten und Orte,</li>
+      <li>dein letztes Ergebnis im Region-Test,</li>
+      <li>ob der Sunset-Modus an ist.</li>
+    </ul>
+    <p>Das ist für die von dir gewünschte Funktion unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Du kannst die Daten jederzeit löschen, indem du die Websitedaten in deinem Browser löschst. In den Checklisten gibt es außerdem einen Button zum Zurücksetzen.</p>
+
+    <h2>5. Einwilligung und Cookie-Banner</h2>
+    <p>Beim ersten Besuch fragen wir, ob du Werbe-Cookies erlaubst. Deine Auswahl speichern wir wie oben beschrieben in deinem Browser. Du kannst sie jederzeit über „Cookie-Einstellungen“ im Seitenfuß ändern oder widerrufen. Rechtsgrundlage: Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 7 Abs. 1 DSGVO.</p>
+
+    <h2>6. Werbung mit Google AdSense</h2>
+    <p>Wir finanzieren die Seite mit Werbung über Google AdSense (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland). {ADS.adsenseClient ? '' : 'Aktuell werden noch keine Anzeigen geladen. Sobald das passiert, gilt Folgendes:'}</p>
+    <p>AdSense wird nur geladen, wenn du im Cookie-Banner zustimmst. Dann setzt Google Cookies oder ähnliche Kennungen, um Anzeigen auszuliefern, ihre Wirkung zu messen und, wenn du zugestimmt hast, Anzeigen auf deine Interessen zuzuschneiden. Dabei werden unter anderem deine IP-Adresse, Geräte- und Browserdaten und die besuchte Seite an Google übertragen, auch an Server in den USA. Google ist nach dem EU-US Data Privacy Framework zertifiziert.</p>
+    <p>Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG). Du kannst sie jederzeit über „Cookie-Einstellungen“ widerrufen. Ohne Einwilligung zeigt Google höchstens nicht personalisierte Anzeigen oder gar keine. Mehr dazu: <a href="https://policies.google.com/technologies/partner-sites?hl=de" rel="noopener">So nutzt Google Daten auf Partner-Websites</a>, Anzeigen-Einstellungen unter <a href="https://adssettings.google.com" rel="noopener">adssettings.google.com</a>.</p>
+
+    {AFFILIATE.amazonTag && (
+      <>
+        <h2>7. Amazon-Partnerprogramm</h2>
+        <p>Wir sind Teilnehmer des Partnerprogramms von Amazon Europe S.à r.l. Links mit Sternchen (*) führen zu Amazon. Wenn du darauf klickst, setzt Amazon auf seiner eigenen Seite ein Cookie, damit die Provision uns zugeordnet werden kann. Für dich ändert sich der Preis nicht. Auf unserer Seite selbst setzen wir dafür keine Cookies. Rechtsgrundlage ist unser berechtigtes Interesse an der Finanzierung der Seite (Art. 6 Abs. 1 lit. f DSGVO). Details: <a href="https://www.amazon.de/gp/help/customer/display.html?nodeId=201909010" rel="noopener">Datenschutzerklärung von Amazon</a>.</p>
+      </>
+    )}
+
+    <h2>{AFFILIATE.amazonTag ? '8' : '7'}. Newsletter</h2>
+    <p>Für den Newsletter nutzen wir Brevo (Sendinblue SAS, 106 boulevard Haussmann, 75008 Paris, Frankreich). Brevo verarbeitet die Daten auf Servern in der EU; mit Brevo besteht ein Vertrag zur Auftragsverarbeitung. Wir brauchen nur deine E-Mail-Adresse. Nach dem Eintragen bekommst du eine Bestätigungsmail. Erst wenn du den Link darin anklickst, bist du angemeldet (Double-Opt-in). Den Zeitpunkt von Anmeldung und Bestätigung speichern wir als Nachweis.</p>
+    <p>Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Abmelden kannst du dich jederzeit über den Link in jeder E-Mail. Deine Adresse wird dann gelöscht.</p>
+
+    <h2>{AFFILIATE.amazonTag ? '9' : '8'}. Einsende-Formular (Easter Egg melden)</h2>
+    <p>Wenn du uns über das Formular ein Easter Egg oder eine Anregung schickst, verarbeiten wir den Inhalt deiner Einsendung und, falls du sie angibst, deinen Namen oder Gamertag und deine E-Mail-Adresse. Wir nutzen die Angaben, um die Einsendung zu prüfen, dir bei Rückfragen zu antworten und sie gegebenenfalls zu veröffentlichen. Deinen Namen nennen wir nur, wenn du ihn angibst.</p>
+    <p>Die Einsendung läuft über unseren Server bei Cloudflare (siehe Abschnitt 3) und wird über Brevo (siehe Newsletter) als E-Mail an uns geschickt. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Wir löschen Einsendungen, sobald sie bearbeitet sind, spätestens nach 12 Monaten. Du kannst deine Einwilligung jederzeit per E-Mail widerrufen.</p>
+
+    <h2>{AFFILIATE.amazonTag ? '10' : '9'}. Schriften und externe Inhalte</h2>
+    <p>Die Schriftarten liegen auf unserem eigenen Server. Beim Aufruf der Seite wird keine Verbindung zu Google Fonts oder anderen Schriftanbietern aufgebaut. Videos oder Social-Media-Inhalte binden wir nicht direkt ein.</p>
+
+    <h2>{AFFILIATE.amazonTag ? '11' : '10'}. Deine Rechte</h2>
+    <p>Du hast das Recht auf Auskunft über deine gespeicherten Daten (Art. 15 DSGVO), auf Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und auf Widerspruch gegen Verarbeitungen, die auf unserem berechtigten Interesse beruhen (Art. 21). Eine Einwilligung kannst du jederzeit für die Zukunft widerrufen (Art. 7 Abs. 3). Schreib uns dafür einfach eine E-Mail.</p>
+    <p>Du kannst dich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren, zum Beispiel beim Bayerischen Landesamt für Datenschutzaufsicht (BayLDA), Promenade 18, 91522 Ansbach.</p>
+
+    <h2>{AFFILIATE.amazonTag ? '12' : '11'}. Änderungen</h2>
+    <p>Wenn wir neue Funktionen einbauen, passen wir diese Erklärung an. Es gilt die jeweils hier veröffentlichte Fassung.</p>
   </div>
 </Base>
