@@ -1,0 +1,24 @@
+---
+// Anmeldefeld für den Easter-Egg-Newsletter. Die Daten gehen direkt an den Newsletter-Dienst,
+// der die Bestätigungsmail verschickt (Double-Opt-in). Einstellungen: NEWSLETTER in site.config.ts.
+import { NEWSLETTER } from '../site.config';
+const show = Boolean(NEWSLETTER.action) || import.meta.env.DEV;
+---
+{show && (
+  <section class="newsletter" aria-labelledby="nl-title">
+    <p class="eyebrow">Easter-Egg-Alarm</p>
+    <h2 id="nl-title">Neue Easter Eggs zuerst erfahren</h2>
+    <p>Trag deine E-Mail ein und wir schicken dir neue Easter Eggs und Ereignisse in GTA 6, sobald wir sie Schritt für Schritt erklärt haben. Kostenlos, kein Spam, jederzeit abbestellbar.</p>
+    <form action={NEWSLETTER.action || '#'} method="post" target="_blank" class="nl-form">
+      <label class="sr-only" for="nl-email">E-Mail-Adresse</label>
+      <input id="nl-email" type="email" name={NEWSLETTER.emailField} required autocomplete="email" placeholder="deine@email.de" />
+      <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" class="nl-hp" aria-hidden="true" />
+      <button type="submit" class="btn">Eintragen</button>
+      <label class="nl-consent">
+        <input type="checkbox" required />
+        <span>Ja, ich möchte den Palmenpixel-Newsletter per E-Mail erhalten. Ich bestätige die Anmeldung über den Link in der Bestätigungsmail und kann mich jederzeit abmelden. Mehr in der <a href="/datenschutz/">Datenschutzerklärung</a>.</span>
+      </label>
+    </form>
+    {!NEWSLETTER.action && <p class="nl-note">Vorschau: Das Formular erscheint live erst, wenn in site.config.ts eine Formular-Adresse eingetragen ist.</p>}
+  </section>
+)}

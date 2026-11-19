@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import NewsletterBox from '../../components/NewsletterBox.astro';
 import { SITE, categoryBySlug } from '../../site.config';
 import { allArtikel, artikelUrl, type Artikel } from '../../lib/artikel';
 
@@ -52,6 +53,7 @@ if (a.data.faq.length) {
       )}
       <AdSlot name="in-article" />
       <Content />
+      {a.data.category === 'easter-eggs' && <NewsletterBox />}
       {a.data.faq.length > 0 && (
         <section class="faq">
           <h2>Häufige Fragen</h2>

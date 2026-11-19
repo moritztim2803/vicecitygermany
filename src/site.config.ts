@@ -20,6 +20,16 @@ export const ADS = {
   } as Record<string, string>,
 };
 
+export const NEWSLETTER = {
+  // Formular-Adresse aus dem Newsletter-Dienst (z. B. Brevo: Formular > Teilen > HTML-Code > action="...").
+  // Leer = das Anmeldefeld wird auf der Live-Seite nicht angezeigt.
+  action: '',
+  // Name des E-Mail-Feldes im Formular des Dienstes (Brevo: 'EMAIL', MailerLite: 'fields[email]').
+  emailField: 'EMAIL',
+  // Name des Dienstes für den Datenschutzhinweis.
+  provider: 'Brevo',
+};
+
 export const AFFILIATE = {
   // Amazon PartnerNet Tracking-ID, z. B. 'deinname-21'
   amazonTag: '',
