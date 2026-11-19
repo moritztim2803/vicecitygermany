@@ -30,9 +30,11 @@ async function einsenden(request, env) {
   let form;
   try { form = await request.formData(); } catch { return json({ ok: false, error: 'bad_request' }, 400); }
 
-  // Honeypot: echte Nutzer lassen das unsichtbare Feld leer.
-  if (clean(form.get('pp_feld_x'), 200)) {
-    console.log('honeypot hit');
+  // Spam-Schutz: Das Formular schickt per JavaScript mit, wie lange die Seite offen war.
+  // Fehlt der Wert oder ist er unter 3 Sekunden, war es sehr wahrscheinlich ein Bot.
+  const zeit = Number(clean(form.get('pp_t'), 20));
+  if (!(zeit >= 3000)) {
+    console.log('bot check', zeit);
     return json({ ok: true });
   }
 
