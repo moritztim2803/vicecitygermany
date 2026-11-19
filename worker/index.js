@@ -31,7 +31,10 @@ async function einsenden(request, env) {
   try { form = await request.formData(); } catch { return json({ ok: false, error: 'bad_request' }, 400); }
 
   // Honeypot: echte Nutzer lassen das unsichtbare Feld leer.
-  if (clean(form.get('website'), 200)) return json({ ok: true });
+  if (clean(form.get('pp_feld_x'), 200)) {
+    console.log('honeypot hit');
+    return json({ ok: true });
+  }
 
   const art = clean(form.get('art'), 30) === 'anregung' ? 'Anregung' : 'Easter Egg';
   const titel = oneLine(clean(form.get('titel'), LIMITS.titel));
