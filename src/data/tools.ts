@@ -20,7 +20,7 @@ export const TOOLS: Tool[] = [
   { id: 'album', name: 'Sammelalbum', claim: 'Alle 480 Karten in 18 Sets. Tipp an, was du hast, und sieh, was bis zur Trophäe fehlt.',
     href: '/guides/gta-6-sammelkarten-tracker/', c: '#b07cff', tag: 'Tracker',
     icon: 'M4 5h10v15H4zM14 7l5 1.5-3.5 12-1.5-.4M7 9h4M7 12h4' },
-  { id: 'heat', name: 'Erkennt mich die Polizei?', claim: 'Tipp an, was die Polizei über dich weiß, und schüttel die Fahndung Schritt für Schritt ab.',
+  { id: 'heat', name: 'Erkennt mich die Polizei?', claim: 'Tipp an, wie viele Sterne du hast und was die Polizei weiß. Du siehst sofort, wie du sie loswirst.',
     href: '/guides/gta-6-polizei-abhaengen-fahndung/', c: '#ffd166', tag: 'Check',
     icon: 'M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z' },
   { id: 'fahrzeuge', name: 'Fahrzeug-Ranking', claim: 'Welches Auto wofür? Die besten Fahrzeuge für Flucht, Rennen, Gelände und Wasser.',

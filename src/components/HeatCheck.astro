@@ -1,23 +1,55 @@
 ---
-// „Erkennt mich die Polizei?“: Interaktive Checkliste zum Abschütteln der Beschreibung nach einer Fahndung.
-const items: { id: string; icon: string; label: string; fix: string }[] = [
-  { id: 'cloth', icon: 'M8 3l4 3 4-3 5 4-3 4-2-1v11H8V10l-2 1-3-4z', label: 'Kleidung', fix: 'Zieh dich um. Am schnellsten mit dem Ersatz-Outfit aus dem Kofferraum deines eigenen Autos.' },
-  { id: 'car', icon: 'M3 15l2-5h14l2 5v4H3zM7 19v2M17 19v2M6 15h3M15 15h3', label: 'Auto', fix: 'Wechsle das Auto oder lass es umlackieren. Lehnt die Werkstatt ab, hat es ein Ortungsgerät, dann lieber ein anderes nehmen.' },
-  { id: 'weapon', icon: 'M3 14h11l2-3h5v3h-4l-1 2H9l-1 3H5l1-3H3z', label: 'Waffe', fix: 'Steck die Waffe weg. Große Waffen wie Gewehre kannst du nicht verstecken, die gehören in den Kofferraum.' },
-  { id: 'duo', icon: 'M8 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM16 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2 20c.5-3 3-5 6-5s5.5 2 6 5M10 20c.5-3 3-5 6-5s5.5 2 6 5', label: 'Jason & Lucia zusammen', fix: 'Trennt euch. Über das Partner-Menü (Steuerkreuz rechts halten) geht ihr getrennte Wege.' },
-  { id: 'cam', icon: 'M4 8h11l5-3v12l-5-3H4zM8 11h.01', label: 'Kamera', fix: 'Zerstör Überwachungskameras im Laden direkt vor Ort, dann gibt es keine Aufnahme von dir.' },
+// Polizei-Check: 1) Wie viele Sterne hattest du? -> was das bedeutet und wie du sie loswirst.
+// 2) Was weiß die Polizei über dich? -> Schritte abhaken, Wiedererkennung sinkt.
+const STAR = 'M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z';
+const levels: { n: number; titel: string; text: string; schritte: string[] }[] = [
+  { n: 1, titel: 'Gemeldet', text: 'Die niedrigste Stufe. Die Polizei kommt, weil dich jemand gemeldet hat, zum Beispiel ein Zeuge oder eine Alarmanlage.',
+    schritte: ['Sichtlinie brechen: ab in eine Seitenstraße.', 'Raus aus der Suchzone auf der Karte.', 'Warten, bis die Sterne verschwinden.'] },
+  { n: 2, titel: 'Die Polizei sucht dich', text: 'Je schwerer das Verbrechen, desto mehr Sterne. Die Polizei sucht dich in der Suchzone auf der Karte.',
+    schritte: ['Sichtlinie brechen und Suchzone verlassen.', 'Versteck dich, zum Beispiel in Büschen.', 'Warten, bis die Sterne verschwinden.'] },
+  { n: 3, titel: 'Volle Verfolgung', text: 'Wer auf Polizisten schießt, treibt die Sterne schnell nach oben.',
+    schritte: ['Nicht auf Polizisten schießen, sonst steigen die Sterne weiter.', 'Mit Fokus (L3 + R3) siehst du, wo die Polizisten sind.', 'Suchzone verlassen, verstecken, warten.'] },
+  { n: 4, titel: 'Großfahndung', text: 'Höhere Stufen bringen mehr Einheiten. Bei der Suche können Hubschrauber mit Suchscheinwerfer und Polizeihunde dazukommen.',
+    schritte: ['Versteck dich in Deckung, die dich ganz verdeckt, damit dich der Hubschrauber nicht sieht.', 'Polizeihunde verfolgen dich hartnäckig: Abstand halten, Gegend wechseln.', 'Suchzone verlassen, verstecken, warten.'] },
+  { n: 5, titel: 'Letzte Chance', text: 'Die höchste Stufe, die du noch abhängen kannst. Ab sechs Sternen geht das nicht mehr.',
+    schritte: ['Auto wechseln, sobald dich keiner sieht.', 'Hubschrauber und Hunde meiden, Deckung suchen.', 'Suchzone verlassen, verstecken, warten.'] },
+  { n: 6, titel: 'Polizei und Militär', text: 'Die Höchststufe. Polizei und Militär hören nicht auf. Sechs Sterne kannst du nicht abhängen.',
+    schritte: ['Es endet nur mit Verhaftung oder Tod.', 'Bargeld vorher am Geldautomaten einzahlen, sonst ist es weg.', 'Willst du das nicht, hör vorher auf: Bei fünf Sternen kannst du noch fliehen.'] },
+];
+// Gewicht = wie stark dich das verrät (Summe 100)
+const items: { id: string; w: number; icon: string; label: string; fix: string }[] = [
+  { id: 'face', w: 25, icon: 'M12 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zM4 21c1-4 4-6 8-6s7 2 8 6', label: 'Gesicht', fix: 'Accessoires wechseln (L1 / LB) oder zum Friseur. Nächstes Mal vorher eine Maske aufsetzen.' },
+  { id: 'cloth', w: 20, icon: 'M8 3l4 3 4-3 5 4-3 4-2-1v11H8V10l-2 1-3-4z', label: 'Kleidung', fix: 'Zieh dich um. Am schnellsten mit dem Ersatz-Outfit aus dem Kofferraum deines eigenen Autos.' },
+  { id: 'car', w: 20, icon: 'M3 15l2-5h14l2 5v4H3zM7 19v2M17 19v2M6 15h3M15 15h3', label: 'Auto', fix: 'Wechsle das Auto oder lass es bei Pay ’n’ Spray umlackieren. Lehnt die Werkstatt ab, nimm ein anderes.' },
+  { id: 'cam', w: 15, icon: 'M4 8h11l5-3v12l-5-3H4zM8 11h.01', label: 'Kamera', fix: 'Zerstör die Überwachungskamera im Laden vor Ort, dann gibt es keine Aufnahme von dir.' },
+  { id: 'weapon', w: 10, icon: 'M3 14h11l2-3h5v3h-4l-1 2H9l-1 3H5l1-3H3z', label: 'Waffe', fix: 'Steck die Waffe weg (L1 / LB). Große Waffen wie Gewehre gehören in den Kofferraum.' },
+  { id: 'duo', w: 10, icon: 'M8 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM16 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM2 20c.5-3 3-5 6-5s5.5 2 6 5M10 20c.5-3 3-5 6-5s5.5 2 6 5', label: 'Jason & Lucia zusammen', fix: 'Trennt euch. Über das Partner-Menü (Steuerkreuz rechts halten) geht ihr getrennte Wege.' },
 ];
 ---
-<section class="hc" data-hc aria-label="Erkennt mich die Polizei?">
-  <div class="hc-stars" aria-hidden="true">
-    {Array.from({ length: 6 }, () => <svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21.1l1.5-7L2 9.3l7-.8z" /></svg>)}
-  </div>
-  <h3>Erkennt mich die Polizei?</h3>
-  <p class="hc-lead">Tipp an, was die Polizei nach deiner Flucht über dich weiß. Darunter siehst du, was du tun musst.</p>
+<section class="hc" data-hc aria-label="Polizei-Check">
+  <h3>Polizei-Check</h3>
 
+  <p class="hc-q"><span>1</span> Wie viele Sterne hattest du?</p>
+  <div class="hc-stars" role="radiogroup" aria-label="Fahndungssterne">
+    {levels.map((l) => (
+      <button type="button" class="hc-star" role="radio" aria-checked="false" data-n={l.n} aria-label={`${l.n} ${l.n === 1 ? 'Stern' : 'Sterne'}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={STAR} /></svg>
+      </button>
+    ))}
+  </div>
+  {levels.map((l) => (
+    <div class:list={['hc-level', { 'is-max': l.n === 6 }]} data-level={l.n} hidden>
+      <p class="hc-level-t"><b>{l.n} {l.n === 1 ? 'Stern' : 'Sterne'}:</b> {l.titel}</p>
+      <p>{l.text}</p>
+      <ol>{l.schritte.map((s) => <li>{s}</li>)}</ol>
+    </div>
+  ))}
+
+  <p class="hc-q"><span>2</span> Was weiß die Polizei über dich?</p>
+  <p class="hc-lead">Nach der Flucht siehst du rote Symbole unter den Sternen. Tipp an, welche du hast.</p>
   <div class="hc-grid" role="group" aria-label="Was weiß die Polizei?">
     {items.map((it) => (
-      <button type="button" class="hc-item" data-id={it.id} aria-pressed="false">
+      <button type="button" class="hc-item" data-id={it.id} data-w={it.w} aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d={it.icon} /></svg>
         <span>{it.label}</span>
       </button>
@@ -25,7 +57,11 @@ const items: { id: string; icon: string; label: string; fix: string }[] = [
   </div>
 
   <div class="hc-out" aria-live="polite">
-    <p class="hc-empty">Noch nichts ausgewählt. Wenn die Polizei gar nichts über dich weiß, bist du schon sauber.</p>
+    <div class="hc-meter">
+      <div class="hc-meter-top"><span>So gut erkennt dich die Polizei</span><span data-hc-pct>0 %</span></div>
+      <div class="hc-bar"><i></i></div>
+    </div>
+    <p class="hc-empty">Tipp oben an, was die Polizei weiß. Dann siehst du hier, was du tun musst.</p>
     <ol class="hc-steps">
       {items.map((it) => (
         <li data-step={it.id} hidden>
@@ -36,12 +72,8 @@ const items: { id: string; icon: string; label: string; fix: string }[] = [
         </li>
       ))}
     </ol>
-    <div class="hc-meter" hidden>
-      <div class="hc-meter-top"><span>Wiedererkennung</span><span data-hc-pct>100 %</span></div>
-      <div class="hc-bar"><i></i></div>
-    </div>
+    <p class="hc-hint" hidden>Hak ab, was du erledigt hast. Der Balken sinkt mit jedem Schritt.</p>
     <p class="hc-clean" hidden>✓ Sauber! Die Polizei erkennt dich nicht mehr wieder.</p>
-    <p class="hc-tip"><b>Tipp fürs nächste Mal:</b> Maske auf, bevor du ein Verbrechen begehst. Dann hat die Polizei dein Gesicht gar nicht erst.</p>
   </div>
 </section>
 
@@ -49,61 +81,84 @@ const items: { id: string; icon: string; label: string; fix: string }[] = [
   .hc { margin: 1.6em 0 2em; padding: 20px; border-radius: 18px; border: 1px solid rgb(62 231 240 / .45);
     background: radial-gradient(360px 200px at 0 0, rgb(255 79 163 / .18), transparent 70%), radial-gradient(360px 200px at 100% 0, rgb(62 231 240 / .16), transparent 70%), var(--night-2);
     box-shadow: 0 0 28px -10px rgb(62 231 240 / .8); }
-  .hc h3 { margin: 6px 0 4px; font-size: 1.5rem; color: #fff; }
-  .hc-lead { margin: 0 0 14px; color: var(--muted); }
-  .hc-stars { display: flex; gap: 4px; }
-  .hc-stars svg { width: 22px; height: 22px; fill: #fff; filter: drop-shadow(0 0 6px rgb(255 79 163 / .9)); animation: hc-flash 1.6s infinite; }
-  .hc-stars svg:nth-child(odd) { filter: drop-shadow(0 0 6px rgb(62 231 240 / .9)); animation-delay: .8s; }
-  @keyframes hc-flash { 50% { opacity: .35; } }
+  .hc h3 { margin: 0 0 6px; font-size: 1.5rem; color: #fff; }
+  .hc-q { display: flex; align-items: center; gap: 10px; margin: 18px 0 8px; font: 1.1rem var(--font-display); color: #fff; }
+  .hc-q span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--pink); font: 700 .85rem var(--font-body); flex: none; }
+  .hc-lead { margin: 0 0 10px; color: var(--muted); font-size: .92rem; }
+  .hc-stars { display: flex; gap: 6px; flex-wrap: wrap; }
+  .hc-star { background: none; border: 0; padding: 4px; cursor: pointer; border-radius: 10px; }
+  .hc-star svg { width: 38px; height: 38px; fill: rgb(255 255 255 / .12); stroke: rgb(255 255 255 / .55); stroke-width: 1.2; stroke-linejoin: round; transition: fill .2s, transform .15s, filter .2s; }
+  .hc-star:hover svg, .hc-star:focus-visible svg { transform: scale(1.12); }
+  .hc-star.is-on svg { fill: #fff; stroke: #fff; filter: drop-shadow(0 0 8px rgb(255 79 163 / .9)); }
+  .hc-star.is-on:nth-child(even) svg { filter: drop-shadow(0 0 8px rgb(62 231 240 / .9)); }
+  .hc-star[aria-checked='true'] svg { animation: hc-pop .35s ease-out; }
+  @keyframes hc-pop { 50% { transform: scale(1.3); } }
+  .hc-stars.is-max .hc-star.is-on svg { fill: #ff3b3b; stroke: #ff3b3b; filter: drop-shadow(0 0 10px #ff3b3b); }
+  .hc-level { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: rgb(0 0 0 / .22); border-left: 3px solid var(--pink); animation: hc-in .3s ease-out; }
+  .hc-level.is-max { border-left-color: #ff3b3b; }
+  .hc-level p { margin: 0 0 6px; }
+  .hc-level-t b { color: var(--pink); }
+  .hc-level.is-max .hc-level-t b { color: #ff3b3b; }
+  .hc-level ol { margin: 6px 0 0; padding-left: 1.3em; }
+  @keyframes hc-in { from { opacity: 0; transform: translateY(6px); } }
   .hc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
   @media (max-width: 520px) { .hc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .hc-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px; border-radius: 12px; cursor: pointer;
     background: rgb(20 10 36 / .6); border: 1px solid var(--night-3); color: var(--text); font: 600 .9rem var(--font-body); text-align: center;
     transition: border-color .2s, box-shadow .2s, background .2s; }
   .hc-item svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-  .hc-item[aria-pressed='true'] { border-color: var(--pink); color: #fff; background: rgb(255 79 163 / .14); box-shadow: 0 0 16px -4px var(--pink); }
+  .hc-item[aria-pressed='true'] { border-color: #ff3b3b; color: #fff; background: rgb(255 59 59 / .14); box-shadow: 0 0 16px -4px #ff3b3b; }
   .hc-item[aria-pressed='true'].is-fixed { border-color: var(--cyan); background: rgb(62 231 240 / .1); box-shadow: 0 0 16px -4px var(--cyan); }
   .hc-out { margin-top: 16px; }
-  .hc-empty { color: var(--muted); margin: 0; }
-  .hc-steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+  .hc-empty, .hc-hint { color: var(--muted); margin: 10px 0 0; font-size: .92rem; }
+  .hc-steps { margin: 10px 0 0; padding-left: 1.3em; display: grid; gap: 8px; }
   .hc-steps label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
   .hc-steps input { margin-top: .35em; width: 18px; height: 18px; accent-color: var(--cyan); flex: none; }
   .hc-steps input:checked + span { opacity: .55; text-decoration: line-through; }
-  .hc-meter { margin-top: 14px; }
   .hc-meter-top { display: flex; justify-content: space-between; font-weight: 700; font-size: .9rem; margin-bottom: 5px; }
   .hc-bar { height: 10px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
-  .hc-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--pink), #ff3b3b); box-shadow: 0 0 12px rgb(255 79 163 / .7); transition: width .35s; }
-  .hc-tip { margin: 14px 0 0; font-size: .88rem; color: var(--muted); }
+  .hc-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffd166, #ff3b3b); box-shadow: 0 0 12px rgb(255 59 59 / .7); transition: width .4s; }
   .hc-clean { margin: 12px 0 0; font: 1.25rem var(--font-display); color: var(--cyan); text-shadow: var(--glow-cyan); }
-  @media (prefers-reduced-motion: reduce) { .hc-stars svg { animation: none; } .hc-bar i { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .hc-star svg { animation: none !important; } .hc-bar i { transition: none; } }
 </style>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-hc]').forEach((root) => {
+    // Sterne
+    const stars = [...root.querySelectorAll<HTMLButtonElement>('.hc-star')];
+    const starBox = root.querySelector<HTMLElement>('.hc-stars')!;
+    const levels = [...root.querySelectorAll<HTMLElement>('[data-level]')];
+    const pick = (n: number) => {
+      stars.forEach((s) => { const k = Number(s.dataset.n); s.classList.toggle('is-on', k <= n); s.setAttribute('aria-checked', String(k === n)); });
+      starBox.classList.toggle('is-max', n === 6);
+      levels.forEach((l) => (l.hidden = Number(l.dataset.level) !== n));
+    };
+    stars.forEach((s) => s.addEventListener('click', () => pick(Number(s.dataset.n))));
+
+    // Was weiß die Polizei?
     const btns = [...root.querySelectorAll<HTMLButtonElement>('.hc-item')];
     const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
     const empty = root.querySelector<HTMLElement>('.hc-empty')!;
-    const meter = root.querySelector<HTMLElement>('.hc-meter')!;
+    const hint = root.querySelector<HTMLElement>('.hc-hint')!;
     const clean = root.querySelector<HTMLElement>('.hc-clean')!;
     const bar = root.querySelector<HTMLElement>('.hc-bar i')!;
     const pct = root.querySelector<HTMLElement>('[data-hc-pct]')!;
 
     const update = () => {
-      const active = btns.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.id!);
-      let done = 0;
+      let open = 0, active = 0, done = 0;
       steps.forEach((s) => {
-        const on = active.includes(s.dataset.step!);
-        s.hidden = !on;
+        const b = root.querySelector<HTMLButtonElement>(`.hc-item[data-id="${s.dataset.step}"]`)!;
+        const on = b.getAttribute('aria-pressed') === 'true';
         const ok = on && s.querySelector('input')!.checked;
-        if (ok) done++;
-        root.querySelector(`.hc-item[data-id="${s.dataset.step}"]`)!.classList.toggle('is-fixed', ok);
+        s.hidden = !on;
+        b.classList.toggle('is-fixed', ok);
+        if (on) { active++; if (ok) done++; else open += Number(b.dataset.w); }
       });
-      empty.hidden = active.length > 0;
-      meter.hidden = active.length === 0;
-      const left = active.length ? Math.round(((active.length - done) / active.length) * 100) : 0;
-      bar.style.width = `${left}%`;
-      pct.textContent = `${left} %`;
-      clean.hidden = !(active.length > 0 && done === active.length);
+      bar.style.width = `${open}%`;
+      pct.textContent = `${open} %`;
+      empty.hidden = active > 0;
+      hint.hidden = active === 0 || done === active;
+      clean.hidden = !(active > 0 && done === active);
     };
 
     btns.forEach((b) => b.addEventListener('click', () => {
