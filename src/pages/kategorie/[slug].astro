@@ -16,7 +16,7 @@ const artikel = (await allArtikel()).filter((a) => a.data.category === cat.slug)
 
 // Passende Tools je Rubrik, damit man direkt etwas ausprobieren kann
 const TOOLS_FOR: Record<string, string[]> = {
-  guides: ['album', 'heat', 'fahrzeuge'],
+  guides: ['cheats', 'album', 'heat'],
   karte: ['karte', 'quiz', 'checklisten'],
   news: ['quiz', 'album', 'karte'],
   technik: ['checklisten', 'quiz', 'karte'],

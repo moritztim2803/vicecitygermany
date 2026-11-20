@@ -68,6 +68,8 @@ const tools = only ? TOOLS.filter((t) => only.includes(t.id)) : TOOLS;
     const n = Object.values(cl).filter(Boolean).length;
     if (n) live.checklisten = `${n} Punkte abgehakt`;
   }
+  const ch = read('palmenpixel-cheats-v1') as string[] | null;
+  if (ch?.length) live.cheats = `${ch.length} / 61 Cheats freigeschaltet`;
   document.querySelectorAll<HTMLElement>('[data-tt] [data-live]').forEach((el) => {
     const v = live[el.dataset.live!];
     if (v) { el.textContent = v; el.hidden = false; }
