@@ -34,7 +34,7 @@ GTA 6 braucht bis zu **212 GB**. Auf der ersten PS5 sind nur **667 GB** frei nut
 
 Am einfachsten: eine SSD kaufen, die **ausdrücklich „für PS5“** beworben wird und schon einen Kühlkörper hat. Dann passt alles.
 
-<!-- Hier Affiliate-Box mit 1-TB- und 2-TB-SSD einbauen, sobald die Amazon-Tracking-ID da ist. -->
+Passende SSDs findest du unten in der Box „Passend dazu“.
 
 ## Welche Größe?
 

@@ -1,0 +1,37 @@
+---
+// Passende Amazon-Produkte unter einem Artikel. Nutzt Amazon-Suchlinks mit unserer Tracking-ID,
+// damit keine Links auf ausverkaufte Einzelprodukte zeigen. Erscheint nur, wenn AFFILIATE.amazonTag gesetzt ist.
+import { AFFILIATE } from '../site.config';
+export type Tipp = { title: string; note: string; q: string };
+interface Props { items: Tipp[]; heading?: string }
+const { items, heading = 'Passend dazu' } = Astro.props;
+const href = (q: string) => `https://www.amazon.de/s?k=${encodeURIComponent(q)}&tag=${AFFILIATE.amazonTag}`;
+---
+{AFFILIATE.amazonTag && items.length > 0 && (
+  <aside class="az" aria-label="Produktempfehlungen">
+    <p class="az-head"><span class="ad-label">Anzeige</span> {heading}</p>
+    <ul>
+      {items.map((t) => (
+        <li>
+          <div><b>{t.title}</b><span>{t.note}</span></div>
+          <a href={href(t.q)} rel="sponsored nofollow noopener" target="_blank">Bei Amazon ansehen*</a>
+        </li>
+      ))}
+    </ul>
+    <p class="az-note">Als Amazon-Partner verdienen wir an qualifizierten Verkäufen. Für dich ändert sich der Preis nicht.</p>
+  </aside>
+)}
+
+<style>
+  .az { margin: 28px 0; padding: 16px 18px; border-radius: 16px; background: var(--night-2); border: 1px solid rgb(255 209 102 / .45); }
+  .az-head { margin: 0 0 10px; font-family: var(--font-display); font-size: 1.15rem; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .az ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .az li { display: flex; gap: 14px; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 12px; background: var(--night-3); }
+  .az li div { display: grid; gap: 2px; }
+  .az li b { color: #fff; }
+  .az li span { font-size: .9rem; color: var(--muted); }
+  .az li a { flex: none; padding: 8px 12px; border-radius: 10px; background: var(--sun-1); color: var(--night); font-weight: 700; text-decoration: none; font-size: .9rem; }
+  .az li a:hover { filter: brightness(1.08); }
+  .az-note { margin: 10px 0 0; font-size: .8rem; color: var(--muted); }
+  @media (max-width: 560px) { .az li { flex-direction: column; align-items: stretch; } .az li a { text-align: center; } }
+</style>
