@@ -5,7 +5,9 @@
 
 import { COAST, ISLES, LAND, R, type Pt } from '../lib/leonida';
 import { ORTE, TYPEN, type OrtTyp } from '../data/orte';
-import { REGIONEN } from '../data/regionen';
+import { REGIONEN, regionUrl } from '../data/regionen';
+interface Props { start?: Region['id'] }
+const { start } = Astro.props;
 
 type Region = {
   id: 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
@@ -72,7 +74,7 @@ const regions: Region[] = [
   },
 ];
 ---
-<figure class="lm" data-lm>
+<figure class="lm" data-lm data-start={start}>
   <div class="lm-stage">
     <svg class="lm-svg" viewBox="0 0 1000 1000" role="group" aria-labelledby="lm-title" xmlns="http://www.w3.org/2000/svg">
       <title id="lm-title">Schematische Karte von Leonida mit den sechs Regionen</title>
@@ -242,6 +244,7 @@ const regions: Region[] = [
           <p>{r.text}</p>
           <ul>{r.facts.map((f) => <li>{f}</li>)}</ul>
           {r.link && <a class="lm-cta" href={r.link.href}>{r.link.label} →</a>}
+          {start !== r.id && <a class="lm-cta lm-cta-2" href={regionUrl(r.id)}>Alle Orte {r.id === 'keys' ? 'in den Leonida Keys' : `in ${r.name}`} →</a>}
         </section>
       ))}
     </div>
@@ -272,7 +275,7 @@ const regions: Region[] = [
         );
       })}
     </ul>
-    <script type="application/json" data-orte-json set:html={JSON.stringify(ORTE.map((o) => ({ id: o.id, name: o.name, region: o.region, typ: TYPEN[o.typ].name, text: o.text, link: o.link ?? '', rlink: `/karte/gta-6-karte-regionen/#${REGIONEN[o.region].slug}` })))} />
+    <script type="application/json" data-orte-json set:html={JSON.stringify(ORTE.map((o) => ({ id: o.id, name: o.name, region: o.region, typ: TYPEN[o.typ].name, text: o.text, link: o.link ?? '', rlink: regionUrl(o.region) })))} />
   </section>
   <figcaption>Eigene schematische Darstellung, nicht maßstabsgetreu. Pins zeigen die ungefähre Lage.</figcaption>
 </figure>
@@ -384,6 +387,7 @@ const regions: Region[] = [
   .lm-cta { display: inline-block; margin-top: 6px; font-weight: 700; color: var(--c); text-decoration: none; }
   .lm-cta:hover { color: #fff; }
   .lm-cta[hidden] { display: none; }
+  .lm-cta-2 { display: block; }
   .lm figcaption { font-size: .8rem; color: var(--muted); text-align: right; }
 
   /* Orte-Liste */
@@ -545,6 +549,7 @@ const regions: Region[] = [
     root.querySelectorAll<HTMLButtonElement>('.lm-chip').forEach((b) => {
       b.addEventListener('click', () => { pinned = pinned === b.dataset.r ? null : b.dataset.r!; show(pinned); });
     });
+    if (root.dataset.start) { pinned = root.dataset.start; show(pinned); }
 
     stage.addEventListener('pointermove', (e) => {
       const r = stage.getBoundingClientRect();
