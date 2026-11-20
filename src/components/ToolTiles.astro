@@ -70,6 +70,8 @@ const tools = only ? TOOLS.filter((t) => only.includes(t.id)) : TOOLS;
   }
   const ch = read('palmenpixel-cheats-v1') as string[] | null;
   if (ch?.length) live.cheats = `${ch.length} / 61 Cheats freigeschaltet`;
+  const tr = read('palmenpixel-trophaeen-v1') as string[] | null;
+  if (tr?.length) live.trophaeen = `${tr.length} / 55 Trophäen`;
   document.querySelectorAll<HTMLElement>('[data-tt] [data-live]').forEach((el) => {
     const v = live[el.dataset.live!];
     if (v) { el.textContent = v; el.hidden = false; }
