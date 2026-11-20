@@ -40,6 +40,8 @@ Mehr dazu in unserem Artikel zur [PC-Version von GTA 6](/news/gta-6-pc-version-r
 | Ultimate Edition | 99,99 € | Hauptspiel plus Ingame-Extras (Fahrzeuge, Waffen, Kleidung) |
 | Collector's Edition | 399,99 € | Sammlerstücke, **Spiel nicht enthalten** |
 
+[Standard für PS5](amazon:GTA+6+PS5) [Standard für Xbox](amazon:GTA+6+Xbox+Series+X) [Ultimate für PS5](amazon:GTA+6+Ultimate+Edition+PS5) [Ultimate für Xbox](amazon:GTA+6+Ultimate+Edition+Xbox)
+
 Die physische Version ist eine **Code-in-a-Box**: In der Packung liegt nur ein Download-Code, keine Disc.
 
 ## Download-Größe

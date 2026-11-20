@@ -49,6 +49,6 @@ Am engsten wird es auf der **Xbox Series S mit 512 GB**. Dort bleibt neben GTA 6
 - **PS5 (alle Modelle):** Eine M.2-NVMe-SSD mit PCIe 4.0 lässt sich in den Erweiterungsslot einbauen. Welche passt und wie der Einbau geht, steht in unserem Artikel [PS5-SSD für GTA 6](/technik/gta-6-ps5-ssd-einbauen/).
 - **Xbox Series X|S:** Offizielle Speichererweiterungskarten von Seagate oder Western Digital werden hinten eingesteckt. Normale SSDs passen nicht.
 
-<!-- Hier später eine Affiliate-Box mit einer passenden SSD einbauen, siehe README. -->
+[1 TB PS5-SSD](amazon:PS5+SSD+1TB+Kühlkörper) [2 TB PS5-SSD](amazon:PS5+SSD+2TB+Kühlkörper) [Xbox-Speicherkarte 1 TB](amazon:Xbox+Series+Speichererweiterungskarte+1TB)
 
 *Quellen: Rockstar (Speicherbedarf), TechSpot (nutzbarer Speicher), Outputlag (Downloadgröße Xbox, 17.11.2026).*

@@ -15,18 +15,6 @@ const CONTROLLER: Tipp[] = [
 ];
 
 export const AMAZON: Record<string, Tipp[]> = {
-  'gta-6-ps5-ssd-einbauen': SSD,
-  'gta-6-speicherplatz-wie-viel-gb': [...SSD,
-    { title: 'Speichererweiterungskarte für Xbox Series X|S', note: 'Der Xbox-Weg: einstecken, fertig. Spiele laufen direkt davon.', q: 'Xbox Series Speichererweiterungskarte 1TB' }],
-  'gta-6-release-uhrzeit-preis-editionen': SPIEL,
-  'gta-6-ultimate-edition-lohnt-sich': SPIEL,
-  'gta-6-collectors-edition-inhalt': SPIEL,
-  'gta-6-ps4-xbox-one': [
-    { title: 'PS5 Slim', note: 'Unser Tipp: der beste Kompromiss aus Preis und Leistung.', q: 'PS5 Slim Konsole' },
-    { title: 'Xbox Series X', note: 'Die stärkere Xbox für GTA 6.', q: 'Xbox Series X Konsole' }],
-  'gta-6-30-fps-60-fps-ps5-pro-xbox': [
-    { title: 'PS5 Pro', note: 'Hier sieht GTA 6 am besten aus: schärferes Bild und stabile 30 FPS.', q: 'PS5 Pro Konsole' },
-    { title: 'PS5 Slim', note: 'Günstiger Einstieg.', q: 'PS5 Slim Konsole' }],
   'gta-6-einsteiger-tipps': CONTROLLER,
   'gta-6-stuerzt-ab-startet-nicht-loesungen': SSD,
   'gta-6-cheats': [CONTROLLER[0], { title: 'Xbox Wireless Controller', note: 'Cheats gibst du mit dem Steuerkreuz ein. Ein Controller mit gutem Steuerkreuz hilft.', q: 'Xbox Wireless Controller' }],
