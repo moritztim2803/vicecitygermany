@@ -34,7 +34,7 @@ export const NEWSLETTER = {
 
 export const AFFILIATE = {
   // Amazon PartnerNet Tracking-ID, z. B. 'deinname-21'
-  amazonTag: '',
+  amazonTag: 'palmenpixel-21',
 };
 
 export const CATEGORIES = [
