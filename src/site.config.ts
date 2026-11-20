@@ -55,6 +55,7 @@ export const NAV = [
   { href: '/checklisten/', name: 'Checklisten' },
   { href: '/kategorie/news/', name: 'News' },
   { href: '/kategorie/technik/', name: 'Technik' },
+  { href: '/zubehoer/', name: 'Kaufen' },
 ];
 
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
