@@ -57,7 +57,16 @@ h2 { font-size: 1.55rem; margin-top: 2em; }
 .site-header nav { overflow-x: auto; max-width: 100%; scrollbar-width: none; }
 .site-header ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; white-space: nowrap; }
 .site-header nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; letter-spacing: .02em; }
-.site-header nav a:hover { color: var(--cyan); }
+.site-header nav a:hover, .site-header nav a[aria-current='page'] { color: var(--cyan); }
+.site-header nav a[aria-current='page'] { text-shadow: var(--glow-cyan); }
+.header-inner { gap: 22px; }
+.nav-quiz { margin-left: auto; flex: none; padding: 7px 14px; border-radius: 99px; font: 700 .85rem var(--font-body); color: #fff; text-decoration: none;
+  background: linear-gradient(90deg, var(--pink), var(--violet)); box-shadow: 0 0 16px -2px rgb(255 79 163 / .7); }
+.nav-quiz:hover { color: #fff; text-shadow: none; filter: brightness(1.12); }
+.nav-quiz span { color: var(--sun-1); }
+@media (max-width: 760px) { .header-inner { gap: 6px 14px; padding-block: 8px; } .site-header nav { order: 3; width: 100%; } .nav-quiz { padding: 6px 12px; } }
+.cheat-hint { margin: 14px 0 0; font-size: .85rem; }
+.cheat-hint kbd { font: 700 .8rem var(--font-display); color: var(--sun-1); border: 1px solid var(--sun-1); border-radius: 6px; padding: 1px 6px; box-shadow: 0 0 10px -2px var(--sun-1); }
 
 main { padding-block: 24px 56px; }
 

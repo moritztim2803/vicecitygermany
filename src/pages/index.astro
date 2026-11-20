@@ -1,51 +1,146 @@
 ---
 import Base from '../layouts/Base.astro';
-import ArticleCard from '../components/ArticleCard.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Sunset from '../components/Sunset.astro';
 import MapTeaser from '../components/MapTeaser.astro';
+import ToolTiles from '../components/ToolTiles.astro';
+import ArticleList from '../components/ArticleList.astro';
+import EggArt from '../components/EggArt.astro';
 import { SITE, CATEGORIES } from '../site.config';
-import { allArtikel, artikelUrl } from '../lib/artikel';
+import { allArtikel } from '../lib/artikel';
+import { ORTE } from '../data/orte';
 
 const artikel = await allArtikel();
 const usedCats = new Set(artikel.map((a) => a.data.category));
 const cats = CATEGORIES.filter((c) => usedCats.has(c.slug));
-const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'de-DE' }];
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'de-DE', description: SITE.tagline },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: `${SITE.url}/favicon.svg` },
+];
+const regions = [
+  { n: 'Vice City', c: '#ff4fa3' }, { n: 'Leonida Keys', c: '#3ee7f0' }, { n: 'Grassrivers', c: '#4dff9a' },
+  { n: 'Port Gellhorn', c: '#ff9a4d' }, { n: 'Ambrosia', c: '#ffd166' }, { n: 'Mount Kalaga', c: '#b07cff' },
+];
 ---
-<Base title={`${SITE.name}: ${SITE.tagline}`} description={`${SITE.tagline}: Easter Eggs, Release, Technik und Hardware, verständlich erklärt.`} jsonLd={jsonLd}>
-  <section class="hero">
+<Base title={`${SITE.name}: ${SITE.tagline}`} description="Dein deutscher GTA-6-Begleiter: interaktive Karte mit 40 Orten, Sammelalbum, Region-Test, Easter Eggs und Schritt-für-Schritt-Guides." jsonLd={jsonLd}>
+  <section class="hero home-hero">
     <Sunset />
     <div class="hero-text">
       <p class="eyebrow">GTA 6 auf Deutsch</p>
-      <h1>Guides, Easter Eggs &amp; News aus dem Sonnenstaat</h1>
-      <p>Kurze, ehrliche Antworten auf das, was du gerade in GTA 6 suchst. Ohne Spoiler, wenn nicht anders markiert.</p>
-      <ul class="hero-cats">
-        {cats.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+      <h1>Dein Begleiter für <span class="hh-glow">Leonida</span></h1>
+      <p>Karte, Sammelalbum, Test und Guides. Alles zum Ausprobieren, Abhaken und Entdecken, spoilerfrei.</p>
+      <div class="hh-cta">
+        <a class="btn hh-pulse" href="/karte/gta-6-quiz-welche-region/">Mach den Test: Welche Region bist du?</a>
+        <a class="btn btn-secondary" href="/karte/gta-6-karte-regionen/">Zur Karte</a>
+      </div>
+      <ul class="hh-stats">
+        <li><b data-count={ORTE.length}>{ORTE.length}</b> Orte auf der Karte</li>
+        <li><b data-count="480">480</b> Sammelkarten</li>
+        <li><b data-count={artikel.length}>{artikel.length}</b> Guides</li>
       </ul>
     </div>
   </section>
-  <MapTeaser />
-  <section class="egg-teaser">
-    <p class="eyebrow">Easter Eggs</p>
-    <h2>Bigfoot, Dexters Wohnung und ein Ei ganz oben auf dem Funkturm</h2>
-    <p>Die verrücktesten Geheimnisse in GTA 6, Schritt für Schritt zum Nachspielen. Spoilerfrei.</p>
-    <ul>
-      <li><a href="/easter-eggs/gta-6-easter-eggs/#bigfoot-finden">Bigfoot finden</a></li>
-      <li><a href="/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden">Dexters Wohnung finden</a></li>
-      <li><a href="/easter-eggs/gta-6-easter-eggs/#das-ei-auf-dem-höchsten-funkturm">Das Ei auf dem Funkturm</a></li>
-    </ul>
-    <a class="btn" href="/kategorie/easter-eggs/">Alle Easter Eggs</a>
+
+  <section class="quiz-feature" aria-labelledby="qf-t">
+    <div class="qf-bubbles" aria-hidden="true">
+      {regions.map((r, i) => <span style={`--c:${r.c};--i:${i}`}>{r.n}</span>)}
+    </div>
+    <div class="qf-text">
+      <p class="eyebrow">Der Test zum Teilen</p>
+      <h2 id="qf-t">Welche Region in Leonida passt zu dir?</h2>
+      <p>8 Fragen, 1 Minute. Am Ende siehst du deine Region in Neon und kannst sie direkt mit deinen Freunden teilen.</p>
+      <a class="btn" href="/karte/gta-6-quiz-welche-region/">Test starten</a>
+      <p class="qf-last" data-quiz-last hidden></p>
+    </div>
   </section>
-  <AdSlot name="header" />
-  <h2 class="section-title">Neueste Artikel</h2>
-  <div class="grid">
-    {artikel.map((a) => (
-      <ArticleCard href={artikelUrl(a)} title={a.data.title} description={a.data.description}
-        category={a.data.category} date={a.data.updatedDate ?? a.data.publishDate} />
-    ))}
+
+  <h2 class="section-title">Tools zum Ausprobieren</h2>
+  <ToolTiles />
+
+  <div class="home-split">
+    <section aria-labelledby="feed-t">
+      <h2 class="section-title" id="feed-t">Was gerade los ist</h2>
+      <ArticleList items={artikel.slice(0, 8)} />
+      <p class="more-link"><a href="/kategorie/guides/">Alle Guides ansehen →</a></p>
+    </section>
+    <aside class="home-side">
+      <section class="egg-mini">
+        <p class="eyebrow">Easter Eggs</p>
+        <h3>Geheimnisse zum Nachspielen</h3>
+        <ul>
+          <li><a href="/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden"><EggArt id="dexter" size={56} />Dexters Wohnung</a></li>
+          <li><a href="/easter-eggs/gta-6-easter-eggs/#bigfoot-finden"><EggArt id="bigfoot" size={56} />Bigfoot im Sumpf</a></li>
+          <li><a href="/easter-eggs/gta-6-easter-eggs/#das-ei-auf-dem-höchsten-funkturm"><EggArt id="ei" size={56} />Das Ei auf dem Funkturm</a></li>
+        </ul>
+        <a class="btn btn-secondary" href="/kategorie/easter-eggs/">Alle Easter Eggs</a>
+      </section>
+      <AdSlot name="sidebar" />
+    </aside>
   </div>
-  <h2 class="section-title">Kategorien</h2>
-  <ul class="cat-list">
-    {cats.map((c) => <li><a href={`/kategorie/${c.slug}/`}><strong>{c.name}</strong><span>{c.description}</span></a></li>)}
+
+  <MapTeaser />
+
+  <h2 class="section-title">Alle Rubriken</h2>
+  <ul class="hero-cats home-cats">
+    {cats.map((c) => <li><a href={`/kategorie/${c.slug}/`}>{c.name}</a></li>)}
+    <li><a href="/fahrzeuge/">Fahrzeuge</a></li>
+    <li><a href="/checklisten/">Checklisten</a></li>
   </ul>
 </Base>
+
+<style>
+  .home-hero h1 { max-width: 16ch; }
+  .hh-glow { color: var(--pink); text-shadow: 0 0 22px rgb(255 79 163 / .9), 0 0 4px #fff; animation: hh-flicker 6s infinite; }
+  @keyframes hh-flicker { 0%, 92%, 100% { opacity: 1; } 93% { opacity: .4; } 94% { opacity: 1; } 96% { opacity: .6; } }
+  .hh-cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 18px; }
+  .hh-pulse { animation: hh-pulse 2.4s ease-in-out infinite; }
+  @keyframes hh-pulse { 50% { box-shadow: 0 0 0 6px rgb(255 79 163 / .18), 0 0 30px rgb(255 79 163 / .6); } }
+  .hh-stats { display: flex; flex-wrap: wrap; gap: 8px 22px; list-style: none; padding: 0; margin: 0; color: var(--text); font-weight: 600; font-size: .92rem; }
+  .hh-stats b { font: 1.5rem var(--font-display); font-weight: 400; color: var(--cyan); text-shadow: var(--glow-cyan); margin-right: 4px; }
+
+  .quiz-feature { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: center;
+    margin: 28px 0; padding: 26px; border-radius: 22px; border: 1px solid rgb(255 79 163 / .55);
+    background: radial-gradient(400px 260px at 20% 50%, rgb(155 92 255 / .25), transparent 70%), linear-gradient(120deg, rgb(255 79 163 / .14), var(--night-2) 60%);
+    box-shadow: 0 0 40px -12px rgb(255 79 163 / .7); }
+  .quiz-feature h2 { margin: .1em 0 .3em; font-size: clamp(1.6rem, 3.6vw, 2.3rem); color: #fff; }
+  .quiz-feature p { margin: .4em 0 1em; }
+  .qf-last { font-weight: 700; color: var(--cyan); margin-top: 12px !important; }
+  .qf-bubbles { position: relative; min-height: 230px; }
+  .qf-bubbles span { position: absolute; padding: 9px 15px; border-radius: 99px; font: 1rem var(--font-display); color: #fff; white-space: nowrap;
+    background: color-mix(in srgb, var(--c) 22%, #140a24); border: 1px solid var(--c); box-shadow: 0 0 18px -2px var(--c);
+    animation: qf-float 5s ease-in-out infinite; animation-delay: calc(var(--i) * -0.8s); }
+  .qf-bubbles span:nth-child(1) { left: 6%; top: 8%; font-size: 1.35rem; }
+  .qf-bubbles span:nth-child(2) { left: 46%; top: 2%; }
+  .qf-bubbles span:nth-child(3) { left: 30%; top: 36%; font-size: 1.15rem; }
+  .qf-bubbles span:nth-child(4) { left: 62%; top: 42%; }
+  .qf-bubbles span:nth-child(5) { left: 4%; top: 64%; }
+  .qf-bubbles span:nth-child(6) { left: 42%; top: 76%; font-size: 1.1rem; }
+  @keyframes qf-float { 50% { transform: translateY(-10px) rotate(-2deg); } }
+
+  .home-split { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; margin-top: 12px; }
+  .more-link { margin: 6px 0 0 74px; font-weight: 700; }
+  .egg-mini { padding: 18px; border-radius: 18px; border: 1px solid rgb(255 209 102 / .5);
+    background: linear-gradient(160deg, rgb(255 209 102 / .1), var(--night-2) 60%); margin-top: 56px; }
+  .egg-mini h3 { margin: 2px 0 10px; font-size: 1.25rem; }
+  .egg-mini ul { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 8px; }
+  .egg-mini a { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #fff; text-decoration: none; padding: 6px; border-radius: 12px; transition: background .2s; }
+  .egg-mini a:hover { background: rgb(255 209 102 / .1); color: var(--sun-1); text-shadow: none; }
+  .home-cats { margin-bottom: 20px; }
+
+  @media (max-width: 860px) {
+    .quiz-feature { grid-template-columns: 1fr; }
+    .qf-bubbles { min-height: 170px; order: -1; }
+    .home-split { grid-template-columns: 1fr; }
+    .egg-mini { margin-top: 0; }
+    .more-link { margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hh-glow, .hh-pulse, .qf-bubbles span { animation: none; } }
+</style>
+
+<script>
+  try {
+    const q = JSON.parse(localStorage.getItem('palmenpixel-quiz') || 'null');
+    const el = document.querySelector<HTMLElement>('[data-quiz-last]');
+    if (q?.name && el) { el.textContent = `Dein letztes Ergebnis: ${q.name}. Traust du dich nochmal?`; el.hidden = false; }
+  } catch { /* egal */ }
+</script>

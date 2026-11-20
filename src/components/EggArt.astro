@@ -1,0 +1,101 @@
+---
+// Eigene Neon-Illustrationen für die Easter Eggs (reines SVG, keine fremden Grafiken).
+interface Props { id: 'dexter' | 'bigfoot' | 'ei' | 'hotel' | 'manatee' | 'geld' | 'club'; size?: number; big?: boolean }
+const { id, size = 64, big = false } = Astro.props;
+const C: Record<string, string> = { dexter: '#ff4fa3', bigfoot: '#4dff9a', ei: '#ffd166', hotel: '#3ee7f0', manatee: '#3ee7f0', geld: '#4dff9a', club: '#b07cff' };
+---
+<span class:list={['ea', `ea-${id}`, { 'ea-big': big }]} style={`--c:${C[id]};--s:${size}px`} aria-hidden="true">
+  <svg viewBox="0 0 64 64">
+    {id === 'dexter' && (
+      <g>
+        <rect x="10" y="14" width="30" height="32" rx="2" />
+        <path d="M15 20h6M27 20h6M15 27h6M27 27h6M15 34h6M27 34h6" class="ea-win" />
+        <path d="M6 52q10-4 20 0t20 0 14 0" class="ea-wave" />
+        <path d="M40 44h16l-3 4H43z" />
+        <path d="M48 44V34l6 8" />
+        <path d="M44 10l8 8M52 10l-8 8" class="ea-blink" />
+      </g>
+    )}
+    {id === 'bigfoot' && (
+      <g>
+        <path d="M22 50c-6 0-8-6-6-14 2-7 4-14 10-14s8 6 7 13c-1 8-4 15-11 15z" class="ea-step1" />
+        <circle cx="16" cy="18" r="2.6" class="ea-step1" /><circle cx="22" cy="14" r="2.6" class="ea-step1" /><circle cx="28" cy="14" r="2.6" class="ea-step1" /><circle cx="33" cy="17" r="2.4" class="ea-step1" />
+        <path d="M42 40c-4 0-5-4-4-9s3-9 7-9 5 4 4 8c-1 6-3 10-7 10z" class="ea-step2" />
+        <circle cx="38" cy="18" r="1.8" class="ea-step2" /><circle cx="42" cy="15" r="1.8" class="ea-step2" /><circle cx="46" cy="15" r="1.8" class="ea-step2" /><circle cx="49" cy="18" r="1.7" class="ea-step2" />
+        <path d="M4 58c8-3 14 1 22-2s16 2 34-2" class="ea-wave" />
+      </g>
+    )}
+    {id === 'ei' && (
+      <g>
+        <path d="M32 6L22 58M32 6l10 52M26 36h12M24 47h16M28 22h8" />
+        <path d="M32 6v-2" />
+        <path d="M24 14q8 6 16 0" class="ea-nest" />
+        <ellipse cx="32" cy="10" rx="4" ry="5" class="ea-egg" />
+        <path d="M14 8q-4 4 0 8M50 8q4 4 0 8M10 4q-7 8 0 16M54 4q7 8 0 16" class="ea-radio" />
+      </g>
+    )}
+    {id === 'hotel' && (
+      <g>
+        <path d="M8 58V22h48v36M8 30h48" />
+        <path d="M14 38h6M26 38h6M38 38h6M14 46h6M26 46h6M38 46h6M28 58v-6h8v6" class="ea-win" />
+        <path d="M16 18q0-8 8-8M24 10h16q8 0 8 8" class="ea-blink" />
+        <path d="M12 15h40" class="ea-sign" />
+      </g>
+    )}
+    {id === 'manatee' && (
+      <g>
+        <path d="M10 34c4-10 22-14 34-8 6 3 8 8 6 12l6 6c1 2-1 4-3 3l-7-4c-8 6-26 6-34 0-3-2-3-6-2-9z" class="ea-swim" />
+        <circle cx="18" cy="32" r="1.5" class="ea-swim" />
+        <path d="M24 42l-2 6M34 43l1 6" class="ea-swim" />
+        <path d="M4 18q6-4 12 0t12 0 12 0 12 0 8 0" class="ea-wave" />
+        <circle cx="30" cy="12" r="1.5" class="ea-bubble" /><circle cx="36" cy="8" r="2" class="ea-bubble" />
+      </g>
+    )}
+    {id === 'geld' && (
+      <g>
+        <rect x="6" y="18" width="52" height="28" rx="3" class="ea-swim" />
+        <circle cx="32" cy="32" r="8" class="ea-swim" />
+        <path d="M32 27v10M29 29h5a2 2 0 0 1 0 4h-4a2 2 0 0 0 0 4h5" class="ea-swim" />
+        <path d="M12 24h6M46 40h6" class="ea-swim" />
+        <path d="M10 12l3-4M52 12l-3-4M32 8V4" class="ea-blink" />
+      </g>
+    )}
+    {id === 'club' && (
+      <g>
+        <path d="M14 58V16h36v42" />
+        <path d="M20 26h24" class="ea-sign" />
+        <path d="M24 58V40h16v18" />
+        <path d="M10 10l6 6M54 10l-6 6M32 4v6" class="ea-blink" />
+      </g>
+    )}
+  </svg>
+</span>
+
+<style is:global>
+  .ea { display: inline-grid; place-items: center; width: var(--s); height: var(--s); flex: none; border-radius: 16px;
+    background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--c) 22%, transparent), #140a24 70%); border: 1px solid color-mix(in srgb, var(--c) 60%, transparent);
+    box-shadow: 0 0 16px -4px var(--c); }
+  .ea svg { width: 78%; height: 78%; overflow: visible; fill: none; stroke: var(--c); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    filter: drop-shadow(0 0 3px var(--c)); }
+  .ea-big { border-radius: 24px; }
+  .ea-big svg { stroke-width: 1.6; }
+  .ea .ea-win { stroke: #fff; stroke-opacity: .8; animation: ea-win 4s steps(1) infinite; }
+  .ea .ea-wave { stroke-opacity: .6; stroke-dasharray: 6 4; animation: ea-dash 3s linear infinite; }
+  .ea .ea-blink { animation: ea-blink 1.6s ease-in-out infinite; }
+  .ea .ea-sign { stroke: #ff4fa3; stroke-width: 3; animation: ea-blink 2.2s steps(2) infinite; }
+  .ea .ea-egg { fill: #fff; stroke: var(--c); animation: ea-wobble 2.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+  .ea .ea-radio { stroke-opacity: .7; animation: ea-blink 1.4s ease-in-out infinite; }
+  .ea .ea-step1 { fill: color-mix(in srgb, var(--c) 30%, transparent); animation: ea-step 2.4s ease-in-out infinite; }
+  .ea .ea-step2 { fill: color-mix(in srgb, var(--c) 30%, transparent); animation: ea-step 2.4s ease-in-out infinite 1.2s; }
+  .ea .ea-swim { animation: ea-swim 3s ease-in-out infinite; }
+  .ea .ea-bubble { animation: ea-bubble 2s ease-in infinite; }
+  .ea .ea-bubble + .ea-bubble { animation-delay: .8s; }
+  @keyframes ea-win { 0%, 100% { stroke-opacity: .85; } 40% { stroke-opacity: .25; } 70% { stroke-opacity: .7; } }
+  @keyframes ea-dash { to { stroke-dashoffset: -20; } }
+  @keyframes ea-blink { 50% { opacity: .2; } }
+  @keyframes ea-wobble { 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+  @keyframes ea-step { 0%, 100% { opacity: .25; } 30%, 60% { opacity: 1; } }
+  @keyframes ea-swim { 50% { transform: translateY(-3px); } }
+  @keyframes ea-bubble { from { transform: translateY(6px); opacity: 0; } 50% { opacity: 1; } to { transform: translateY(-8px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ea * { animation: none !important; } }
+</style>

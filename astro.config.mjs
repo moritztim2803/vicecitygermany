@@ -9,7 +9,7 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     sitemap({
-      filter: (page) => !/\/(impressum|datenschutz)\/$/.test(page),
+      filter: (page) => !/\/(impressum|datenschutz)\/$/.test(page) && !/\/test\//.test(page),
     }),
   ],
 });

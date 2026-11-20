@@ -1,0 +1,38 @@
+---
+// Ergebnis-Seiten zum Teilen: eigenes Vorschaubild je Region, dann ab in den Test.
+import Base from '../../layouts/Base.astro';
+import { REGIONEN, REGION_ORDER, QUIZ_URL } from '../../data/regionen';
+import { ORTE } from '../../data/orte';
+
+export function getStaticPaths() {
+  return REGION_ORDER.map((id) => ({ params: { region: REGIONEN[id].slug }, props: { id } }));
+}
+const { id } = Astro.props;
+const r = REGIONEN[id];
+const orte = ORTE.filter((o) => o.region === id && o.x !== undefined).slice(0, 4);
+---
+<Base title={`Meine GTA-6-Region: ${r.name}. Und du?`} description={`${r.name}: ${r.motto}. Mach den Region-Test und finde in einer Minute heraus, wo du in Leonida hingehörst.`}
+  ogImage={`/og/test-${r.slug}.png`} noindex>
+  <section class="tr" style={`--c:${r.c}`}>
+    <p class="tr-kicker">Jemand hat den Region-Test gemacht und ist</p>
+    <h1>{r.name}</h1>
+    <p class="tr-typ">{r.typ} · {r.motto}</p>
+    <p class="tr-text">{r.text}</p>
+    <ul class="tr-orte">{orte.map((o) => <li>{o.name}</li>)}</ul>
+    <a class="btn tr-go" href={QUIZ_URL}>Und wo gehörst du hin? Test starten</a>
+    <p class="tr-small">8 Fragen, 1 Minute, ohne Anmeldung.</p>
+  </section>
+</Base>
+
+<style>
+  .tr { text-align: center; margin: 30px auto; max-width: 680px; padding: 34px 22px; border-radius: 22px; border: 1px solid var(--c);
+    background: radial-gradient(500px 260px at 50% 0, color-mix(in srgb, var(--c) 28%, transparent), transparent 70%), var(--night-2); box-shadow: 0 0 50px -12px var(--c); }
+  .tr-kicker { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; margin: 0; }
+  .tr h1 { font-size: clamp(2.6rem, 10vw, 4.2rem); margin: .15em 0 .1em; color: var(--c); text-shadow: 0 0 30px var(--c); animation: tr-land .8s cubic-bezier(.2, 1.6, .4, 1); }
+  @keyframes tr-land { from { transform: scale(.5); opacity: 0; } }
+  .tr-typ { font-weight: 700; color: #fff; }
+  .tr-orte { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 16px 0 24px; }
+  .tr-orte li { padding: 5px 12px; border-radius: 99px; border: 1px solid var(--c); font-size: .88rem; }
+  .tr-go { font-size: 1.1rem; padding: 14px 26px; }
+  .tr-small { color: var(--muted); font-size: .85rem; }
+</style>

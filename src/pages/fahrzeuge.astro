@@ -1,0 +1,208 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { FAHRZEUGE, KLASSEN, RANKINGS, type Klasse } from '../data/fahrzeuge';
+import { SITE } from '../site.config';
+
+// Eigene Silhouetten je Fahrzeugklasse (Platzhalter, bis echte Screenshots da sind)
+const SIL: Record<Klasse, string> = {
+  super: 'M6 40h88l-4-8-18-4-14-8H38L22 30 8 33z',
+  sport: 'M6 40h88l-3-9-16-3-12-8H40L26 28 9 32z',
+  klassiker: 'M4 40h92v-6l-8-3-10-1-8-9H34l-10 9H12l-8 3z',
+  pickup: 'M4 40h92v-10H62V20H38l-8 10H6z',
+  suv: 'M4 40h92v-9l-8-2-8-11H28l-10 11-12 2z',
+  gelaende: 'M6 38h88l-4-10-14-2-10-8H40l-10 8-18 3zM22 18h56',
+  motorrad: 'M20 40a8 8 0 1 0 0-.1M80 40a8 8 0 1 0 0-.1M20 40l14-14h18l8 8h20M44 26l-4-8h-8M60 34l-6-8',
+  boot: 'M4 32h92l-10 10H14zM30 32V20h26l8 12M40 20v-6',
+  luft: 'M10 30h70l14-6-4 8 4 8-14-6H10zM40 30l-14-16h8l20 16M40 30l-14 16h8l20-16',
+  militaer: 'M6 40h88v-8H70V24H40v8H6zM40 28H8',
+};
+const imgFor = (id: string) => {
+  const f = path.join(process.cwd(), 'public', 'fahrzeuge', `${id}.jpg`);
+  return fs.existsSync(f) ? `/fahrzeuge/${id}.jpg` : null;
+};
+const byId = Object.fromEntries(FAHRZEUGE.map((f) => [f.id, f]));
+const klassen = [...new Set(FAHRZEUGE.map((f) => f.klasse))];
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'ItemList', name: 'GTA 6 Fahrzeuge', numberOfItems: FAHRZEUGE.length,
+  itemListElement: FAHRZEUGE.map((f, i) => ({ '@type': 'ListItem', position: i + 1, name: f.name, url: `${SITE.url}/fahrzeuge/#${f.id}` })),
+}];
+---
+<Base title="GTA 6 Fahrzeuge: Ranking, Fundorte und welches Auto wofür" description="Die besten Fahrzeuge in GTA 6 für Start, Tempo, Gelände, Wasser und Chaos. Mit Fundorten, so bekommst du sie, und was sie können." jsonLd={jsonLd}>
+  <header class="fz-head">
+    <p class="eyebrow">Fahrzeug-Datenbank</p>
+    <h1>Welches Auto wofür?</h1>
+    <p class="lead">Unsere Empfehlungen für jeden Zweck, dazu alle bestätigten Fahrzeuge mit Fundort. Wähl oben, was du vorhast.</p>
+    <div class="fz-road" aria-hidden="true"><span></span></div>
+  </header>
+
+  <section class="fz-rank" aria-label="Ranking nach Zweck">
+    <div class="fz-tabs" role="tablist">
+      {RANKINGS.map((r, i) => (
+        <button type="button" role="tab" data-rk={r.id} aria-selected={i === 0 ? 'true' : 'false'} style={`--c:${r.c}`}>{r.name}</button>
+      ))}
+    </div>
+    {RANKINGS.map((r, i) => (
+      <div class="fz-pod" data-pod={r.id} role="tabpanel" hidden={i !== 0} style={`--c:${r.c}`}>
+        <p class="fz-q">{r.frage}</p>
+        <ol>
+          {r.plaetze.map((p, n) => {
+            const f = byId[p.id];
+            return (
+              <li style={`--n:${n}`} class={`fz-p${n + 1}`}>
+                <span class="fz-place">{n + 1}</span>
+                <svg viewBox="0 0 100 50" class="fz-sil" aria-hidden="true"><path d={SIL[f.form ?? f.klasse]} />{!["luft","boot"].includes(f.form ?? f.klasse) && <><circle cx="26" cy="41" r="6" class="fz-w" /><circle cx="74" cy="41" r="6" class="fz-w" /></>}</svg>
+                <a href={`#${f.id}`}><b>{f.name}</b></a>
+                <span>{p.warum}</span>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    ))}
+  </section>
+
+  <AdSlot name="header" />
+
+  <section aria-labelledby="fz-all">
+    <div class="fz-allhead">
+      <h2 id="fz-all">Alle Fahrzeuge <span data-fz-count>{FAHRZEUGE.length}</span></h2>
+      <div class="fz-filter" role="group" aria-label="Nach Klasse filtern">
+        <button type="button" data-k="all" aria-pressed="true">Alle</button>
+        {klassen.map((k) => <button type="button" data-k={k} aria-pressed="false" style={`--c:${KLASSEN[k].c}`}>{KLASSEN[k].name}</button>)}
+      </div>
+    </div>
+    <ul class="fz-grid">
+      {FAHRZEUGE.map((f, i) => {
+        const img = imgFor(f.id);
+        const k = KLASSEN[f.klasse];
+        return (
+          <li id={f.id} class="fz-card" data-k={f.klasse} style={`--c:${k.c};--i:${i}`}>
+            <div class="fz-pic">
+              {img ? <img src={img} alt={f.name} loading="lazy" /> : (
+                <svg viewBox="0 0 100 50" class="fz-sil" aria-hidden="true"><path d={SIL[f.form ?? f.klasse]} />{!["luft","boot"].includes(f.form ?? f.klasse) && <><circle cx="26" cy="41" r="6" class="fz-w" /><circle cx="74" cy="41" r="6" class="fz-w" /></>}</svg>
+              )}
+              <span class="fz-k">{k.name}</span>
+            </div>
+            <div class="fz-body">
+              <h3>{f.name}</h3>
+              <p class="fz-maker">{f.hersteller}{f.tags && f.tags.map((t) => <span class="fz-tag">{t}</span>)}</p>
+              <p class="fz-st">{f.staerke}</p>
+              <details>
+                <summary>So bekommst du ihn</summary>
+                <ol>{f.holen.map((h) => <li>{h}</li>)}</ol>
+              </details>
+              {f.warnung && <p class="fz-warn">⚠ {f.warnung}</p>}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class="prose fz-wissen">
+    <h2>Autos klauen und behalten: So geht's</h2>
+    <ol>
+      <li><strong>Kaufen kannst du keine Autos.</strong> Du nimmst sie dir von der Straße oder bekommst sie über die Story und deine Edition.</li>
+      <li><strong>Geparkte neue Autos brauchen einen Schlüssel.</strong> Den Schlüssel-Kloner bekommst du in Kapitel 3 von Randy. Ältere Autos und Autos mit Fahrer kriegst du auch ohne.</li>
+      <li><strong>Lass das Auto registrieren.</strong> Ab Kapitel 2 macht das Moses, die erste Registrierung ist kostenlos. Nicht registrierte Autos sind weg, wenn du stirbst oder verhaftet wirst.</li>
+      <li><strong>Achtung, Peilsender:</strong> Manche teuren Autos und alle Militärfahrzeuge haben einen Sender. Moses registriert solche Autos nicht, und die Polizei findet dich darin.</li>
+      <li><strong>Polizei hinter dir?</strong> Die Polizei merkt sich dein Auto. Wechsle den Wagen, dann verlierst du sie leichter. Mehr dazu im <a href="/guides/gta-6-polizei-abhaengen-fahndung/">Polizei-Guide</a>.</li>
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .fz-head { position: relative; padding: 18px 0 8px; }
+  .fz-head h1 { margin: .1em 0 .2em; font-size: clamp(2rem, 6vw, 3.2rem); color: #fff; text-shadow: 0 0 24px rgb(255 154 77 / .6); }
+  .fz-road { position: relative; height: 34px; margin: 18px 0 6px; border-radius: 8px; overflow: hidden;
+    background: linear-gradient(#1b0f30, #120822); border-top: 2px solid rgb(255 154 77 / .6); border-bottom: 2px solid rgb(255 154 77 / .6); }
+  .fz-road::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 3px; transform: translateY(-50%);
+    background: repeating-linear-gradient(90deg, var(--sun-1) 0 34px, transparent 34px 70px); animation: fz-road 1s linear infinite; }
+  .fz-road span { position: absolute; top: 4px; left: -60px; width: 46px; height: 22px; border-radius: 10px 16px 4px 4px; background: var(--pink);
+    box-shadow: 0 0 18px var(--pink), 30px 0 24px -8px rgb(255 255 255 / .5); animation: fz-car 5s cubic-bezier(.5,0,.5,1) infinite; }
+  @keyframes fz-road { to { background-position: -70px 0; } }
+  @keyframes fz-car { to { left: calc(100% + 60px); } }
+
+  .fz-rank { margin: 22px 0; padding: 18px; border-radius: 20px; background: var(--night-2); border: 1px solid var(--night-3); }
+  .fz-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .fz-tabs button { padding: 8px 16px; border-radius: 99px; border: 1px solid var(--night-3); background: var(--night); color: var(--text);
+    font: 1rem var(--font-display); cursor: pointer; transition: .2s; }
+  .fz-tabs button[aria-selected='true'] { border-color: var(--c); color: #140a24; background: var(--c); box-shadow: 0 0 18px -2px var(--c); }
+  .fz-q { margin: 0 0 12px; color: var(--muted); font-weight: 600; }
+  .fz-pod ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+  .fz-pod li { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 16px 14px; border-radius: 16px; text-align: center;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--c) 16%, #140a24), #140a24); border: 1px solid color-mix(in srgb, var(--c) 50%, transparent);
+    animation: fz-up .5s cubic-bezier(.2,.9,.3,1.2) both; animation-delay: calc(var(--n) * 120ms); }
+  .fz-pod .fz-p1 { order: 2; padding-top: 34px; box-shadow: 0 0 30px -8px var(--c); border-color: var(--c); }
+  .fz-pod .fz-p2 { order: 1; }
+  .fz-pod .fz-p3 { order: 3; }
+  @keyframes fz-up { from { opacity: 0; transform: translateY(24px) scale(.96); } }
+  .fz-place { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    font: 1.05rem var(--font-display); color: #140a24; background: var(--c); box-shadow: 0 0 14px var(--c); }
+  .fz-pod .fz-sil { width: 70%; margin: 4px auto; }
+  .fz-pod a { color: #fff; text-decoration: none; font-size: 1.05rem; }
+  .fz-pod a:hover { color: var(--c); text-shadow: none; }
+  .fz-pod li > span:last-child { color: var(--muted); font-size: .88rem; line-height: 1.4; }
+  .fz-sil { display: block; overflow: visible; }
+  .fz-sil path { fill: color-mix(in srgb, var(--c) 18%, transparent); stroke: var(--c); stroke-width: 1.8; stroke-linejoin: round; filter: drop-shadow(0 0 4px var(--c)); }
+  .fz-sil .fz-w { fill: #140a24; stroke: var(--c); stroke-width: 2; }
+
+  .fz-allhead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 28px 0 14px; }
+  .fz-allhead h2 { margin: 0; }
+  .fz-allhead h2 span { font: 700 .9rem var(--font-body); color: var(--sun-2, #ff9a4d); border: 1px solid currentColor; border-radius: 99px; padding: 2px 9px; vertical-align: middle; }
+  .fz-filter { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fz-filter button { --c: var(--cyan); padding: 6px 12px; border-radius: 99px; border: 1px solid var(--night-3); background: var(--night-2); color: var(--text); font: 600 .82rem var(--font-body); cursor: pointer; }
+  .fz-filter button[aria-pressed='true'] { border-color: var(--c); color: #fff; background: color-mix(in srgb, var(--c) 16%, var(--night-2)); box-shadow: 0 0 12px -3px var(--c); }
+  .fz-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+  .fz-card { display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: var(--night-2); border: 1px solid var(--night-3);
+    transition: transform .25s, border-color .25s, box-shadow .25s; animation: tt-in .45s both; animation-delay: calc(min(var(--i), 8) * 50ms); scroll-margin-top: 90px; }
+  .fz-card:hover, .fz-card:target { transform: translateY(-3px); border-color: var(--c); box-shadow: 0 0 24px -6px var(--c); }
+  .fz-card[hidden] { display: none; }
+  .fz-pic { position: relative; aspect-ratio: 16 / 9; display: grid; place-items: center;
+    background: radial-gradient(circle at 50% 80%, color-mix(in srgb, var(--c) 28%, transparent), transparent 65%), linear-gradient(#1e1035, #120822); }
+  .fz-pic::after { content: ''; position: absolute; left: 10%; right: 10%; bottom: 18%; height: 2px; background: var(--c); opacity: .5; box-shadow: 0 0 12px var(--c); }
+  .fz-pic img { width: 100%; height: 100%; object-fit: cover; }
+  .fz-pic .fz-sil { width: 62%; transition: transform .4s; }
+  .fz-card:hover .fz-pic .fz-sil { transform: translateX(6px); }
+  .fz-k { position: absolute; top: 10px; left: 10px; padding: 3px 9px; border-radius: 99px; font: 700 .7rem var(--font-body); letter-spacing: .1em; text-transform: uppercase;
+    color: #140a24; background: var(--c); }
+  .fz-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .fz-body h3 { margin: 0; font-size: 1.15rem; color: #fff; }
+  .fz-maker { margin: 0; color: var(--muted); font-size: .85rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .fz-tag { padding: 1px 8px; border-radius: 99px; border: 1px solid var(--c); color: var(--c); font-weight: 700; font-size: .72rem; }
+  .fz-st { margin: 0; font-size: .93rem; }
+  .fz-body details { margin-top: 2px; }
+  .fz-body summary { cursor: pointer; font-weight: 700; color: var(--c); font-size: .9rem; }
+  .fz-body details ol { margin: 6px 0 0; padding-left: 1.2em; font-size: .9rem; color: var(--text); }
+  .fz-warn { margin: 0; font-size: .85rem; color: #ff8080; font-weight: 600; }
+  .fz-wissen { margin-top: 36px; }
+
+  @media (max-width: 640px) {
+    .fz-pod ol { grid-template-columns: 1fr; }
+    .fz-pod li { order: initial !important; padding-top: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fz-road::before, .fz-road span, .fz-pod li, .fz-card { animation: none; } }
+</style>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.fz-tabs button')];
+  tabs.forEach((t) => t.addEventListener('click', () => {
+    tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+    document.querySelectorAll<HTMLElement>('[data-pod]').forEach((p) => {
+      const on = p.dataset.pod === t.dataset.rk;
+      p.hidden = !on;
+      if (on) p.querySelectorAll<HTMLElement>('li').forEach((li) => { li.style.animation = 'none'; void li.offsetWidth; li.style.animation = ''; });
+    });
+  }));
+  const fb = [...document.querySelectorAll<HTMLButtonElement>('.fz-filter button')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.fz-card')];
+  fb.forEach((b) => b.addEventListener('click', () => {
+    fb.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    let n = 0;
+    cards.forEach((c) => { const ok = b.dataset.k === 'all' || c.dataset.k === b.dataset.k; c.hidden = !ok; if (ok) n++; });
+    document.querySelector('[data-fz-count]')!.textContent = String(n);
+  }));
+</script>

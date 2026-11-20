@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import EggArt from '../components/EggArt.astro';
+import { ORTE, type RegionId } from '../data/orte';
+
+const REG: Record<RegionId, { n: string; c: string }> = {
+  vice: { n: 'Vice City', c: '#ff4fa3' }, keys: { n: 'Leonida Keys', c: '#3ee7f0' }, grass: { n: 'Grassrivers', c: '#4dff9a' },
+  gell: { n: 'Port Gellhorn', c: '#ff9a4d' }, amb: { n: 'Ambrosia', c: '#ffd166' }, kal: { n: 'Mount Kalaga', c: '#b07cff' },
+};
+const start = [
+  { id: 's-prolog', t: 'Prolog durchspielen, dann ist Speichern möglich', href: '/technik/gta-6-speichern-spielstand/' },
+  { id: 's-geld', t: 'Geld aus Kapitel 1 ausgeben, nicht sparen', href: '/guides/gta-6-schnell-geld-verdienen/' },
+  { id: 's-kenton', t: 'Mit Kenton zum Schatztauchen', href: '/guides/gta-6-schnell-geld-verdienen/' },
+  { id: 's-outfit', t: 'Ersatz-Outfit in den Kofferraum legen', href: '/guides/gta-6-einsteiger-tipps/' },
+  { id: 's-maske', t: 'Maske aufsetzen, bevor du ein Verbrechen begehst', href: '/guides/gta-6-polizei-abhaengen-fahndung/' },
+  { id: 's-bank', t: 'Größere Summen am Automaten einzahlen', href: '/guides/gta-6-einsteiger-tipps/' },
+  { id: 's-moses', t: 'Erstes Auto bei Moses registrieren (ab Kapitel 2)', href: '/fahrzeuge/' },
+  { id: 's-wechsel', t: 'Charakterwechsel ausprobieren (ab Kapitel 2)', href: '/guides/gta-6-jason-lucia-charakterwechsel/' },
+];
+const eggs = [
+  { id: 'e-dexter', art: 'dexter' as const, t: 'Dexters Wohnung gefunden', href: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden' },
+  { id: 'e-bigfoot', art: 'bigfoot' as const, t: 'Bigfoot im Sumpf gesehen', href: '/easter-eggs/gta-6-easter-eggs/#bigfoot-finden' },
+  { id: 'e-ei', art: 'ei' as const, t: 'Das Ei auf dem Funkturm gefunden', href: '/easter-eggs/gta-6-easter-eggs/#das-ei-auf-dem-höchsten-funkturm' },
+];
+const regions = Object.keys(REG) as RegionId[];
+const total = start.length + eggs.length + ORTE.length;
+---
+<Base title="GTA 6 Checklisten: Erste Schritte, Easter Eggs und alle Orte" description="Hak ab, was du in GTA 6 schon geschafft hast: erste Schritte, Easter Eggs und alle 40 Orte in Leonida. Mit Gesamtfortschritt, gespeichert in deinem Browser.">
+  <section class="cl-top" data-cl-root>
+    <div class="cl-ring" aria-hidden="true">
+      <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="cl-bg" /><circle cx="60" cy="60" r="50" class="cl-fg" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" /></svg>
+      <b data-cl-pct>0 %</b>
+    </div>
+    <div>
+      <p class="eyebrow">Checklisten</p>
+      <h1>Dein Fortschritt in Leonida</h1>
+      <p class="lead"><b data-cl-done>0</b> von {total} Punkten abgehakt. Wird nur in diesem Browser gespeichert.</p>
+      <p class="cl-album" data-cl-album>Sammelkarten: noch nichts eingetragen. <a href="/guides/gta-6-sammelkarten-tracker/">Zum Sammelalbum →</a></p>
+    </div>
+  </section>
+
+  <div class="cl-cols">
+    <section class="cl-box" style="--c:#ffd166">
+      <h2>Erste Schritte <span data-cl-sec="start"></span></h2>
+      <ul>
+        {start.map((s) => (
+          <li><label><input type="checkbox" data-cl={s.id} data-sec="start" /><span>{s.t}</span></label><a href={s.href} aria-label={`Anleitung: ${s.t}`}>→</a></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="cl-box" style="--c:#ff4fa3">
+      <h2>Easter Eggs <span data-cl-sec="eggs"></span></h2>
+      <ul class="cl-eggs">
+        {eggs.map((e) => (
+          <li><label><input type="checkbox" data-cl={e.id} data-sec="eggs" /><EggArt id={e.art} size={44} /><span>{e.t}</span></label><a href={e.href} aria-label={`Anleitung: ${e.t}`}>→</a></li>
+        ))}
+      </ul>
+      <p class="cl-more">Neue Easter Eggs kommen hier automatisch dazu.</p>
+    </section>
+  </div>
+
+  <section class="cl-box cl-orte" style="--c:#3ee7f0">
+    <h2>Alle Orte entdecken <span data-cl-sec="orte"></span></h2>
+    <p class="cl-sub">Warst du schon dort? Hak jeden Ort ab, den du besucht hast. Wo er liegt, zeigt dir die <a href="/karte/gta-6-karte-regionen/">interaktive Karte</a>.</p>
+    <div class="cl-regs">
+      {regions.map((r) => (
+        <div class="cl-reg" style={`--c:${REG[r].c}`}>
+          <h3>{REG[r].n} <span data-cl-reg={r}></span></h3>
+          <ul>
+            {ORTE.filter((o) => o.region === r).map((o) => (
+              <li><label><input type="checkbox" data-cl={`o-${o.id}`} data-sec="orte" data-reg={r} /><span>{o.name}</span></label></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+  <p class="cl-reset"><button type="button" class="linklike" data-cl-reset>Alle Häkchen zurücksetzen</button></p>
+  <div class="cl-confetti" aria-hidden="true"></div>
+</Base>
+
+<style>
+  .cl-top { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; padding: 22px; margin: 8px 0 22px; border-radius: 20px;
+    background: radial-gradient(400px 220px at 0 50%, rgb(77 255 154 / .16), transparent 70%), var(--night-2); border: 1px solid rgb(77 255 154 / .45); }
+  .cl-top h1 { margin: .1em 0 .2em; color: #fff; }
+  .cl-top .lead { margin: 0 0 6px; }
+  .cl-top .lead b { color: #4dff9a; }
+  .cl-album { margin: 0; font-weight: 600; }
+  .cl-ring { position: relative; width: 130px; height: 130px; flex: none; }
+  .cl-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .cl-ring circle { fill: none; stroke-width: 10; }
+  .cl-bg { stroke: var(--night-3); }
+  .cl-fg { stroke: #4dff9a; stroke-linecap: round; filter: drop-shadow(0 0 6px #4dff9a); transition: stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1); }
+  .cl-ring b { position: absolute; inset: 0; display: grid; place-items: center; font: 1.6rem var(--font-display); font-weight: 400; color: #fff; }
+  .cl-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+  .cl-box { padding: 18px; border-radius: 18px; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 10%, var(--night-2)), var(--night-2) 60%);
+    border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); }
+  .cl-box h2 { margin: 0 0 10px; font-size: 1.35rem; display: flex; align-items: center; gap: 10px; }
+  .cl-box h2 span, .cl-reg h3 span { font: 700 .8rem var(--font-body); color: var(--c); border: 1px solid var(--c); border-radius: 99px; padding: 1px 8px; }
+  .cl-box ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .cl-box li { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .cl-box label { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; cursor: pointer; flex: 1; transition: background .2s; }
+  .cl-box label:hover { background: color-mix(in srgb, var(--c) 8%, transparent); }
+  .cl-box input { width: 20px; height: 20px; accent-color: var(--c); flex: none; }
+  .cl-box input:checked + span, .cl-box input:checked ~ span { text-decoration: line-through; opacity: .55; }
+  .cl-box li > a { color: var(--c); text-decoration: none; font-weight: 700; padding: 4px 8px; }
+  .cl-box li.pop label { animation: cl-pop .45s ease-out; }
+  @keyframes cl-pop { 40% { transform: scale(1.04); background: color-mix(in srgb, var(--c) 18%, transparent); } }
+  .cl-more, .cl-sub { color: var(--muted); font-size: .9rem; margin: 10px 0 0; }
+  .cl-sub { margin: 0 0 12px; }
+  .cl-orte { margin-top: 16px; }
+  .cl-regs { columns: 240px 4; column-gap: 14px; }
+  .cl-reg { break-inside: avoid; margin-bottom: 14px; display: block; padding: 12px; border-radius: 14px; background: rgb(0 0 0 / .18); border-top: 2px solid var(--c); }
+  .cl-reg h3 { margin: 0 0 6px; font-size: 1.05rem; color: var(--c); display: flex; gap: 8px; align-items: center; }
+  .cl-reg label { padding: 3px 4px; font-size: .92rem; }
+  .cl-reg input { width: 17px; height: 17px; }
+  .cl-reset { text-align: right; font-size: .85rem; margin-top: 14px; }
+  .cl-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+  :global(.cl-confetti i) { position: absolute; width: 7px; height: 11px; border-radius: 2px; animation: ct2-fall 1.4s cubic-bezier(.2,.6,.4,1) forwards; }
+</style>
+
+<script>
+  const KEY = 'palmenpixel-checklisten-v1';
+  let state: Record<string, boolean> = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { state = {}; }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* egal */ } };
+  const boxes = [...document.querySelectorAll<HTMLInputElement>('[data-cl]')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const confetti = () => {
+    if (reduce) return;
+    const box = document.querySelector('.cl-confetti')!;
+    const cols = ['#ff4fa3', '#3ee7f0', '#ffd166', '#4dff9a'];
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('i');
+      p.style.left = `${50 + (Math.random() - .5) * 40}%`; p.style.top = '35%';
+      p.style.background = cols[i % 4];
+      p.style.setProperty('--dx', `${(Math.random() - .5) * 600}px`); p.style.setProperty('--dy', `${150 + Math.random() * 400}px`);
+      p.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+      box.appendChild(p); setTimeout(() => p.remove(), 1600);
+    }
+  };
+
+  const render = () => {
+    const done = boxes.filter((b) => b.checked).length;
+    const pct = Math.round((done / boxes.length) * 100);
+    document.querySelector('[data-cl-done]')!.textContent = String(done);
+    document.querySelector('[data-cl-pct]')!.textContent = `${pct} %`;
+    document.querySelector<SVGCircleElement>('.cl-fg')!.style.strokeDashoffset = String(100 - pct);
+    document.querySelectorAll<HTMLElement>('[data-cl-sec]').forEach((el) => {
+      const s = boxes.filter((b) => b.dataset.sec === el.dataset.clSec);
+      el.textContent = `${s.filter((b) => b.checked).length}/${s.length}`;
+    });
+    document.querySelectorAll<HTMLElement>('[data-cl-reg]').forEach((el) => {
+      const s = boxes.filter((b) => b.dataset.reg === el.dataset.clReg);
+      el.textContent = `${s.filter((b) => b.checked).length}/${s.length}`;
+    });
+  };
+  boxes.forEach((b) => {
+    b.checked = !!state[b.dataset.cl!];
+    b.addEventListener('change', () => {
+      state[b.dataset.cl!] = b.checked; save(); render();
+      if (b.checked) {
+        const li = b.closest('li')!; li.classList.remove('pop'); void li.offsetWidth; li.classList.add('pop');
+        const sec = boxes.filter((x) => x.dataset.sec === b.dataset.sec);
+        if (sec.every((x) => x.checked)) confetti();
+      }
+    });
+  });
+
+  // Stand aus dem Sammelalbum anzeigen
+  try {
+    const album = JSON.parse(localStorage.getItem('palmenpixel-sammelkarten-v2') || 'null') as Record<string, number[]> | null;
+    if (album) {
+      const n = Object.values(album).reduce((s, a) => s + (a?.length || 0), 0);
+      if (n) document.querySelector('[data-cl-album]')!.innerHTML = `Sammelkarten: <b>${n} / 480</b> eingetragen. <a href="/guides/gta-6-sammelkarten-tracker/">Zum Sammelalbum →</a>`;
+    }
+  } catch { /* egal */ }
+
+  let armed = false;
+  const reset = document.querySelector<HTMLButtonElement>('[data-cl-reset]')!;
+  reset.addEventListener('click', () => {
+    if (!armed) { armed = true; reset.textContent = 'Wirklich alle löschen? Nochmal klicken'; setTimeout(() => { armed = false; reset.textContent = 'Alle Häkchen zurücksetzen'; }, 4000); return; }
+    armed = false; reset.textContent = 'Alle Häkchen zurücksetzen';
+    state = {}; save(); boxes.forEach((b) => (b.checked = false)); render();
+  });
+  render();
+</script>

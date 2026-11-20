@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolTiles from '../components/ToolTiles.astro';
+import { TOOLS } from '../data/tools';
+import { SITE } from '../site.config';
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'ItemList', name: 'GTA 6 Tools', numberOfItems: TOOLS.length,
+  itemListElement: TOOLS.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.name, url: `${SITE.url}${t.href}` })),
+}];
+---
+<Base title="GTA 6 Tools: Karte, Sammelalbum, Test und Checklisten" description="Alle interaktiven GTA-6-Tools von Palmenpixel: Region-Test, Karte mit 40 Orten, Sammelalbum für 480 Karten, Polizei-Check, Fahrzeug-Ranking und Checklisten." jsonLd={jsonLd}>
+  <header class="tools-head">
+    <p class="eyebrow">Tools</p>
+    <h1>Zum Ausprobieren, Abhaken und Teilen</h1>
+    <p class="lead">Alles läuft direkt im Browser, ohne Anmeldung. Dein Fortschritt bleibt auf deinem Gerät gespeichert.</p>
+  </header>
+  <ToolTiles />
+  <section class="tools-share">
+    <h2>Mit Freunden spielen?</h2>
+    <p>Mach den Region-Test und schick deinen Freunden dein Ergebnis. Kurzer Link zum Teilen: <b>palmenpixel.de/test</b></p>
+    <a class="btn" href="/karte/gta-6-quiz-welche-region/">Test starten</a>
+  </section>
+</Base>
+
+<style>
+  .tools-head { padding: 14px 0 18px; }
+  .tools-head h1 { margin: .1em 0 .3em; color: #fff; text-shadow: 0 0 22px rgb(62 231 240 / .5); }
+  .tools-share { margin: 32px 0; padding: 22px; border-radius: 18px; border: 1px dashed rgb(255 79 163 / .6); text-align: center; }
+  .tools-share h2 { margin: 0 0 6px; }
+  .tools-share b { color: var(--cyan); }
+</style>

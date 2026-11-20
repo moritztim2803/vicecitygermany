@@ -2,13 +2,14 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
 import NewsletterBox from '../../components/NewsletterBox.astro';
 import SubmitCta from '../../components/SubmitCta.astro';
 import LeonidaMap from '../../components/LeonidaMap.astro';
 import CardTracker from '../../components/CardTracker.astro';
 import RegionQuiz from '../../components/RegionQuiz.astro';
 import HeatCheck from '../../components/HeatCheck.astro';
+import EggStrip from '../../components/EggStrip.astro';
+import ToolTiles from '../../components/ToolTiles.astro';
 import { SITE, categoryBySlug } from '../../site.config';
 import { allArtikel, artikelUrl, type Artikel } from '../../lib/artikel';
 
@@ -21,7 +22,8 @@ const { Content, headings } = await render(a);
 const cat = categoryBySlug(a.data.category)!;
 const updated = a.data.updatedDate ?? a.data.publishDate;
 const url = new URL(artikelUrl(a), Astro.site).href;
-const related = all.filter((x) => x.id !== a.id).slice(0, 3);
+const others = all.filter((x) => x.id !== a.id);
+const related = [...others.filter((x) => x.data.category === a.data.category), ...others.filter((x) => x.data.category !== a.data.category)].slice(0, 5);
 const toc = headings.filter((h) => h.depth === 2);
 
 const jsonLd: object[] = [
@@ -45,7 +47,7 @@ if (a.data.faq.length) {
   });
 }
 ---
-<Base title={a.data.title} description={a.data.description} type="article" jsonLd={jsonLd}>
+<Base title={a.data.title} description={a.data.description} type="article" jsonLd={jsonLd} ogImage={a.id === 'gta-6-quiz-welche-region' ? '/og/test.png' : undefined}>
   <nav class="breadcrumb" aria-label="Brotkrumen"><a href="/">Start</a> › <a href={`/kategorie/${cat.slug}/`}>{cat.name}</a></nav>
   <div class="article-layout">
     <article class="prose">
@@ -55,6 +57,7 @@ if (a.data.faq.length) {
       {a.id === 'gta-6-sammelkarten-tracker' && <CardTracker />}
       {a.id === 'gta-6-quiz-welche-region' && <RegionQuiz />}
       {a.id === 'gta-6-polizei-abhaengen-fahndung' && <HeatCheck />}
+      {a.id === 'gta-6-easter-eggs' && <EggStrip here />}
       {toc.length > 2 && (
         <details class="toc" open><summary>Inhalt</summary>
           <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
@@ -74,9 +77,19 @@ if (a.data.faq.length) {
     </article>
     <aside class="sidebar">
       <AdSlot name="sidebar" />
+      <div class="side-tools"><h2 class="h-small">Tools</h2><ToolTiles only={['quiz', 'album', 'karte']} compact /></div>
       {related.length > 0 && <div><h2 class="h-small">Weiterlesen</h2>
-        {related.map((r) => <ArticleCard href={artikelUrl(r)} title={r.data.title} description={r.data.description}
-          category={r.data.category} date={r.data.updatedDate ?? r.data.publishDate} />)}</div>}
+        <ul class="side-rel">{related.map((r) => <li><span>{categoryBySlug(r.data.category)?.name}</span><a href={artikelUrl(r)}>{r.data.title}</a></li>)}</ul></div>}
     </aside>
   </div>
 </Base>
+
+<style>
+  .side-tools { margin-bottom: 22px; }
+  .side-tools :global(.tt) { grid-template-columns: 1fr; }
+  .side-rel { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .side-rel li { padding: 10px 0 10px 12px; border-left: 2px solid rgb(255 79 163 / .5); }
+  .side-rel span { display: block; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--cyan); }
+  .side-rel a { color: var(--text); text-decoration: none; font-weight: 600; font-size: .95rem; line-height: 1.35; }
+  .side-rel a:hover { color: var(--pink); }
+</style>

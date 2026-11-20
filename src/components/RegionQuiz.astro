@@ -1,38 +1,35 @@
 ---
-// Quiz „Welche Leonida-Region passt zu dir?“. Läuft komplett im Browser, keine Daten werden gesendet.
-type R = 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
-const regions: Record<R, { name: string; c: string; typ: string; text: string; link: string; linkText: string }> = {
-  vice: { name: 'Vice City', c: '#ff4fa3', typ: 'Großstadt', text: 'Du brauchst Neonlicht, Lärm und Leute um dich herum. Tagsüber Strand, nachts Club: In der Großstadt nach dem Vorbild von Miami bist du zu Hause.', link: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden', linkText: 'Dein erstes Ziel: Dexters Wohnung' },
-  keys: { name: 'Leonida Keys', c: '#3ee7f0', typ: 'Inselkette', text: 'Boot, Sonne, türkises Wasser. Du lässt es lieber ruhig angehen und tauchst nach Schätzen, statt im Stau zu stehen.', link: '/guides/gta-6-schnell-geld-verdienen/', linkText: 'Schatztauchen mit Kenton' },
-  grass: { name: 'Grassrivers', c: '#4dff9a', typ: 'Sumpfgebiet', text: 'Je seltsamer, desto besser. Alligatoren schrecken dich nicht ab, du willst wissen, was da draußen im Sumpf lauert.', link: '/easter-eggs/gta-6-easter-eggs/', linkText: 'Alle Easter Eggs' },
-  gell: { name: 'Port Gellhorn', c: '#ff9a4d', typ: 'Küstenort', text: 'Billigmotel statt Luxushotel. Du magst Orte mit Geschichte, verlassene Attraktionen und Leute, die keine Fragen stellen.', link: '/karte/gta-6-karte-regionen/#port-gellhorn', linkText: 'Mehr über Port Gellhorn' },
-  amb: { name: 'Ambrosia', c: '#ffd166', typ: 'Industriestadt', text: 'Ehrliche Arbeit, laute Motoren. Zwischen Zuckerraffinerie und Biker-Gang fühlst du dich wohler als in jeder Strandbar.', link: '/karte/gta-6-karte-regionen/#ambrosia', linkText: 'Mehr über Ambrosia' },
-  kal: { name: 'Mount Kalaga', c: '#b07cff', typ: 'Nationalpark', text: 'Weg von allem. Angeln am See, Jagen im Wald, Offroad über Schotter: Im Nationalpark findest du deine Ruhe.', link: '/karte/gta-6-karte-regionen/#mount-kalaga', linkText: 'Mehr über Mount Kalaga' },
-};
+// Region-Test „Welche Leonida-Region passt zu dir?“. Läuft komplett im Browser.
+// Ergebnis wird nur lokal gemerkt (palmenpixel-quiz), damit Startseite und Tools es anzeigen können.
+import { REGIONEN, REGION_ORDER, ergebnisUrl } from '../data/regionen';
+import { ORTE, type RegionId } from '../data/orte';
+type R = RegionId;
+
+// Erste Region in r zählt doppelt, weitere einfach.
 const questions: { q: string; a: { t: string; r: R[] }[] }[] = [
   { q: 'Dein perfekter Abend in Leonida?', a: [
-    { t: 'Club, Cocktails, Neonlicht', r: ['vice'] },
-    { t: 'Sonnenuntergang auf dem Boot', r: ['keys'] },
-    { t: 'Lagerfeuer am See', r: ['kal'] },
-    { t: 'Bier in der Biker-Bar', r: ['amb', 'gell'] },
+    { t: 'Club-Nacht in Downtown Vice City', r: ['vice'] },
+    { t: 'Sonnenuntergang auf dem Boot vor Key Lento', r: ['keys'] },
+    { t: 'Billard im Delights in Port Gellhorn', r: ['gell', 'amb'] },
+    { t: 'Lagerfeuer am Lake Tallaloko', r: ['kal', 'grass'] },
   ] },
   { q: 'Welches Fahrzeug nimmst du?', a: [
-    { t: 'Sportwagen', r: ['vice'] },
-    { t: 'Speedboot', r: ['keys'] },
-    { t: 'Motorrad', r: ['amb'] },
-    { t: 'Geländewagen oder Propellerboot', r: ['kal', 'grass'] },
+    { t: 'Supersportwagen über Vice Beach', r: ['vice'] },
+    { t: 'Boot von Brian’s Boat Works', r: ['keys'] },
+    { t: 'Pick-up für Schlammrennen', r: ['amb', 'gell'] },
+    { t: 'Propellerboot durch den Sumpf', r: ['grass', 'keys'] },
   ] },
   { q: 'Wo übernachtest du?', a: [
-    { t: 'Penthouse mit Meerblick', r: ['vice'] },
-    { t: 'Hütte am Strand', r: ['keys'] },
-    { t: 'Billigmotel an der Landstraße', r: ['gell'] },
-    { t: 'Zelt im Wald', r: ['kal'] },
+    { t: 'Art-déco-Hotel in Ocean Beach', r: ['vice'] },
+    { t: 'Ganz unten in Southwind, am Ende der Keys', r: ['keys'] },
+    { t: 'Billigmotel an der Landstraße', r: ['gell', 'amb'] },
+    { t: 'Zelt im Mount Kalaga National Park', r: ['kal'] },
   ] },
   { q: 'Wie verdienst du dein Geld?', a: [
+    { t: 'Beute beim Hehler in Little Cuba verkaufen', r: ['vice'] },
     { t: 'Nach Wracks tauchen', r: ['keys'] },
-    { t: 'Autos „besorgen“ und verkaufen', r: ['gell'] },
-    { t: 'Jagen und Angeln', r: ['kal', 'grass'] },
-    { t: 'Große Coups in der Stadt', r: ['vice'] },
+    { t: 'Rennen auf dem Gellhorn Raceway', r: ['gell'] },
+    { t: 'Schicht in der Zuckerraffinerie', r: ['amb'] },
   ] },
   { q: 'Welches Tier wärst du?', a: [
     { t: 'Flamingo', r: ['vice'] },
@@ -40,97 +37,199 @@ const questions: { q: string; a: { t: string; r: R[] }[] }[] = [
     { t: 'Alligator', r: ['grass'] },
     { t: 'Bär', r: ['kal'] },
   ] },
-  { q: 'Was hörst du im Auto?', a: [
-    { t: 'Club-Hits, laut', r: ['vice'] },
-    { t: 'Reggae und Strandmusik', r: ['keys'] },
-    { t: 'Rock und Metal', r: ['amb'] },
-    { t: 'Alte Hits aus dem Kassettenrekorder', r: ['gell', 'grass'] },
+  { q: 'Dein Ausflug am Wochenende?', a: [
+    { t: 'Aussichtsplattform am Mount Kalaga', r: ['kal'] },
+    { t: 'Eis essen in Watson Bay', r: ['grass', 'keys'] },
+    { t: 'Angeln am Lake Leonida', r: ['amb', 'kal'] },
+    { t: 'Den Manifest Canyon erkunden', r: ['gell', 'kal'] },
   ] },
-  { q: 'Was suchst du in GTA 6 als Erstes?', a: [
-    { t: 'Die besten Partys', r: ['vice'] },
-    { t: 'Geheimnisse und Easter Eggs', r: ['grass'] },
-    { t: 'Ruhe und Natur', r: ['kal', 'keys'] },
-    { t: 'Ärger', r: ['amb', 'gell'] },
+  { q: 'Welches Geheimnis jagst du zuerst?', a: [
+    { t: 'Bigfoot im Sumpf', r: ['grass'] },
+    { t: 'Dexters Wohnung', r: ['vice'] },
+    { t: 'Den Leuchtturm hinter Millport', r: ['kal', 'gell'] },
+    { t: 'Den Kampfjet auf der Mile Zero Air Station', r: ['keys'] },
+  ] },
+  { q: 'Wenn du Ärger suchst, dann …', a: [
+    { t: '… mit der Biker-Gang in Ambrosia', r: ['amb'] },
+    { t: '… beim Juwelier in Capri', r: ['grass', 'vice'] },
+    { t: '… auf den Villen-Inseln von Starfish Island', r: ['vice'] },
+    { t: '… in der Polizeiwache von Port Gellhorn', r: ['gell'] },
   ] },
 ];
-const order: R[] = ['vice', 'keys', 'grass', 'gell', 'amb', 'kal'];
+// Pro Region die bekanntesten Orte fürs Ergebnis
+const orte: Record<string, string[]> = {};
+for (const r of REGION_ORDER) orte[r] = ORTE.filter((o) => o.region === r && o.x !== undefined).slice(0, 4).map((o) => o.name);
+const data = { regions: REGIONEN, order: REGION_ORDER, orte, urls: Object.fromEntries(REGION_ORDER.map((r) => [r, ergebnisUrl(r)])) };
 ---
-<section class="rq" data-rq aria-label="Quiz: Welche Region passt zu dir?" data-regions={JSON.stringify(regions)} data-order={JSON.stringify(order)}>
-  <div class="rq-progress" aria-hidden="true"><i></i></div>
+<section class="rq" data-rq aria-label="Region-Test: Welche Region passt zu dir?">
+  <script type="application/json" data-rq-json set:html={JSON.stringify(data)} />
+  <div class="rq-start">
+    <div class="rq-orbs" aria-hidden="true">
+      {REGION_ORDER.map((r, i) => <span style={`--c:${REGIONEN[r].c};--i:${i};top:${[8, 58, 22, 66, 6, 48][i]}%`}>{REGIONEN[r].name}</span>)}
+    </div>
+    <p class="rq-step">Region-Test · {questions.length} Fragen · 1 Minute</p>
+    <p class="rq-title" role="heading" aria-level="2">Welche Region in Leonida passt zu dir?</p>
+    <button type="button" class="btn rq-go">Los geht’s</button>
+  </div>
+  <div class="rq-progress" aria-hidden="true" hidden><i></i></div>
   {questions.map((q, i) => (
-    <fieldset class="rq-q" data-i={i} hidden={i !== 0}>
+    <fieldset class="rq-q" data-i={i} hidden>
       <legend><span class="rq-step">Frage {i + 1} von {questions.length}</span>{q.q}</legend>
       <div class="rq-answers">
-        {q.a.map((a) => <button type="button" class="rq-a" data-r={a.r.join(',')}>{a.t}</button>)}
+        {q.a.map((a, j) => <button type="button" class="rq-a" style={`--j:${j}`} data-r={a.r.join(',')}>{a.t}</button>)}
       </div>
     </fieldset>
   ))}
+  <div class="rq-roll" hidden aria-hidden="true"><span></span></div>
   <div class="rq-result" hidden aria-live="polite">
-    <p class="rq-kicker">Deine Region</p>
+    <div class="rq-burst" aria-hidden="true"></div>
+    <p class="rq-kicker">Du gehörst nach</p>
     <h3 class="rq-name"></h3>
     <p class="rq-typ"></p>
     <p class="rq-text"></p>
+    <p class="rq-orte-h">Deine Orte:</p>
+    <ul class="rq-orte"></ul>
     <ul class="rq-bars"></ul>
+    <div class="rq-share-box">
+      <p><b>Schick’s deinen Freunden:</b> Wer landet wo?</p>
+      <div class="rq-actions">
+        <button type="button" class="btn rq-share">Ergebnis teilen</button>
+        <button type="button" class="btn btn-secondary rq-img">Story-Bild speichern</button>
+      </div>
+      <p class="rq-copied" hidden>Link kopiert!</p>
+    </div>
     <div class="rq-actions">
-      <a class="btn rq-link" href="#"></a>
-      <button type="button" class="btn btn-secondary rq-share">Ergebnis teilen</button>
+      <a class="btn btn-secondary rq-link" href="#"></a>
       <button type="button" class="rq-again">Nochmal spielen</button>
     </div>
-    <p class="rq-copied" hidden>Link kopiert!</p>
   </div>
 </section>
 
 <style>
-  .rq { --c: #ff4fa3; margin: 1.6em 0 2em; padding: 22px; border-radius: 18px; position: relative; overflow: hidden;
-    background: radial-gradient(400px 220px at 100% 0, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%), var(--night-2);
-    border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); box-shadow: 0 0 30px -10px var(--c); transition: border-color .4s, box-shadow .4s; }
+  .rq { --c: #ff4fa3; margin: 1.6em 0 2em; padding: 24px; border-radius: 20px; position: relative; overflow: hidden;
+    background: radial-gradient(420px 240px at 100% 0, color-mix(in srgb, var(--c) 24%, transparent), transparent 70%),
+      radial-gradient(360px 200px at 0 100%, rgb(62 231 240 / .1), transparent 70%), var(--night-2);
+    border: 1px solid color-mix(in srgb, var(--c) 60%, transparent); box-shadow: 0 0 40px -10px var(--c); transition: border-color .5s, box-shadow .5s; }
+  .rq-start { text-align: center; padding: 6px 0 4px; }
+  .rq-orbs { position: relative; height: 130px; margin-bottom: 8px; }
+  .rq-orbs span { position: absolute; left: calc(12% + (var(--i) * 15%)); padding: 6px 12px; border-radius: 99px;
+    font: .9rem var(--font-display); color: #fff; border: 1px solid var(--c); background: color-mix(in srgb, var(--c) 18%, var(--night));
+    box-shadow: 0 0 16px -4px var(--c); animation: rq-float 4s ease-in-out infinite; animation-delay: calc(var(--i) * -.7s); white-space: nowrap; transform: translateX(-30%); }
+  @keyframes rq-float { 50% { translate: 0 -10px; } }
+  .rq-title { font-family: var(--font-display); line-height: 1.2; font-size: clamp(1.5rem, 4.5vw, 2.1rem); margin: .2em 0 .6em; color: #fff; text-shadow: 0 0 20px rgb(255 79 163 / .55); }
+  .rq-go { font-size: 1.1rem; padding: 14px 30px; animation: rq-pulse 2s ease-in-out infinite; }
+  @keyframes rq-pulse { 50% { box-shadow: 0 0 0 8px rgb(255 79 163 / .15), 0 0 30px rgb(255 79 163 / .5); } }
   .rq-progress { height: 6px; border-radius: 99px; background: var(--night-3); overflow: hidden; margin-bottom: 18px; }
-  .rq-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--sun-1), var(--pink), var(--violet)); transition: width .35s ease; }
-  .rq-q { border: 0; margin: 0; padding: 0; animation: rq-in .35s ease-out; }
-  .rq-q legend { font: 1.45rem/1.25 var(--font-display); color: #fff; margin-bottom: 14px; padding: 0; }
+  .rq-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--sun-1), var(--pink), var(--violet)); transition: width .35s ease; box-shadow: 0 0 12px var(--pink); }
+  .rq-q { border: 0; margin: 0; padding: 0; }
+  .rq-q legend { font: 1.45rem/1.25 var(--font-display); color: #fff; margin-bottom: 14px; padding: 0; animation: rq-in .35s ease-out; }
   .rq-step { display: block; font: 700 .75rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); margin-bottom: 6px; }
   .rq-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   @media (max-width: 520px) { .rq-answers { grid-template-columns: 1fr; } }
-  .rq-a { text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--night-3); background: rgb(20 10 36 / .6);
-    color: var(--text); font: 600 1rem var(--font-body); cursor: pointer; transition: border-color .2s, transform .15s, box-shadow .2s; }
-  .rq-a:hover, .rq-a:focus-visible { border-color: var(--pink); box-shadow: 0 0 16px -4px var(--pink); transform: translateY(-2px); }
-  .rq-result { animation: rq-in .5s ease-out; }
+  .rq-a { text-align: left; padding: 15px 16px; border-radius: 12px; border: 1px solid var(--night-3); background: rgb(20 10 36 / .6);
+    color: var(--text); font: 600 1rem var(--font-body); cursor: pointer; transition: border-color .2s, transform .15s, box-shadow .2s, background .2s;
+    animation: rq-in .4s both; animation-delay: calc(var(--j) * 70ms + 80ms); }
+  .rq-a:hover, .rq-a:focus-visible { border-color: var(--pink); box-shadow: 0 0 18px -4px var(--pink); transform: translateY(-2px); }
+  .rq-a.is-picked { background: rgb(255 79 163 / .25); border-color: var(--pink); transform: scale(1.03); }
+  .rq-roll { text-align: center; padding: 50px 0; }
+  .rq-roll span { font: clamp(2rem, 8vw, 3.4rem) var(--font-display); color: var(--c); text-shadow: 0 0 24px var(--c); display: inline-block; }
+  .rq-result { position: relative; animation: rq-in .5s ease-out; }
+  .rq-burst { position: absolute; inset: -24px; pointer-events: none; background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--c) 45%, transparent), transparent 55%);
+    animation: rq-burst 1.4s ease-out forwards; }
+  @keyframes rq-burst { from { opacity: 1; transform: scale(.4); } to { opacity: 0; transform: scale(1.6); } }
   .rq-kicker { margin: 0; font: 700 .75rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-  .rq-name { margin: .1em 0 0; font-size: clamp(2.2rem, 7vw, 3.2rem); line-height: 1.05; color: var(--c); text-shadow: 0 0 22px color-mix(in srgb, var(--c) 70%, transparent); }
+  .rq-name { margin: .1em 0 0; font-size: clamp(2.4rem, 8vw, 3.6rem); line-height: 1.05; color: var(--c); text-shadow: 0 0 26px color-mix(in srgb, var(--c) 75%, transparent);
+    animation: rq-land .7s cubic-bezier(.2, 1.6, .4, 1); }
+  @keyframes rq-land { from { transform: scale(.5); opacity: 0; } }
   .rq-typ { margin: .2em 0 .8em; font-weight: 700; color: #fff; }
-  .rq-bars { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 6px; font-size: .85rem; }
+  .rq-orte-h { margin: 12px 0 6px; font-weight: 700; font-size: .9rem; }
+  .rq-orte { list-style: none; padding: 0; margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .rq-orte :global(li) { padding: 5px 12px; border-radius: 99px; font-size: .85rem; border: 1px solid var(--c); color: #fff; background: color-mix(in srgb, var(--c) 14%, transparent);
+    animation: rq-in .4s both; animation-delay: calc(var(--k) * 90ms + .3s); }
+  .rq-bars { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 6px; font-size: .85rem; }
   .rq-bars :global(li) { display: grid; grid-template-columns: 8.5em 1fr 2.6em; align-items: center; gap: 8px; }
   .rq-bars :global(span:last-child) { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
   .rq-bars :global(.bar) { height: 8px; border-radius: 99px; background: var(--night-3); overflow: hidden; }
-  .rq-bars :global(.bar i) { display: block; height: 100%; border-radius: inherit; }
-  .rq-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  .rq-bars :global(.bar i) { display: block; height: 100%; border-radius: inherit; width: 0; transition: width 1s cubic-bezier(.2, .8, .3, 1); }
+  .rq-share-box { margin: 18px 0 14px; padding: 16px; border-radius: 14px; border: 1px dashed color-mix(in srgb, var(--c) 70%, transparent); background: rgb(0 0 0 / .2); }
+  .rq-share-box p { margin: 0 0 10px; }
+  .rq-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
   .rq-again { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
   .rq-again:hover { color: #fff; }
-  .rq-copied { color: var(--cyan); font-weight: 700; margin: 8px 0 0; }
-  @keyframes rq-in { from { opacity: 0; transform: translateY(8px); } }
-  @media (prefers-reduced-motion: reduce) { .rq-q, .rq-result { animation: none; } .rq-a { transition: none; } }
+  .rq-copied { color: var(--cyan); font-weight: 700; margin: 8px 0 0 !important; }
+  @keyframes rq-in { from { opacity: 0; transform: translateY(10px); } }
+  @media (prefers-reduced-motion: reduce) { .rq *, .rq-go { animation: none !important; } .rq-a { transition: none; } }
 </style>
 
 <script>
+  type Reg = { id: string; slug: string; name: string; c: string; typ: string; motto: string; text: string; link: string; linkText: string };
+  const SITE_HOST = 'palmenpixel.de';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Story-Bild (1080 x 1920) im Neon-Look, rein im Browser gezeichnet
+  const storyImage = async (r: Reg, orte: string[]): Promise<Blob | null> => {
+    await document.fonts.ready;
+    const W = 1080, H = 1920;
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const x = cv.getContext('2d')!;
+    const bg = x.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#140a24'); bg.addColorStop(.55, '#2a0f45'); bg.addColorStop(1, '#5a1650');
+    x.fillStyle = bg; x.fillRect(0, 0, W, H);
+    // Sonne mit Streifen
+    const sun = x.createLinearGradient(0, 520, 0, 1060);
+    sun.addColorStop(0, '#ffd166'); sun.addColorStop(1, '#ff4fa3');
+    x.save(); x.beginPath(); x.arc(W / 2, 800, 300, 0, Math.PI * 2); x.clip();
+    x.fillStyle = sun; x.fillRect(0, 480, W, 640);
+    x.fillStyle = '#2a0f45'; for (let i = 0; i < 6; i++) x.fillRect(0, 860 + i * 38, W, 8 + i * 3);
+    x.restore();
+    // Raster-Boden
+    x.strokeStyle = 'rgba(62,231,240,.35)'; x.lineWidth = 2;
+    for (let i = 0; i < 12; i++) { const y = 1110 + i * i * 6; x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
+    for (let i = -10; i <= 10; i++) { x.beginPath(); x.moveTo(W / 2 + i * 30, 1110); x.lineTo(W / 2 + i * 220, H); x.stroke(); }
+    x.textAlign = 'center';
+    x.fillStyle = '#3ee7f0'; x.font = '44px Righteous, sans-serif'; x.fillText('MEINE GTA-6-REGION', W / 2, 250);
+    x.shadowColor = r.c; x.shadowBlur = 50; x.fillStyle = r.c;
+    let size = 170; x.font = `${size}px Righteous, sans-serif`;
+    while (x.measureText(r.name).width > W - 100 && size > 80) { size -= 6; x.font = `${size}px Righteous, sans-serif`; }
+    x.fillText(r.name, W / 2, 440); x.fillText(r.name, W / 2, 440);
+    x.shadowBlur = 0; x.fillStyle = '#fff'; x.font = '600 52px Inter, sans-serif'; x.fillText(r.motto, W / 2, 1220);
+    x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '40px Inter, sans-serif';
+    orte.slice(0, 3).forEach((o, i) => x.fillText('• ' + o, W / 2, 1320 + i * 60));
+    x.fillStyle = 'rgba(20,10,36,.85)'; x.beginPath(); x.roundRect(140, 1560, W - 280, 200, 40); x.fill();
+    x.strokeStyle = r.c; x.lineWidth = 4; x.stroke();
+    x.fillStyle = '#fff'; x.font = '600 44px Inter, sans-serif'; x.fillText('Und du? Mach den Test:', W / 2, 1640);
+    x.fillStyle = '#ffd166'; x.font = '64px Righteous, sans-serif'; x.fillText(`${SITE_HOST}/test`, W / 2, 1720);
+    return new Promise((res) => cv.toBlob((b) => res(b), 'image/png'));
+  };
+
   document.querySelectorAll<HTMLElement>('[data-rq]').forEach((root) => {
-    const regions = JSON.parse(root.dataset.regions!);
-    const order: string[] = JSON.parse(root.dataset.order!);
+    const D = JSON.parse(root.querySelector('[data-rq-json]')!.textContent!);
+    const regions: Record<string, Reg> = D.regions;
+    const order: string[] = D.order;
     const qs = [...root.querySelectorAll<HTMLFieldSetElement>('.rq-q')];
-    const bar = root.querySelector<HTMLElement>('.rq-progress i')!;
+    const start = root.querySelector<HTMLElement>('.rq-start')!;
+    const prog = root.querySelector<HTMLElement>('.rq-progress')!;
+    const bar = prog.querySelector<HTMLElement>('i')!;
+    const roll = root.querySelector<HTMLElement>('.rq-roll')!;
     const res = root.querySelector<HTMLElement>('.rq-result')!;
     let score: Record<string, number> = {};
     let step = 0;
+    let current = '';
+
+    const showQ = (i: number) => { qs.forEach((q, n) => (q.hidden = n !== i)); };
 
     const showResult = (best: string, sc: Record<string, number>) => {
-      const r = regions[best];
-      qs.forEach((q) => (q.hidden = true));
+      const r = regions[best]; current = best;
+      qs.forEach((q) => (q.hidden = true)); start.hidden = true; roll.hidden = true; prog.hidden = false;
       bar.style.width = '100%';
       root.style.setProperty('--c', r.c);
       res.querySelector('.rq-name')!.textContent = r.name;
-      res.querySelector('.rq-typ')!.textContent = r.typ;
+      res.querySelector('.rq-typ')!.textContent = `${r.typ} · ${r.motto}`;
       res.querySelector('.rq-text')!.textContent = r.text;
       const link = res.querySelector<HTMLAnchorElement>('.rq-link')!;
       link.href = r.link; link.textContent = r.linkText + ' →';
+      const ol = res.querySelector('.rq-orte')!; ol.innerHTML = '';
+      (D.orte[best] as string[]).forEach((o, k) => { const li = document.createElement('li'); li.textContent = o; li.style.setProperty('--k', String(k)); ol.appendChild(li); });
       const sum = Object.values(sc).reduce((a, b) => a + b, 0) || 1;
       const list = res.querySelector('.rq-bars')!;
       list.innerHTML = '';
@@ -140,46 +239,84 @@ const order: R[] = ['vice', 'keys', 'grass', 'gell', 'amb', 'kal'];
         li.innerHTML = `<span></span><span class="bar"><i></i></span><span>${pct} %</span>`;
         li.querySelector('span')!.textContent = regions[k].name;
         const i = li.querySelector<HTMLElement>('.bar i')!;
-        i.style.width = `${pct}%`; i.style.background = regions[k].c;
+        i.style.background = regions[k].c;
+        requestAnimationFrame(() => requestAnimationFrame(() => (i.style.width = `${pct}%`)));
         list.appendChild(li);
       });
       res.hidden = false;
+      try { localStorage.setItem('palmenpixel-quiz', JSON.stringify({ id: best, name: r.name })); } catch { /* egal */ }
       try { history.replaceState(null, '', `#ergebnis-${best}`); } catch { /* egal */ }
     };
 
-    const finish = () => {
-      let best = order[0];
-      order.forEach((k) => { if ((score[k] || 0) > (score[best] || 0)) best = k; });
-      showResult(best, score);
+    // Kurzes „Glücksrad“ durch alle Regionen, dann Landung auf dem Ergebnis
+    const rollTo = (best: string) => {
+      if (reduce) return showResult(best, score);
+      qs.forEach((q) => (q.hidden = true)); roll.hidden = false;
+      const el = roll.querySelector('span')!;
+      let n = 0; const total = 14;
+      const tick = () => {
+        const k = n < total - 1 ? order[n % order.length] : best;
+        el.textContent = regions[k].name; root.style.setProperty('--c', regions[k].c);
+        n++;
+        if (n < total) setTimeout(tick, 60 + n * n * 1.6); else setTimeout(() => showResult(best, score), 420);
+      };
+      tick();
     };
 
+    const finish = () => {
+      const max = Math.max(...order.map((k) => score[k] || 0));
+      const tied = order.filter((k) => (score[k] || 0) === max);
+      rollTo(tied[Math.floor(Math.random() * tied.length)]);
+    };
+
+    root.querySelector('.rq-go')!.addEventListener('click', () => {
+      start.hidden = true; prog.hidden = false; showQ(0);
+      qs[0].querySelector<HTMLButtonElement>('.rq-a')!.focus({ preventScroll: true });
+    });
+
     qs.forEach((q, i) => q.querySelectorAll<HTMLButtonElement>('.rq-a').forEach((b) => b.addEventListener('click', () => {
+      if (q.dataset.lock) return; q.dataset.lock = '1';
+      b.classList.add('is-picked');
       b.dataset.r!.split(',').forEach((k, idx) => { score[k] = (score[k] || 0) + (idx === 0 ? 2 : 1); });
       step = i + 1;
       bar.style.width = `${(step / qs.length) * 100}%`;
-      q.hidden = true;
-      if (step < qs.length) { qs[step].hidden = false; qs[step].querySelector<HTMLButtonElement>('.rq-a')!.focus({ preventScroll: true }); }
-      else finish();
+      setTimeout(() => {
+        b.classList.remove('is-picked'); delete q.dataset.lock;
+        if (step < qs.length) { showQ(step); qs[step].querySelector<HTMLButtonElement>('.rq-a')!.focus({ preventScroll: true }); }
+        else finish();
+      }, reduce ? 0 : 260);
     })));
 
     root.querySelector('.rq-again')!.addEventListener('click', () => {
       score = {}; step = 0; res.hidden = true; root.style.removeProperty('--c');
-      bar.style.width = '0'; qs.forEach((q, i) => (q.hidden = i !== 0));
+      bar.style.width = '0'; showQ(0);
       try { history.replaceState(null, '', location.pathname); } catch { /* egal */ }
     });
 
+    const flash = () => { const c = res.querySelector<HTMLElement>('.rq-copied')!; c.hidden = false; setTimeout(() => (c.hidden = true), 2500); };
     root.querySelector('.rq-share')!.addEventListener('click', async () => {
-      const name = res.querySelector('.rq-name')!.textContent;
-      const url = location.href;
-      const text = `Meine GTA-6-Region ist ${name}! Welche passt zu dir?`;
+      const r = regions[current];
+      const url = new URL(D.urls[current], location.origin).href;
+      const text = `Meine GTA-6-Region ist ${r.name}! Welche passt zu dir? Mach den Test:`;
       try {
-        if (navigator.share) { await navigator.share({ title: 'Welche Leonida-Region passt zu dir?', text, url }); return; }
-        await navigator.clipboard.writeText(`${text} ${url}`);
-        const c = res.querySelector<HTMLElement>('.rq-copied')!; c.hidden = false; setTimeout(() => (c.hidden = true), 2500);
+        if (navigator.share) { await navigator.share({ title: 'Welche Region in Leonida passt zu dir?', text, url }); return; }
+        await navigator.clipboard.writeText(`${text} ${url}`); flash();
       } catch { /* abgebrochen */ }
     });
 
-    // Geteilter Link mit #ergebnis-xyz zeigt direkt das Ergebnis
+    root.querySelector('.rq-img')!.addEventListener('click', async () => {
+      const r = regions[current];
+      const blob = await storyImage(r, D.orte[current]);
+      if (!blob) return;
+      const file = new File([blob], `palmenpixel-${r.slug}.png`, { type: 'image/png' });
+      try {
+        if (navigator.canShare?.({ files: [file] })) { await navigator.share({ files: [file], text: `Meine GTA-6-Region: ${r.name}` }); return; }
+      } catch { /* abgebrochen, dann eben Download */ }
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    });
+
+    // Link mit #ergebnis-xyz zeigt direkt das Ergebnis
     const m = location.hash.match(/^#ergebnis-(\w+)$/);
     if (m && regions[m[1]]) showResult(m[1], { [m[1]]: 1 });
   });

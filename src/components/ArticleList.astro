@@ -1,0 +1,45 @@
+---
+// Übersichtliche Artikelliste (statt Kachel-Raster): Datum, Rubrik, Titel, Kurzantwort.
+import { categoryBySlug } from '../site.config';
+import { artikelUrl, type Artikel } from '../lib/artikel';
+interface Props { items: Artikel[]; showCat?: boolean }
+const { items, showCat = true } = Astro.props;
+const CAT_C: Record<string, string> = { news: '#3ee7f0', guides: '#ff4fa3', 'easter-eggs': '#ffd166', karte: '#4dff9a', technik: '#b07cff' };
+const fmt = (d: Date) => d.toLocaleDateString('de-DE', { day: '2-digit', month: 'short' });
+---
+<ol class="al">
+  {items.map((a, i) => {
+    const d = a.data.updatedDate ?? a.data.publishDate;
+    return (
+      <li style={`--c:${CAT_C[a.data.category] ?? '#ff4fa3'};--i:${i}`}>
+        <time datetime={d.toISOString()}>{fmt(d)}</time>
+        <div>
+          {showCat && <span class="al-cat">{categoryBySlug(a.data.category)?.name}</span>}
+          <a href={artikelUrl(a)}>{a.data.title}</a>
+          <p>{a.data.description}</p>
+        </div>
+      </li>
+    );
+  })}
+</ol>
+
+<style is:global>
+  .al { list-style: none; margin: 0; padding: 0; position: relative; }
+  .al::before { content: ''; position: absolute; left: 62px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--pink), var(--violet), transparent); opacity: .5; }
+  .al li { position: relative; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 22px; padding: 10px 0; animation: tt-in .45s both; animation-delay: calc(min(var(--i), 10) * 50ms); }
+  .al li::before { content: ''; position: absolute; left: 57px; top: 18px; width: 12px; height: 12px; border-radius: 50%; background: #140a24; border: 2px solid var(--c); box-shadow: 0 0 10px var(--c); }
+  .al time { padding-top: 12px; font: 700 .78rem var(--font-body); color: var(--muted); text-transform: uppercase; text-align: right; font-variant-numeric: tabular-nums; }
+  .al li > div { padding: 8px 14px 10px; border-radius: 12px; transition: background .2s; }
+  .al li:hover > div { background: color-mix(in srgb, var(--c) 9%, transparent); }
+  .al-cat { display: block; font: 700 .68rem var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--c); margin-bottom: 2px; }
+  .al a { color: #fff; font-weight: 700; font-size: 1.05rem; text-decoration: none; line-height: 1.35; }
+  .al a::after { content: ''; position: absolute; inset: 0; }
+  .al li:hover a { color: var(--c); text-shadow: none; }
+  .al p { margin: 3px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+  @media (max-width: 520px) {
+    .al::before { left: 6px; }
+    .al li { grid-template-columns: minmax(0, 1fr); gap: 0; padding-left: 20px; }
+    .al li::before { left: 1px; }
+    .al time { padding: 0 0 0 14px; text-align: left; }
+  }
+</style>

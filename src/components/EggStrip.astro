@@ -1,0 +1,32 @@
+---
+// Die Easter Eggs als leuchtende Kacheln mit eigener Illustration. Klick springt zur Anleitung.
+import EggArt from './EggArt.astro';
+interface Props { here?: boolean }
+const { here = false } = Astro.props;
+const base = here ? '' : '/easter-eggs/gta-6-easter-eggs/';
+const EGGS: { id: 'dexter' | 'bigfoot' | 'ei'; name: string; wo: string; a: string }[] = [
+  { id: 'dexter', name: 'Dexters Wohnung', wo: 'Washington Island', a: 'dexters-wohnung-finden' },
+  { id: 'bigfoot', name: 'Bigfoot im Sumpf', wo: 'Cottonmouth Lake', a: 'bigfoot-finden' },
+  { id: 'ei', name: 'Das Ei auf dem Funkturm', wo: 'Vice Dale County', a: 'das-ei-auf-dem-höchsten-funkturm' },
+];
+---
+<section class="es" aria-label="Easter Eggs im Überblick">
+  {EGGS.map((e, i) => (
+    <a class="es-egg" href={`${base}#${e.a}`} style={`--i:${i}`}>
+      <EggArt id={e.id} size={88} big />
+      <b>{e.name}</b>
+      <span>{e.wo}</span>
+    </a>
+  ))}
+</section>
+
+<style>
+  .es { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 14px; margin: 14px 0 18px; }
+  .es-egg { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 12px; border-radius: 18px; text-decoration: none; color: var(--text); text-align: center;
+    background: radial-gradient(circle at 50% 30%, rgb(255 209 102 / .12), transparent 70%), var(--night-2); border: 1px solid rgb(255 209 102 / .3);
+    animation: tt-in .5s both; animation-delay: calc(var(--i) * 90ms); transition: transform .2s, box-shadow .2s; }
+  .es-egg:hover { transform: translateY(-4px); box-shadow: 0 10px 30px -12px #ffd166; }
+  .es-egg b { font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; }
+  .es-egg span { color: var(--muted); font-size: .85rem; }
+  @keyframes tt-in { from { opacity: 0; transform: translateY(14px); } }
+</style>

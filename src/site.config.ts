@@ -45,5 +45,17 @@ export const CATEGORIES = [
   { slug: 'technik', name: 'Technik & Hardware', description: 'Performance, Einstellungen, Speicherplatz, Controller und Zubehör.' },
 ] as const;
 
+// Hauptnavigation oben
+export const NAV = [
+  { href: '/tools/', name: 'Tools' },
+  { href: '/karte/gta-6-karte-regionen/', name: 'Karte' },
+  { href: '/fahrzeuge/', name: 'Fahrzeuge' },
+  { href: '/kategorie/easter-eggs/', name: 'Easter Eggs' },
+  { href: '/kategorie/guides/', name: 'Guides' },
+  { href: '/checklisten/', name: 'Checklisten' },
+  { href: '/kategorie/news/', name: 'News' },
+  { href: '/kategorie/technik/', name: 'Technik' },
+];
+
 export type CategorySlug = (typeof CATEGORIES)[number]['slug'];
 export const categoryBySlug = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
