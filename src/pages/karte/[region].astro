@@ -1,0 +1,145 @@
+---
+// Eine Seite pro Region: Überblick, Karte mit der Region ausgewählt, alle Orte nach Art, passende Guides.
+import Base from '../../layouts/Base.astro';
+import LeonidaMap from '../../components/LeonidaMap.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ToolTiles from '../../components/ToolTiles.astro';
+import { REGIONEN, REGION_ORDER, QUIZ_URL, regionUrl } from '../../data/regionen';
+import { ORTE, TYPEN, type OrtTyp, type RegionId } from '../../data/orte';
+import { SITE } from '../../site.config';
+
+export function getStaticPaths() {
+  return REGION_ORDER.map((id) => ({ params: { region: `gta-6-${REGIONEN[id].slug}` }, props: { id } }));
+}
+const { id } = Astro.props as { id: RegionId };
+const r = REGIONEN[id];
+
+// Texte aus dem Karten-Guide (Quellen: Rockstar, map.stateofleonida.net)
+const INFO: Record<RegionId, { vorbild: string; intro: string[]; tun: { t: string; href?: string }[] }> = {
+  vice: { vorbild: 'Miami',
+    intro: ['Die Großstadt nach dem Vorbild von Miami ist das Herz von Leonida: Hochhäuser in Downtown, Strände auf Vice Beach und Ocean Beach, dazu der Flughafen, der Kreuzfahrthafen und die Inseln der Reichen.',
+      'Ganz im Osten liegt Washington Island mit Dexters Wohnung, einem der ersten Easter Eggs im Spiel.'],
+    tun: [{ t: 'Dexters Wohnung auf Washington Island finden', href: '/easter-eggs/gta-6-easter-eggs/#dexters-wohnung-finden' },
+      { t: 'Nachtleben in Downtown: NINE1NINE und The Vault' }, { t: 'Am Ocean Beach trainieren, im Venus Fitness' },
+      { t: 'Am Flughafen VCIA die Trophäe „Catch Me If You Can“ holen', href: '/guides/gta-6-trophaeen/' }] },
+  keys: { vorbild: 'Florida Keys',
+    intro: ['Eine tropische Inselkette südlich von Vice City, verbunden durch einen langen Highway. In Key Lento beginnt das Spiel.',
+      'Hier triffst du Kenton, der dich auf Schatztauchgänge schickt. Das ist am Anfang die beste Geldquelle.'],
+    tun: [{ t: 'Schatztauchen mit Kenton', href: '/guides/gta-6-schnell-geld-verdienen/' }, { t: 'Mit dem Boot die Inseln abfahren' },
+      { t: 'Bis Southwind ans südliche Ende fahren' }, { t: 'Mile Zero Air Station: Militärgebiet, besser mit Abstand' }] },
+  grass: { vorbild: 'Everglades',
+    intro: ['Das Sumpfgebiet nach dem Vorbild der Everglades: Marschland, Alligatoren und laut Rockstar „gefährlichere Raubtiere und seltsamere Entdeckungen“.',
+      'In Pelican Valley liegt der Cottonmouth Lake, an der Küste findest du Watson Bay und Capri.'],
+    tun: [{ t: 'Bigfoot suchen', href: '/easter-eggs/gta-6-easter-eggs/#bigfoot-finden' }, { t: 'Mit dem Airboat durch den Sumpf' },
+      { t: 'Ein Eis in Watson Bay' }] },
+  gell: { vorbild: 'Floridas „vergessene Küste“',
+    intro: ['Die „vergessene Küste“: früher ein Urlaubsort, heute voller Billigmotels, geschlossener Attraktionen und leerer Einkaufszentren.',
+      'Ab Kapitel 2 triffst du hier Moses, der dir gestohlene Autos abkauft.'],
+    tun: [{ t: 'Rennen auf dem Gellhorn International Raceway' }, { t: 'Gestohlene Autos an Moses verkaufen' },
+      { t: 'Billard im Delights' }] },
+  amb: { vorbild: 'Industriestadt',
+    intro: ['Eine Industriestadt, die sich um die Zuckerraffinerie Allied Crystal dreht. Große Teile der Stadt kontrolliert die Biker-Gang Final Chapter.',
+      'Nebenan liegt Lake Leonida, der große See im Landesinneren.'],
+    tun: [{ t: 'Schlammrennen im Thrillbilly Mud Club' }, { t: 'Die Zuckerraffinerie Allied Crystal ansehen' },
+      { t: 'Der Biker-Gang Final Chapter aus dem Weg gehen' }] },
+  kal: { vorbild: 'Nationalpark',
+    intro: ['Ein Nationalpark im Norden von Leonida mit Seen, Flüssen und Offroad-Strecken. Laut Rockstar der Ort für Jagen, Angeln und Offroad-Touren.',
+      'Von der Aussichtsplattform blickst du bis nach Vice City.'],
+    tun: [{ t: 'Angeln am Lake Tallaloko' }, { t: 'Jagen im Wald' }, { t: 'Mit dem Quad über die Pfade' },
+      { t: 'Abends auf die Aussichtsplattform' }] },
+};
+const info = INFO[id];
+const inR = id === 'keys' ? 'in den Leonida Keys' : `in ${r.name}`;
+const orte = ORTE.filter((o) => o.region === id);
+const gruppen = (Object.keys(TYPEN) as OrtTyp[]).map((t) => ({ t, list: orte.filter((o) => o.typ === t) })).filter((g) => g.list.length);
+const andere = REGION_ORDER.filter((x) => x !== id);
+const title = `GTA 6 ${r.name}: Alle Orte und was du dort machen kannst`.length <= 70
+  ? `GTA 6 ${r.name}: Alle Orte und was du dort machen kannst` : `GTA 6 ${r.name}: Alle Orte im Überblick`;
+const description = `${r.name} in GTA 6: ${r.typ} nach dem Vorbild ${info.vorbild === 'Miami' ? 'von Miami' : `„${info.vorbild}“`}. Alle ${orte.length} Orte, Sehenswürdigkeiten und was du dort machen kannst.`.slice(0, 160);
+const url = `${SITE.url}${regionUrl(id)}`;
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: `${SITE.url}/` },
+    { '@type': 'ListItem', position: 2, name: 'Karte', item: `${SITE.url}/kategorie/karte/` },
+    { '@type': 'ListItem', position: 3, name: r.name, item: url },
+  ],
+}, {
+  '@context': 'https://schema.org', '@type': 'ItemList', name: `Orte ${inR}`, numberOfItems: orte.length,
+  itemListElement: orte.map((o, i) => ({ '@type': 'ListItem', position: i + 1, name: o.name })),
+}];
+---
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <nav class="breadcrumb" aria-label="Brotkrumen"><a href="/">Start</a> › <a href="/kategorie/karte/">Karte</a></nav>
+  <header class="rg-head" style={`--c:${r.c}`}>
+    <p class="eyebrow">{r.typ} · Vorbild: {info.vorbild}</p>
+    <h1>GTA 6 {r.name}</h1>
+    <p class="lead">{r.motto}. {orte.length} Orte auf unserer Karte.</p>
+  </header>
+
+  <div class="rg-layout">
+    <div class="prose rg-main">
+      {info.intro.map((p) => <p>{p}</p>)}
+      <LeonidaMap start={id} />
+      <AdSlot name="in-article" />
+
+      <h2>Alle Orte {inR}</h2>
+      {gruppen.map((g) => (
+        <section class="rg-group">
+          <h3>{TYPEN[g.t].name}</h3>
+          <ul class="rg-orte" style={`--c:${r.c}`}>
+            {g.list.map((o) => (
+              <li>
+                <b>{o.name}</b>
+                <span>{o.text}</span>
+                {o.link && <a href={o.link}>Zur Anleitung →</a>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <h2>Das kannst du {inR} machen</h2>
+      <ul>
+        {info.tun.map((t) => <li>{t.href ? <a href={t.href}>{t.t}</a> : t.t}</li>)}
+      </ul>
+
+      <h2>Ist {r.name} deine Region?</h2>
+      <p>{r.text}</p>
+      <p><a class="rg-quiz" href={QUIZ_URL} style={`--c:${r.c}`}>Mach den Test: Welche Region bist du? →</a></p>
+
+      <h2>Die anderen Regionen</h2>
+      <ul class="rg-other">
+        {andere.map((x) => (
+          <li style={`--c:${REGIONEN[x].c}`}><a href={regionUrl(x)}><b>{REGIONEN[x].name}</b><span>{REGIONEN[x].typ} · {REGIONEN[x].motto}</span></a></li>
+        ))}
+      </ul>
+      <p class="rg-src"><em>Quellen: Rockstar Games, map.stateofleonida.net. Die Karte ist selbst gezeichnet und nicht maßstabsgetreu.</em></p>
+      <AdSlot name="footer" />
+    </div>
+    <aside class="sidebar">
+      <AdSlot name="sidebar" />
+      <div class="side-tools"><h2 class="h-small">Tools</h2><ToolTiles only={['karte', 'quiz', 'checklisten']} compact /></div>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .rg-head { padding: 14px 0 6px; }
+  .rg-head h1 { margin: .1em 0 .3em; color: #fff; text-shadow: 0 0 22px color-mix(in srgb, var(--c) 60%, transparent); }
+  .rg-head .eyebrow { color: var(--c); }
+  .rg-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; }
+  @media (max-width: 1000px) { .rg-layout { grid-template-columns: 1fr; } }
+  .rg-group h3 { margin-bottom: 8px; }
+  .rg-orte { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 8px; }
+  .rg-orte li { display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: var(--night-2); border-left: 3px solid var(--c); }
+  .rg-orte b { color: #fff; }
+  .rg-orte span { font-size: .95rem; }
+  .rg-orte a { font-weight: 700; color: var(--c); text-decoration: none; }
+  .rg-quiz { display: inline-block; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--c); color: #fff; text-decoration: none; font-weight: 700;
+    background: color-mix(in srgb, var(--c) 18%, transparent); box-shadow: 0 0 18px color-mix(in srgb, var(--c) 30%, transparent); }
+  .rg-other { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 10px; }
+  .rg-other a { display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: var(--night-2); border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); text-decoration: none; }
+  .rg-other b { color: var(--c); }
+  .rg-other span { font-size: .85rem; color: var(--muted); }
+  .rg-src { font-size: .85rem; color: var(--muted); }
+</style>

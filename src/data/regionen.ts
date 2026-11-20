@@ -26,3 +26,4 @@ export const REGIONEN: Record<RegionId, Region> = {
 export const REGION_ORDER: RegionId[] = ['vice', 'keys', 'grass', 'gell', 'amb', 'kal'];
 export const QUIZ_URL = '/karte/gta-6-quiz-welche-region/';
 export const ergebnisUrl = (r: RegionId) => `/test/${REGIONEN[r].slug}/`;
+export const regionUrl = (r: RegionId) => `/karte/gta-6-${REGIONEN[r].slug}/`;
