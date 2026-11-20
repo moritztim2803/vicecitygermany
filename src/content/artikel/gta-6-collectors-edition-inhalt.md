@@ -39,6 +39,8 @@ Die Box selbst ist laut Monsterdealz etwa 48 × 34 × 32 cm groß.
 
 Rockstar schreibt in der Beschreibung ausdrücklich: Das Spiel ist **separat erhältlich**. Wer Box und Spiel will, zahlt also mindestens 399,99 € plus 79,99 € für die Standard Edition.
 
+[Standard für PS5](amazon:GTA+6+PS5) [Standard für Xbox](amazon:GTA+6+Xbox+Series+X)
+
 ## Wo und wie kaufen?
 
 - **Nur im Rockstar Store** unter store.rockstargames.com, nicht bei Amazon oder MediaMarkt.

@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { amazonize } from '../../lib/amazon-html';
 import Base from '../../layouts/Base.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import NewsletterBox from '../../components/NewsletterBox.astro';
@@ -70,7 +71,7 @@ if (a.data.faq.length) {
         </details>
       )}
       <AdSlot name="in-article" />
-      <Content />
+      {a.rendered?.html ? <Fragment set:html={amazonize(a.rendered.html)} /> : <Content />}
       {AMAZON[a.id] && <AmazonTipps items={AMAZON[a.id]} />}
       {a.data.category === 'easter-eggs' && <NewsletterBox />}
       {a.data.category === 'easter-eggs' && <SubmitCta />}

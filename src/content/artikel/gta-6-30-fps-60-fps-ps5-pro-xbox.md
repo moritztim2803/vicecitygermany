@@ -42,6 +42,8 @@ Die PS5 Pro schafft **keine höhere Bildrate**, aber:
 
 Lohnt sich die Pro nur für GTA 6? Für die meisten nicht. Wer ohnehin aufrüsten wollte und einen guten 4K-Fernseher hat, bekommt aber die beste Version.
 
+[PS5 Pro](amazon:PS5+Pro+Konsole) [PS5 Slim](amazon:PS5+Slim+Konsole) [Xbox Series X](amazon:Xbox+Series+X+Konsole)
+
 ## Tipps für ein flüssigeres Spielgefühl
 
 - **Spielmodus am Fernseher** einschalten. Das senkt die Eingabeverzögerung spürbar.

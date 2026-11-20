@@ -46,7 +46,7 @@ Seiten und Videos, die eine PS4-Version oder einen Download versprechen, sind **
 
 Unser Tipp: Für die meisten ist die **PS5 Slim** der beste Kompromiss aus Preis und Leistung.
 
-<!-- Hier Affiliate-Box mit PS5 Slim und PS5 Pro einbauen, sobald die Amazon-Tracking-ID da ist. -->
+[PS5 Slim](amazon:PS5+Slim+Konsole) [PS5 Pro](amazon:PS5+Pro+Konsole) [Xbox Series X](amazon:Xbox+Series+X+Konsole) [Xbox Series S](amazon:Xbox+Series+S+Konsole)
 
 ## Spielstand aus GTA 5 übernehmen?
 

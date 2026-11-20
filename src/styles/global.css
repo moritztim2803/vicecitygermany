@@ -240,3 +240,12 @@ main { padding-block: 24px 56px; }
 .collect-grid > div { background: var(--night-2); border: 1px solid var(--night-3); border-left: 3px solid var(--cyan); border-radius: 12px; padding: 12px 14px; }
 .collect-grid strong { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; }
 .collect-grid span { color: var(--muted); font-size: .9rem; }
+
+/* Amazon-Links im Artikeltext (rehype-amazon) */
+.prose a.az-link { color: var(--sun-1); text-decoration-color: color-mix(in srgb, var(--sun-1) 50%, transparent); }
+.prose p.az-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px 14px; border-radius: 14px;
+  background: var(--night-2); border: 1px solid rgb(255 209 102 / .4); }
+.prose p.az-row .ad-label { width: 100%; margin: 0; }
+.prose p.az-row a.az-link { padding: 8px 12px; border-radius: 10px; background: var(--sun-1); color: var(--night); font-weight: 700; font-size: .9rem; text-decoration: none; }
+.prose p.az-row a.az-link:hover { filter: brightness(1.08); }
+.prose td a.az-link { white-space: nowrap; font-weight: 700; }

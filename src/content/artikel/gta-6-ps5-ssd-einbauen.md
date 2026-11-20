@@ -34,7 +34,7 @@ GTA 6 braucht bis zu **212 GB**. Auf der ersten PS5 sind nur **667 GB** frei nut
 
 Am einfachsten: eine SSD kaufen, die **ausdrücklich „für PS5“** beworben wird und schon einen Kühlkörper hat. Dann passt alles.
 
-Passende SSDs findest du unten in der Box „Passend dazu“.
+[1 TB PS5-SSD mit Kühlkörper](amazon:PS5+SSD+1TB+Kühlkörper) [2 TB PS5-SSD mit Kühlkörper](amazon:PS5+SSD+2TB+Kühlkörper)
 
 ## Welche Größe?
 
@@ -56,6 +56,6 @@ Jetzt kannst du GTA 6 über **Einstellungen** > **Speicher** auf die neue SSD ve
 
 ## Und auf der Xbox?
 
-Auf der Xbox Series X|S passt keine normale M.2-SSD. Du brauchst eine offizielle **Speichererweiterungskarte** (Seagate oder Western Digital), die hinten eingesteckt wird. Gerade auf der **Xbox Series S mit 512 GB** (nur 364 GB nutzbar) ist das für GTA 6 fast Pflicht.
+Auf der Xbox Series X|S passt keine normale M.2-SSD. Du brauchst eine offizielle [Speichererweiterungskarte](amazon:Xbox+Series+Speichererweiterungskarte+1TB) (Seagate oder Western Digital), die hinten eingesteckt wird. Gerade auf der **Xbox Series S mit 512 GB** (nur 364 GB nutzbar) ist das für GTA 6 fast Pflicht.
 
 *Quellen: Sony PlayStation Support (Anforderungen an M.2-SSDs), TechSpot (nutzbarer Speicher), Rockstar (Speicherbedarf).*

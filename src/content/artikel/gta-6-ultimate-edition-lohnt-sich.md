@@ -25,6 +25,7 @@ faq:
 | Hauptspiel | Ja | Ja |
 | Vintage Vice City Pack | nur bei Vorbestellung | nur bei Vorbestellung |
 | Ultimate-Inhalte | Nein | Ja |
+| Bei Amazon | [PS5](amazon:GTA+6+PS5) · [Xbox](amazon:GTA+6+Xbox+Series+X) | [PS5](amazon:GTA+6+Ultimate+Edition+PS5) · [Xbox](amazon:GTA+6+Ultimate+Edition+Xbox) |
 
 ## Was steckt in der Ultimate Edition?
 
@@ -57,5 +58,7 @@ Im PlayStation Store ist ein **„Ultimate Edition Upgrade“** aufgetaucht. Ein
 - **Standard reicht**, wenn du die Story spielen willst und kein Sammler bist.
 - **Ultimate lohnt sich**, wenn du viele Stunden in der offenen Welt verbringst, Autos sammelst und dir 20 € für mehr Abwechslung wert sind.
 - **Finger weg von der Collector's Edition**, wenn du nur das Spiel willst: Sie kostet 399,99 € und **enthält das Spiel nicht**. Mehr dazu im Artikel zur [GTA 6 Collector's Edition](/news/gta-6-collectors-edition-inhalt/).
+
+[Standard für PS5](amazon:GTA+6+PS5) [Standard für Xbox](amazon:GTA+6+Xbox+Series+X) [Ultimate für PS5](amazon:GTA+6+Ultimate+Edition+PS5) [Ultimate für Xbox](amazon:GTA+6+Ultimate+Edition+Xbox)
 
 *Quellen: PC Gamer (Editionen und Inhalte), TechRadar (Upgrade-Eintrag im PlayStation Store, 24.06.2026), Rockstar (Preise).*
