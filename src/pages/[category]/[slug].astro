@@ -9,6 +9,7 @@ import CardTracker from '../../components/CardTracker.astro';
 import RegionQuiz from '../../components/RegionQuiz.astro';
 import HeatCheck from '../../components/HeatCheck.astro';
 import CheatList from '../../components/CheatList.astro';
+import TrophyList from '../../components/TrophyList.astro';
 import EggStrip from '../../components/EggStrip.astro';
 import ToolTiles from '../../components/ToolTiles.astro';
 import { SITE, categoryBySlug } from '../../site.config';
@@ -59,6 +60,7 @@ if (a.data.faq.length) {
       {a.id === 'gta-6-quiz-welche-region' && <RegionQuiz />}
       {a.id === 'gta-6-polizei-abhaengen-fahndung' && <HeatCheck />}
       {a.id === 'gta-6-cheats' && <CheatList />}
+      {a.id === 'gta-6-trophaeen' && <TrophyList />}
       {a.id === 'gta-6-easter-eggs' && <EggStrip here />}
       {toc.length > 2 && (
         <details class="toc" open><summary>Inhalt</summary>
