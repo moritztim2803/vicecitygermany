@@ -1,13 +1,14 @@
 ---
-// Seiten-Gags: Palmen-Mauszeiger (nur Desktop) und Cheat-Code „SUNSET“ für den Sunset-Modus.
+// Seiten-Gags: Palmen-Mauszeiger (nur Desktop, Klickpunkt = weißer Punkt in der Krone) und Cheat-Code „SUNSET“ für den Sunset-Modus.
 ---
 <div class="cheat-hud" aria-live="polite" hidden><span data-cheat-keys></span></div>
 <div class="sunset-rain" aria-hidden="true"></div>
 
 <style is:global>
   @media (hover: hover) and (pointer: fine) {
-    html { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke='%23140a24' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M3 3l8 20 2.5-8.5L22 12z'/%3E%3C/g%3E%3Cpath d='M3 3l8 20 2.5-8.5L22 12z' fill='%23ff4fa3' stroke='%23fff' stroke-width='1.2' stroke-linejoin='round'/%3E%3Cg stroke='%233ee7f0' stroke-width='1.6' fill='none' stroke-linecap='round'%3E%3Cpath d='M20 26v-7'/%3E%3Cpath d='M20 19c-2-2-5-2-6.5-.5M20 19c2-2 5-2 6.5-.5M20 19c-.5-2.5-2.5-4-4.5-4M20 19c.5-2.5 2.5-4 4.5-4'/%3E%3C/g%3E%3C/svg%3E") 2 2, auto; }
-    a, button, summary, label, [role='button'], select { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg stroke='%23140a24' stroke-width='4' fill='none' stroke-linecap='round'%3E%3Cpath d='M16 30V14'/%3E%3C/g%3E%3Cg stroke-linecap='round' fill='none'%3E%3Cpath d='M16 30V14' stroke='%23ffd166' stroke-width='2.4'/%3E%3Cpath d='M16 14c-4-4-10-4-13-1M16 14c4-4 10-4 13-1M16 14c-1-5-5-8-9-8M16 14c1-5 5-8 9-8M16 14c0-4 0-8-1-11' stroke='%234dff9a' stroke-width='2.2'/%3E%3C/g%3E%3C/svg%3E") 16 4, pointer; }
+    html { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 10c3 5 6 10 7 20M10 10c-3-4-7-5-9-3M10 10c-1-4-4-7-8-7M10 10c2-4 6-6 10-5M10 10c4-2 9-1 11 2M10 10c3 1 6 4 6 8M10 10c-4 0-7 2-8 6' stroke='%23140a24' stroke-width='4.5'/%3E%3Cpath d='M10 10c3 5 6 10 7 20' stroke='%23ffd166' stroke-width='2.4'/%3E%3Cpath d='M10 10c-3-4-7-5-9-3M10 10c-1-4-4-7-8-7M10 10c2-4 6-6 10-5M10 10c4-2 9-1 11 2M10 10c3 1 6 4 6 8M10 10c-4 0-7 2-8 6' stroke='%234dff9a' stroke-width='2.2'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%23fff' stroke='%23140a24' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E") 10 10, auto; }
+    a, button, summary, label, [role='button'], select { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 10c3 5 6 10 7 20M10 10c-3-4-7-5-9-3M10 10c-1-4-4-7-8-7M10 10c2-4 6-6 10-5M10 10c4-2 9-1 11 2M10 10c3 1 6 4 6 8M10 10c-4 0-7 2-8 6' stroke='%23140a24' stroke-width='4.5'/%3E%3Cpath d='M10 10c3 5 6 10 7 20' stroke='%23ffd166' stroke-width='2.4'/%3E%3Cpath d='M10 10c-3-4-7-5-9-3M10 10c-1-4-4-7-8-7M10 10c2-4 6-6 10-5M10 10c4-2 9-1 11 2M10 10c3 1 6 4 6 8M10 10c-4 0-7 2-8 6' stroke='%233ee7f0' stroke-width='2.2'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%23fff' stroke='%23140a24' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E") 10 10, pointer; }
+    input, textarea { cursor: text; }
   }
   .click-spark { position: fixed; z-index: 90; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; pointer-events: none;
     background: var(--sc); box-shadow: 0 0 8px var(--sc); animation: click-spark .55s ease-out forwards; }
