@@ -5,6 +5,7 @@
 
 import { COAST, ISLES, LAND, R, type Pt } from '../lib/leonida';
 import { ORTE, TYPEN, type OrtTyp } from '../data/orte';
+import { REGIONEN } from '../data/regionen';
 
 type Region = {
   id: 'vice' | 'keys' | 'grass' | 'gell' | 'amb' | 'kal';
@@ -271,7 +272,7 @@ const regions: Region[] = [
         );
       })}
     </ul>
-    <script type="application/json" data-orte-json set:html={JSON.stringify(ORTE.map((o) => ({ id: o.id, name: o.name, region: o.region, typ: TYPEN[o.typ].name, text: o.text, link: o.link ?? '' })))} />
+    <script type="application/json" data-orte-json set:html={JSON.stringify(ORTE.map((o) => ({ id: o.id, name: o.name, region: o.region, typ: TYPEN[o.typ].name, text: o.text, link: o.link ?? '', rlink: `/karte/gta-6-karte-regionen/#${REGIONEN[o.region].slug}` })))} />
   </section>
   <figcaption>Eigene schematische Darstellung, nicht maßstabsgetreu. Pins zeigen die ungefähre Lage.</figcaption>
 </figure>
@@ -382,6 +383,7 @@ const regions: Region[] = [
   .lm-card li::marker { color: var(--c); }
   .lm-cta { display: inline-block; margin-top: 6px; font-weight: 700; color: var(--c); text-decoration: none; }
   .lm-cta:hover { color: #fff; }
+  .lm-cta[hidden] { display: none; }
   .lm figcaption { font-size: .8rem; color: var(--muted); text-align: right; }
 
   /* Orte-Liste */
@@ -461,7 +463,7 @@ const regions: Region[] = [
     };
 
     // Orte
-    const orte: { id: string; name: string; region: string; typ: string; text: string; link: string }[] =
+    const orte: { id: string; name: string; region: string; typ: string; text: string; link: string; rlink: string }[] =
       JSON.parse(root.querySelector('[data-orte-json]')?.textContent || '[]');
     const byId = Object.fromEntries(orte.map((o) => [o.id, o]));
     const items = [...root.querySelectorAll<HTMLLIElement>('.lm-orte-list li')];
@@ -485,7 +487,8 @@ const regions: Region[] = [
       card.querySelector('[data-ort-n]')!.textContent = o.name;
       card.querySelector('[data-ort-t]')!.textContent = o.text;
       const l = card.querySelector<HTMLAnchorElement>('[data-ort-l]')!;
-      l.hidden = !o.link; if (o.link) l.href = o.link;
+      l.hidden = false; l.href = o.link || o.rlink;
+      l.textContent = o.link ? 'Zur Anleitung →' : `Mehr über ${META[o.region][0]} →`;
       card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
     };
     root.querySelectorAll<SVGGElement>('.lm-pin').forEach((p) => {
