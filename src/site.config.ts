@@ -50,6 +50,7 @@ export const NAV = [
   { href: '/tools/', name: 'Tools' },
   { href: '/karte/gta-6-karte-regionen/', name: 'Karte' },
   { href: '/fahrzeuge/', name: 'Fahrzeuge' },
+  { href: '/charaktere/', name: 'Charaktere' },
   { href: '/kategorie/easter-eggs/', name: 'Easter Eggs' },
   { href: '/kategorie/guides/', name: 'Guides' },
   { href: '/checklisten/', name: 'Checklisten' },
